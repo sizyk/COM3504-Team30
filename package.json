@@ -1,0 +1,39 @@
+{
+  "name": "template-site-js",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build-css": "postcss public/styles/global.css --dir public/styles/dist",
+    "watch-css": "postcss public/styles/global.css --dir public/styles/dist --watch",
+    "watch-js": "nodemon ./src/bin/www",
+    "start": "concurrently --raw --kill-others \"npm:watch-*\"",
+    "lint": "eslint --color '**/*.js' '**/bin/www'",
+    "lint:fix": "eslint --color '**/*.js' '**/bin/www' --fix"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~4.3.4",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1",
+    "serve-favicon": "^2.5.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.17",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.56.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.29.1",
+    "nodemon": "^3.0.3",
+    "postcss": "^8.4.35",
+    "postcss-cli": "^11.0.0",
+    "postcss-import": "^16.0.1",
+    "postcss-nested": "^6.0.1",
+    "prettier": "3.2.5",
+    "prettier-plugin-ejs": "^1.0.3",
+    "prettier-plugin-tailwindcss": "^0.5.11",
+    "tailwindcss": "^3.4.1"
+  }
+}

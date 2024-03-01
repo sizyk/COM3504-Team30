@@ -1,0 +1,13 @@
+{
+    "extends": ["airbnb-base"],
+
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+
+    "ignorePatterns": [
+        "node_modules",
+        "*.config.js"
+    ]
+}
