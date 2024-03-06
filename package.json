@@ -7,6 +7,7 @@
     "watch-css": "postcss public/styles/global.css --dir public/styles/dist --watch",
     "watch-js": "nodemon ./src/bin/www",
     "start": "concurrently --raw --kill-others \"npm:watch-*\"",
+    "prettify": "prettier -w .",
     "lint": "eslint --color '**/*.js' '**/bin/www'",
     "lint:fix": "eslint --color '**/*.js' '**/bin/www' --fix"
   },
