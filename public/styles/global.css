@@ -7,15 +7,15 @@
        the .dark selector doesn't seem to be picked up.
      */
   :root {
-    --text: #e7f3ec;
-    --background: #030705;
-    --primary: #53a270;
-    --secondary: #45315e;
-    --accent: #763d6f;
+    --text: #F1EEE7;
+    --background: #212121;
+    --primary: #A7C957;
+    --secondary: #9adcc7;
+    --accent: #2d5936;
 
     /* Light mode colours */
-    --background-inverse: #f8fcfa;
-    --text-inverse: #161616;
+    --background-inverse: #F1EEE7;
+    --text-inverse: #262C26;
 
     /* Mix to get a hover colours */
     --text-hover: color-mix(in srgb, var(--text), #000 33%);
@@ -30,15 +30,15 @@
   }
 
   .light {
-    --text: #161616;
-    --background: #f8fcfa;
-    --primary: #5dac7a;
-    --secondary: #b5a1ce;
-    --accent: #c289bb;
+    --text: #262C26;
+    --background: #F1EEE7;
+    --primary: #2d5936;
+    --secondary: #9adcc7;
+    --accent: #b9d478;
 
     /* Dark mode colours */
-    --background-inverse: #030705;
-    --text-inverse: #e7f3ec;
+    --background-inverse: #212121;
+    --text-inverse: #F1EEE7;
 
     /* Mix to get a hover colours */
     --text-hover: color-mix(in srgb, var(--text), #fff 33%);
