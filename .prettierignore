@@ -1,0 +1,6 @@
+.github
+.prettierrc
+postcss.config.js
+tailwind.config.js
+src/partials/js-variables.ejs
+src/layouts/main.ejs

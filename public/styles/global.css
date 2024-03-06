@@ -1,0 +1,226 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* For some unknown reason, dark mode needs to be the default as
+       the .dark selector doesn't seem to be picked up.
+     */
+  :root {
+    --text: #F1EEE7;
+    --background: #212121;
+    --primary: #A7C957;
+    --secondary: #9adcc7;
+    --accent: #2d5936;
+
+    /* Light mode colours */
+    --background-inverse: #F1EEE7;
+    --text-inverse: #262C26;
+
+    /* Mix to get a hover colours */
+    --text-hover: color-mix(in srgb, var(--text), #000 33%);
+    --text-inverse-hover: color-mix(in srgb, var(--text-inverse), #fff 33%);
+
+    --background-hover: color-mix(in srgb, var(--background), #fff 20%);
+    --background-inverse-hover: color-mix(
+      in srgb,
+      var(--background-inverse),
+      #000 20%
+    );
+  }
+
+  .light {
+    --text: #262C26;
+    --background: #F1EEE7;
+    --primary: #2d5936;
+    --secondary: #9adcc7;
+    --accent: #b9d478;
+
+    /* Dark mode colours */
+    --background-inverse: #212121;
+    --text-inverse: #F1EEE7;
+
+    /* Mix to get a hover colours */
+    --text-hover: color-mix(in srgb, var(--text), #fff 33%);
+    --text-inverse-hover: color-mix(in srgb, var(--text-inverse), #000 33%);
+
+    --background-hover: color-mix(in srgb, var(--background), #000 20%);
+    --background-inverse-hover: color-mix(
+      in srgb,
+      var(--background-inverse),
+      #fff 20%
+    );
+  }
+}
+
+/*===GENERAL RULES============================================================*/
+main {
+  @apply flex-fill-remaining-space;
+}
+
+/*===UTILITIES================================================================*/
+@layer utilities {
+  .flex-fill-remaining-space {
+    flex: 1 0 auto;
+  }
+
+  .hover-button {
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease-in-out,
+      color 0.2s ease-in-out,
+      stroke 0.2s ease-in-out;
+    background-color: var(--background);
+    color: var(--text);
+    stroke: var(--text);
+
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--background-hover);
+      }
+    }
+
+    &-inverse {
+      cursor: pointer;
+      transition:
+        background-color 0.2s ease-in-out,
+        color 0.2s ease-in-out,
+        stroke 0.2s ease-in-out;
+
+      background-color: var(--background-inverse);
+      color: var(--text-inverse);
+      stroke: var(--text-inverse);
+
+      &:hover {
+        @media (hover: hover) {
+          background-color: var(--background-inverse-hover);
+        }
+      }
+    }
+  }
+
+  .hover-link {
+    cursor: pointer;
+    transition:
+      color 0.2s ease-in-out,
+      stroke 0.2s ease-in-out;
+
+    color: var(--text);
+    stroke: var(--text);
+
+    &:hover {
+      @media (hover: hover) {
+        color: var(--text-hover);
+        stroke: var(--text-hover);
+      }
+    }
+
+    &-inverse {
+      cursor: pointer;
+      transition:
+        color 0.2s ease-in-out,
+        stroke 0.2s ease-in-out;
+
+      color: var(--text-inverse);
+      stroke: var(--text-inverse);
+
+      &:hover {
+        @media (hover: hover) {
+          color: var(--text-inverse-hover);
+          stroke: var(--text-inverse-hover);
+        }
+      }
+    }
+  }
+}
+
+/*===SITE-WIDE================================================================*/
+#nav-links {
+  @media screen(max-md) {
+    @apply pt-4;
+    @apply -z-10;
+    @apply flex-col;
+    @apply absolute;
+    @apply w-screen;
+
+    bottom: 0;
+
+    transform: translateY(0);
+
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  a {
+    @media screen(max-md) {
+      @apply hover-link-inverse;
+      @apply dark:hover-link;
+    }
+    @media screen(md) {
+      @apply hover-link;
+    }
+  }
+
+  &.active {
+    @media screen(max-md) {
+      transform: translateY(100%);
+    }
+  }
+}
+
+#nav-shadow {
+  &.active {
+    opacity: 85%;
+    pointer-events: auto;
+  }
+
+  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#theme-toggle {
+  height: 2rem;
+  aspect-ratio: 1.75;
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0 5px;
+
+  > #moving-switch {
+    height: 1.5rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    transition: transform 0.1s ease-in-out;
+  }
+
+  &[data-theme='dark'] > #moving-switch {
+    transform: translateX(100%);
+  }
+}
+
+.material-symbols-outlined {
+  /* Recommended icon sizes */
+  &.opsz-20 {
+    font-size: 20px;
+    font-variation-settings:
+      'FILL' 1,
+      'OPSZ' 20;
+  }
+  &.opsz-24 {
+    font-size: 24px;
+    font-variation-settings:
+      'FILL' 1,
+      'OPSZ' 24;
+  }
+  &.opsz-40 {
+    font-size: 40px;
+    font-variation-settings:
+      'FILL' 1,
+      'OPSZ' 40;
+  }
+  &.opsz-48 {
+    font-size: 48px;
+    font-variation-settings:
+      'FILL' 1,
+      'OPSZ' 48;
+  }
+}
