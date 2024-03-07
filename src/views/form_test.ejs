@@ -19,16 +19,18 @@
     <!-- Location (Either coordinates or use a map) -->
     <!-- Size (TEXT (num only))-->
     <!-- Image (Either by file upload or URL reference. Converted to Base64 and uploaded) -->
-    <!-- In checkboxes: hasFlowers, leaves, fruits, seeds, sunExposure, flowerColor -->
+    <!-- In checkboxes: hasFlowers, leaves, sunExposure -->
+    <!-- Color picker for flowerColor -->
+    <!--  fruits, seeds in a dropdown -->
 
     <!-- Modal -->
     <div class="modal fixed w-full h-full top-0 left-0 flex items-center justify-center hidden" id="plantModal" tabindex="-1" role="dialog">
       <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
-      <div class="modal-container bg-white w-5/6 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+      <div class="modal-container bg-background w-5/6 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
         <div class="modal-content py-4 px-6">
           <div class="flex justify-between items-center mb-4">
             <h5 class="modal-title text-xl font-semibold">Create a new plant sighting</h5>
-            <button class="close-modal" aria-label="Close modal" data-close>
+            <button class="flex justify-center close-modal rounded border border-gray-300" aria-label="Close modal" title="Close modal" data-close>
               <span class="material-symbols-outlined">close</span>
             </button>
           </div>
@@ -44,7 +46,53 @@
                 <label for="description" class="block text-text">Description</label>
                 <textarea type="textarea" class="resize-none form-input mt-1 block w-full rounded border border-gray-300 pl-2" id="description" name="description" rows="3" maxlength="256" required></textarea>
               </div>
-              <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="alert('Not implemented yet :P')">Submit</button>
+              <div class="form-group mb-4">
+                <label for="dateTimeSeen" class="block text-text">Time seen</label>
+                <input type="datetime-local" id="dateTimeSeen" name="dateTimeSeen" class="form-input mt-1 block w-full rounded border border-gray-300 pl-2">
+              </div>
+              <div class="form-group mb-4">
+                <label for="size" class="block text-text">Size (cm)</label>
+                <input type="number" class="form-input mt-1 block w-full rounded border border-gray-300 pl-2" id="size" name="size" min="0" value="0" required>
+              </div>
+              <!-- Select -->
+              <div class="form-group mb-4">
+                <label for="sunExposure" class="block text-text">Sun Exposure</label>
+                <select id="sunExposure" class="form-input bg-white border border-gray-300 text-text text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5">
+                  <option>None</option>
+                  <option>Partial</option>
+                  <option>Full</option>
+                </select>
+              </div>
+
+              <div class="form-group mb-4">
+                <label for="colour" class="block text-text">Plant Colour</label>
+                <input type="color" class="form-input p-1 h-10 w-14 block bg-white border border-gray-200 cursor-pointer rounde" id="hs-color-input" value="#2d5936" title="Select plant colour">
+              </div>
+
+              <!-- Checkboxes -->
+              <!-- In checkboxes: hasFlowers, hasLeaves & sunExposure -->
+              <!-- TODO change color of selected checkbox to --primary -->
+              <label for="properties" class="block text-text">Properties</label>
+              <div id="properties" class="form-group mb-4">
+                <div class="flex items-center mb-2">
+                  <input id="hasFlowers" type="checkbox" value="" class="form-input w-4 h-4 text-primary bg-text border-text-hover rounded focus:primary-hover">
+                  <label for="hasFlowers" class="ms-2 text-sm font-medium text-text">Flowers</label>
+                </div>
+                <div class="flex items-center mb-2">
+                  <input id="hasLeaves" type="checkbox" value="" class="form-input w-4 h-4 text-primary bg-text border-text-hover rounded focus:primary-hover">
+                  <label for="hasLeaves" class="ms-2 text-sm font-medium text-text">Leaves</label>
+                </div>
+                <div class="flex items-center mb-2">
+                  <input id="hasFruit" type="checkbox" value="" class="form-input w-4 h-4 text-primary bg-text border-text-hover rounded focus:primary-hover">
+                  <label for="hasFruit" class="ms-2 text-sm font-medium text-text">Fruit</label>
+                </div>
+                <div class="flex items-center mb-2">
+                  <input id="hasSeeds" type="checkbox" value="" class="form-input w-4 h-4 text-primary bg-text border-text-hover rounded focus:primary-hover">
+                  <label for="hasSeeds" class="ms-2 text-sm font-medium text-text">Seeds</label>
+                </div>
+              </div>
+              <p>todo: image & geolocation</p>
+              <button type="submit" class="form-input bg-primary hover:bg-primary-hover text-white font-bold py-2 px-4 rounded" onclick="alert('Not implemented yet :P')">Submit</button>
             </form>
           </div>
         </div>
