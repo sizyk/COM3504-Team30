@@ -45,8 +45,10 @@
             </button>
           </div>
           <div class="modal-body">
-            <form action="/form-test" method="POST">
-              <!-- TODO: Change to POST when ready -->
+            <form
+              action="/form-test"
+              method="POST"
+              enctype="multipart/form-data">
               <div class="form-group mb-4">
                 <label for="name" class="block text-text">Name</label>
                 <input
@@ -128,7 +130,7 @@
               <!-- In checkboxes: hasFlowers, hasLeaves & sunExposure -->
               <!-- TODO change color of selected checkbox to --primary -->
               <label for="properties" class="block text-text">Properties</label>
-              <div id="properties" class="form-group mb-4">
+              <div id="properties" class="form-group mb-4 flex justify-between">
                 <div class="mb-2 flex items-center">
                   <input
                     id="hasFlowers"
@@ -186,7 +188,21 @@
                   >
                 </div>
               </div>
-              <p>todo: image & geolocation</p>
+              <div class="form-group mb-4">
+                <label
+                  class="block text-text"
+                  for="file_input"
+                >Upload Image</label>
+                <input
+                  class="w-full cursor-pointer file:form-input file:hover-button
+                    file:rounded file:px-4 file:py-2 file:font-bold"
+                  id="image"
+                  name="image"
+                  type="file"
+                  aria-describedby="file_input_help"
+                  accept="image/png, image/jpeg">
+              </div>
+              <p>todo: geolocation</p>
               <button
                 type="submit"
                 class="form-input hover-button rounded px-4 py-2 font-bold"
