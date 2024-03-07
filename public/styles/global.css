@@ -7,15 +7,18 @@
        the .dark selector doesn't seem to be picked up.
      */
   :root {
-    --text: #F1EEE7;
+    --text: #f1eee7;
     --background: #212121;
-    --primary: #A7C957;
+    --primary: #a7c957;
     --secondary: #9adcc7;
     --accent: #2d5936;
 
+    /* Secondary is too light to use 'text colour' on dark theme, so need this */
+    --on-secondary: var(--background);
+
     /* Light mode colours */
-    --background-inverse: #F1EEE7;
-    --text-inverse: #262C26;
+    --background-inverse: #f1eee7;
+    --text-inverse: #262c26;
 
     /* Mix to get a hover colours */
     --text-hover: color-mix(in srgb, var(--text), #000 33%);
@@ -33,15 +36,18 @@
   }
 
   .light {
-    --text: #262C26;
-    --background: #F1EEE7;
+    --text: #262c26;
+    --background: #f1eee7;
     --primary: #2d5936;
     --secondary: #9adcc7;
     --accent: #b9d478;
 
+    /* Secondary is too light to use 'text colour' on dark theme, so need this */
+    --on-secondary: var(--text);
+
     /* Dark mode colours */
     --background-inverse: #212121;
-    --text-inverse: #F1EEE7;
+    --text-inverse: #f1eee7;
 
     /* Mix to get a hover colours */
     --text-hover: color-mix(in srgb, var(--text), #fff 33%);
@@ -53,8 +59,9 @@
       var(--background-inverse),
       #fff 20%
     );
-    --primary-hover: color-mix(in srgb, var(--primary), #000000 33%);
-    --secondary-hover: color-mix(in srgb, var(--secondary), #000000 33%);
+
+    --primary-hover: color-mix(in srgb, var(--primary), #fff 33%);
+    --secondary-hover: color-mix(in srgb, var(--secondary), #000 33%);
   }
 }
 
@@ -75,30 +82,30 @@ main {
       background-color 0.2s ease-in-out,
       color 0.2s ease-in-out,
       stroke 0.2s ease-in-out;
-    background-color: var(--background);
-    color: var(--text);
-    stroke: var(--text);
+    background-color: var(--primary);
+    color: var(--background);
+    stroke: var(--background);
 
     &:hover {
       @media (hover: hover) {
-        background-color: var(--background-hover);
+        background-color: var(--primary-hover);
       }
     }
 
-    &-inverse {
+    &-secondary {
       cursor: pointer;
       transition:
         background-color 0.2s ease-in-out,
         color 0.2s ease-in-out,
         stroke 0.2s ease-in-out;
 
-      background-color: var(--background-inverse);
-      color: var(--text-inverse);
-      stroke: var(--text-inverse);
+      background-color: var(--secondary);
+      color: var(--on-secondary);
+      stroke: var(--on-secondary);
 
       &:hover {
         @media (hover: hover) {
-          background-color: var(--background-inverse-hover);
+          background-color: var(--secondary-hover);
         }
       }
     }
