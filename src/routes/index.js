@@ -16,4 +16,8 @@ router.get('/page-3', (req, res) => {
   renderLayout(res, 'page3');
 });
 
+router.get('/form-test', (req, res) => {
+  renderLayout(res, 'form_test', {title: 'Form Test'});
+});
+
 module.exports = router;

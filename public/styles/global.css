@@ -27,6 +27,9 @@
       var(--background-inverse),
       #000 20%
     );
+
+    --primary-hover: color-mix(in srgb, var(--primary), #000 33%);
+    --secondary-hover: color-mix(in srgb, var(--secondary), #000 33%);
   }
 
   .light {
@@ -50,6 +53,8 @@
       var(--background-inverse),
       #fff 20%
     );
+    --primary-hover: color-mix(in srgb, var(--primary), #000000 33%);
+    --secondary-hover: color-mix(in srgb, var(--secondary), #000000 33%);
   }
 }
 
