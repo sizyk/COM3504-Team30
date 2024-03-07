@@ -250,3 +250,43 @@ main {
       'OPSZ' 48;
   }
 }
+
+.plant-card {
+  .plant-info,
+  .plant-name,
+  .plant-name div {
+    transition:
+      transform 0.75s ease-out,
+      padding-top 0.75s ease-out,
+      opacity 0.75s ease-out;
+  }
+
+  .plant-info {
+    background-color: color-mix(
+      in srgb,
+      var(--text),
+      rgba(255, 255, 255, 0) 20%
+    );
+    transform: translateY(100%);
+    /* Prevent issues when card is fractional pixels wide */
+    width: calc(100% + 1px);
+  }
+
+  .plant-name {
+    transform: translateY(-100%);
+  }
+
+  &:hover {
+    .plant-info,
+    .plant-name {
+      transform: translateY(0);
+    }
+
+    .plant-name {
+      padding-top: 0;
+      div {
+        opacity: 0;
+      }
+    }
+  }
+}
