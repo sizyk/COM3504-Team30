@@ -9,6 +9,7 @@ const serverLog = require('debug')('app:server');
 const errorLog = require('debug')('app:error');
 const http = require('http');
 const app = require('../app');
+var database = require('../databases/plants');
 
 /**
  * Normalize a port into a number, string, or false.
