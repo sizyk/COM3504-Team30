@@ -2,6 +2,8 @@ const express = require('express');
 const renderLayout = require('../helpers/layout-renderer');
 const router = express.Router();
 
+const plants = require('../controllers/plants');
+
 /* IMAGE CODE (move into seperate route eventually) */
 var multer = require('multer');
 var storage = multer.diskStorage({
@@ -39,6 +41,7 @@ router.post('/form-test', upload.single('image'), (req, res) => {
   let filepath = req.file.path;
 
   plant = {
+    author: "placeholder", //replace with user when implemented
     name: plantData.name,
     description: plantData.description,
     dateTimeSeen: new Date(plantData.dateTimeSeen),
@@ -72,7 +75,8 @@ router.post('/form-test', upload.single('image'), (req, res) => {
     plant.hasSeeds = false
   }
 
-  console.log(plant);
+  let result = plants.create(plant);
+  console.log(result);
   renderLayout(res, 'form_test', { title: 'Form Test' });
 });
 
