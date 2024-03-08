@@ -34,3 +34,17 @@ exports.create = function (plantData) {
         return null;
     });
 };
+
+// Function to get all plants
+exports.getAll = function () {
+    // Retrieve all plants from the database
+    return plantModel.find({}).then(plants => {
+        // return plant data as a JSON string
+        return JSON.stringify(plants);
+    }).catch(error => {
+        console.log(error);
+
+        // return null in case of an error
+        return null;
+    });
+};

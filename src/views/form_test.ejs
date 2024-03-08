@@ -233,4 +233,27 @@
       });
     });
   </script>
+
+  <!-- View plants TEST -->
+  <div class="container mx-auto mt-5 flex justify-between">
+    <% data.forEach( plant => { %>
+      <div>
+        <p><strong>Name: </strong><%= plant.name %></p>
+        <p><strong>Description: </strong><%= plant.description %></p>
+        <p><strong>Time seen: </strong><%= plant.dateTimeSeen %></p>
+        <p><strong>Size: </strong><%= plant.size %></p>
+        <p><strong>Sun Exposure: </strong><%= plant.sunExposure %></p>
+        <p><strong>Colour: </strong><%= plant.colour %></p>
+        <p><strong>Flowers: </strong><%= plant.hasFlowers %> <strong>Leaves: </strong><%= plant.hasLeaves %> <strong>Fruit:
+          </strong><%= plant.hasFruit %> <strong>Seeds: </strong><%= plant.hasSeeds %></p>
+        <p><strong>Geolocation: </strong>(<%= plant.longitude %>, <%= plant.latitude %>)</p>
+        <img
+                src="<%= plant.image %>"
+                alt="Plant Image"
+                width="200"
+                height="200"/>
+      </div>
+    <% }); %>
+  </div>
+
 </main>

@@ -33,7 +33,12 @@ router.get('/page-3', (req, res) => {
 });
 
 router.get('/form-test', (req, res) => {
-  renderLayout(res, 'form_test', { title: 'Form Test' });
+  let result = plants.getAll();
+  result.then(students => {
+    let data = JSON.parse(students);
+    console.log(data.length);
+    renderLayout(res, 'form_test', { title: 'Form Test', data: data });
+  })
 });
 
 router.post('/form-test', upload.single('image'), (req, res) => {
@@ -77,7 +82,14 @@ router.post('/form-test', upload.single('image'), (req, res) => {
 
   let result = plants.create(plant);
   console.log(result);
-  renderLayout(res, 'form_test', { title: 'Form Test' });
+
+  // render page with updated data
+  result = plants.getAll();
+  result.then(students => {
+    let data = JSON.parse(students);
+    console.log(data.length);
+    renderLayout(res, 'form_test', { title: 'Form Test', data: data });
+  })
 });
 
 module.exports = router;
