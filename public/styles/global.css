@@ -255,10 +255,9 @@ main {
   .plant-info,
   .plant-name,
   .plant-name div {
-    transition:
-      transform 0.75s ease-out,
-      padding-top 0.75s ease-out,
-      opacity 0.75s ease-out;
+    transition: transform 0.75s ease-out,
+    padding-top 0.75s ease-out,
+    opacity 0.75s ease-out;
   }
 
   .plant-info {
@@ -284,9 +283,15 @@ main {
 
     .plant-name {
       padding-top: 0;
+
       div {
         opacity: 0;
       }
     }
   }
+}
+
+.modal-body {
+  max-height: calc(100vh - 210px);
+  overflow-y: auto;
 }

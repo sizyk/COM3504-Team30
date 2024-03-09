@@ -1,23 +1,25 @@
 const express = require('express');
+const multer = require('multer');
+const log = require('debug')('app:db');
 const renderLayout = require('../helpers/layout-renderer');
-const router = express.Router();
 
+const router = express.Router();
 const plants = require('../controllers/plants');
 
 /* IMAGE CODE (move into seperate route eventually) */
-var multer = require('multer');
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'public/img/uploads')
+
+const storage = multer.diskStorage({
+  destination(req, file, cb) {
+    cb(null, 'public/img/uploads');
   },
-  filename: function (req, file, cb) {
-    var original = file.originalname;
-    var file_extension = original.split('.');
-    filename = Date.now() + '.' + file_extension[file_extension.length - 1];
-    cb(null, filename)
-  }
+  filename(req, file, cb) {
+    const original = file.originalname;
+    const fileExtension = original.split('.');
+    const filename = `${Date.now()}.${fileExtension[fileExtension.length - 1]}`;
+    cb(null, filename);
+  },
 });
-let upload = multer({ storage: storage });
+const upload = multer({ storage });
 
 /* GET home page. */
 router.get('/', (req, res) => {
@@ -33,20 +35,48 @@ router.get('/page-3', (req, res) => {
 });
 
 router.get('/form-test', (req, res) => {
-  let result = plants.getAll();
-  result.then(students => {
-    let data = JSON.parse(students);
-    console.log(data.length);
-    renderLayout(res, 'form_test', { title: 'Form Test', data: data });
-  })
+  const result = plants.getAll();
+  result.then((students) => {
+    const data = JSON.parse(students);
+    log(data.length);
+    renderLayout(res, 'form_test', { title: 'Form Test', data });
+  });
 });
 
 router.post('/form-test', upload.single('image'), (req, res) => {
-  let plantData = req.body;
-  let filepath = req.file.path;
+  const plantData = req.body;
+  const filepath = req.file.path;
+  let hasFlowers;
+  let hasLeaves;
+  let hasFruit;
+  let hasSeeds;
 
-  plant = {
-    author: "placeholder", //replace with user when implemented
+  // deal with checkboxes, as they have no value if not checked
+  if (plantData.hasFlowers === 'true') {
+    hasFlowers = true;
+  } else {
+    hasFlowers = false;
+  }
+  if (plantData.hasLeaves === 'true') {
+    hasLeaves = true;
+  } else {
+    hasLeaves = false;
+  }
+
+  if (plantData.hasFruit === 'true') {
+    hasFruit = true;
+  } else {
+    hasFruit = false;
+  }
+
+  if (plantData.hasSeeds === 'true') {
+    hasSeeds = true;
+  } else {
+    hasSeeds = false;
+  }
+
+  const plant = {
+    author: 'placeholder', // replace with user when implemented
     name: plantData.name,
     description: plantData.description,
     dateTimeSeen: new Date(plantData.dateTimeSeen),
@@ -55,41 +85,23 @@ router.post('/form-test', upload.single('image'), (req, res) => {
     colour: plantData.colour,
     longitude: 0,
     latitude: 0,
-    image: filepath}
-
-  if (req.body.hasFlowers === 'true') {
-    plant.hasFlowers = true
-  }else{
-    plant.hasFlowers = false
-  }
-  if (req.body.hasLeaves === 'true') {
-    plant.hasLeaves = true
-  }else{
-    plant.hasLeaves = false
-  }
-
-  if (req.body.hasFruit === 'true') {
-    plant.hasFruit = true
-  }else{
-    plant.hasFruit = false
-  }
-
-  if (req.body.hasSeeds === 'true') {
-    plant.hasSeeds = true
-  }else{
-    plant.hasSeeds = false
-  }
+    image: filepath,
+    hasFlowers,
+    hasLeaves,
+    hasFruit,
+    hasSeeds,
+  };
 
   let result = plants.create(plant);
-  console.log(result);
+  log(result);
 
   // render page with updated data
   result = plants.getAll();
-  result.then(students => {
-    let data = JSON.parse(students);
-    console.log(data.length);
-    renderLayout(res, 'form_test', { title: 'Form Test', data: data });
-  })
+  result.then((students) => {
+    const data = JSON.parse(students);
+    log(data.length);
+    renderLayout(res, 'form_test', { title: 'Form Test', data });
+  });
 });
 
 module.exports = router;
