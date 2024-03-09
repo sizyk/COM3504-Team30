@@ -42,6 +42,6 @@ app.use((err, req, res) => {
 });
 
 app.use('/public/img/uploads', express.static(path
-    .join(__dirname, '/public/img/uploads'))); // for serving static image files
+  .join(__dirname, '/public/img/uploads'))); // for serving static image files
 
 module.exports = app;
