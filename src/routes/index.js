@@ -56,7 +56,7 @@ router.get('/page-3', (req, res) => {
   renderLayout(res, 'page3');
 });
 
-router.post('/form-test', upload.single('image'), (req, res) => {
+router.post('/create-plant', upload.single('image'), (req, res) => {
   const plantData = req.body;
   const filepath = req.file.path;
   let hasFlowers;
@@ -105,16 +105,10 @@ router.post('/form-test', upload.single('image'), (req, res) => {
     hasSeeds,
   };
 
-  let result = plants.create(plant);
+  const result = plants.create(plant);
   log(result);
 
-  // render page with updated data
-  result = plants.getAll();
-  result.then((students) => {
-    const data = JSON.parse(students);
-    log(data.length);
-    renderLayout(res, 'form_test', { title: 'Form Test', data });
-  });
+  res.redirect('/');
 });
 
 module.exports = router;
