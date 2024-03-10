@@ -48,7 +48,8 @@
             <form
               action="/form-test"
               method="POST"
-              enctype="multipart/form-data">
+              enctype="multipart/form-data"
+            >
               <div class="form-group mb-4">
                 <label for="name" class="block text-text">Name</label>
                 <input
@@ -189,18 +190,17 @@
                 </div>
               </div>
               <div class="form-group mb-4">
-                <label
-                  class="block text-text"
-                  for="file_input"
-                >Upload Image</label>
+                <label class="block text-text" for="file_input"
+                  >Upload Image</label
+                >
                 <input
-                  class="w-full cursor-pointer file:form-input file:hover-button
-                    file:rounded file:px-4 file:py-2 file:font-bold"
+                  class="file:form-input file:hover-button w-full cursor-pointer file:rounded file:px-4 file:py-2 file:font-bold"
                   id="image"
                   name="image"
                   type="file"
                   aria-describedby="file_input_help"
-                  accept="image/png, image/jpeg">
+                  accept="image/png, image/jpeg"
+                />
               </div>
               <p>todo: geolocation</p>
               <button
@@ -237,23 +237,30 @@
   <!-- View plants TEST -->
   <div class="container mx-auto mt-5 flex justify-between">
     <% data.forEach( plant => { %>
-      <div>
-        <p><strong>Name: </strong><%= plant.name %></p>
-        <p><strong>Description: </strong><%= plant.description %></p>
-        <p><strong>Time seen: </strong><%= plant.dateTimeSeen %></p>
-        <p><strong>Size: </strong><%= plant.size %></p>
-        <p><strong>Sun Exposure: </strong><%= plant.sunExposure %></p>
-        <p><strong>Colour: </strong><%= plant.colour %></p>
-        <p><strong>Flowers: </strong><%= plant.hasFlowers %> <strong>Leaves: </strong><%= plant.hasLeaves %> <strong>Fruit:
-          </strong><%= plant.hasFruit %> <strong>Seeds: </strong><%= plant.hasSeeds %></p>
-        <p><strong>Geolocation: </strong>(<%= plant.longitude %>, <%= plant.latitude %>)</p>
-        <img
-                src="<%= plant.image %>"
-                alt="Plant Image"
-                width="200"
-                height="200"/>
-      </div>
+    <div>
+      <p><strong>Name: </strong><%= plant.name %></p>
+      <p><strong>Description: </strong><%= plant.description %></p>
+      <p><strong>Time seen: </strong><%= plant.dateTimeSeen %></p>
+      <p><strong>Size: </strong><%= plant.size %></p>
+      <p><strong>Sun Exposure: </strong><%= plant.sunExposure %></p>
+      <p><strong>Colour: </strong><%= plant.colour %></p>
+      <p>
+        <strong>Flowers: </strong><%= plant.hasFlowers %>
+        <strong>Leaves: </strong><%= plant.hasLeaves %>
+        <strong>Fruit: </strong><%= plant.hasFruit %>
+        <strong>Seeds: </strong><%= plant.hasSeeds %>
+      </p>
+      <p>
+        <strong>Geolocation: </strong>(<%= plant.longitude %>, <%=
+        plant.latitude %>)
+      </p>
+      <img
+        src="<%= plant.image %>"
+        alt="Plant Image"
+        width="200"
+        height="200"
+      />
+    </div>
     <% }); %>
   </div>
-
 </main>

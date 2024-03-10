@@ -23,24 +23,30 @@ exports.create = (plantData) => {
   });
 
   // Save the new plant to the database and handle success or failure
-  return plant.save().then(() => {
-    log(plant);
+  return plant
+    .save()
+    .then(() => {
+      log(plant);
 
-    // return plant data as a JSON string
-    return JSON.stringify(plant);
-  }).catch((error) => {
-    log(error);
+      // return plant data as a JSON string
+      return JSON.stringify(plant);
+    })
+    .catch((error) => {
+      log(error);
 
-    // return null in case of an error
-    return null;
-  });
+      // return null in case of an error
+      return null;
+    });
 };
 
 // Function to get all plants
-exports.getAll = () => PlantModel.find({}).then((plants) => JSON.stringify(plants))
-  .catch((error) => {
-    log(error);
+exports.getAll = () => {
+  PlantModel.find({})
+    .then((plants) => JSON.stringify(plants))
+    .catch((error) => {
+      log(error);
 
-    // return null in case of an error
-    return null;
-  });
+      // return null in case of an error
+      return null;
+    });
+};

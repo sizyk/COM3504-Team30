@@ -1,24 +1,17 @@
 <div
-  class="plant-card overflow-hidden border-8 border-text bg-[url('/public/img/wildflowers.jpg')] bg-cover"
+  class="plant-card h-[28rem] overflow-hidden border-8 border-text bg-cover bg-center"
+  style="background-image: url('<%= plant.image %>')"
 >
   <div class="plant-info flex h-full flex-col gap-2 text-background">
     <div class="plant-name relative isolate px-2">
-      <h2 class="text-3xl font-bold">Flower Name</h2>
+      <h2 class="text-3xl font-bold"><%= plant.name %></h2>
       <p class="italic">Flower Scientific Name</p>
-      <p>Spotted at 11:37 on 01/03/2024, in Sheffield 🇬🇧</p>
+      <p><%= plant.spottedString %></p>
       <div
         class="absolute bottom-0 left-0 -z-10 h-[200%] w-full bg-gradient-to-t from-text from-35%"
       ></div>
     </div>
-    <p class="flex-fill-remaining-space my-2 px-2">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque eos
-      inventore laborum laudantium repellat. Ad adipisci asperiores, corporis
-      delectus dolore dolorem doloribus, id iure quae sapiente sed, similique
-      voluptas? Delectus. Lorem ipsum dolor sit amet, consectetur adipisicing
-      elit. Animi aspernatur atque doloremque, dolorum ea earum molestias non,
-      officiis perspiciatis quidem sequi sint tempora voluptatum? Laudantium
-      magnam nobis officiis provident sunt.
-    </p>
+    <p class="flex-fill-remaining-space my-2 px-2"><%= plant.description %></p>
     <div class="flex flex-row justify-stretch gap-2 p-2">
       <a href="/plant/1" class="hover-button w-1/2 rounded-lg px-4 py-2"
         >Chat/More Details</a

@@ -255,9 +255,10 @@ main {
   .plant-info,
   .plant-name,
   .plant-name div {
-    transition: transform 0.75s ease-out,
-    padding-top 0.75s ease-out,
-    opacity 0.75s ease-out;
+    transition:
+      transform 0.75s ease-out,
+      padding-top 0.75s ease-out,
+      opacity 0.75s ease-out;
   }
 
   .plant-info {

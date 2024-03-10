@@ -2,21 +2,14 @@
   <div
     class="mb-8 flex flex-row items-end justify-between border-b-4 border-text pb-2"
   >
-    <h1 class="text-4xl font-bold">All Plants</h1>
+    <h1 class="text-4xl font-bold"><%= title %></h1>
     <div>[filters go here]</div>
   </div>
   <div
     class="grid grid-cols-1 gap-10 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
   >
-    <%- include('../partials/plant-card.ejs') %> <%-
-    include('../partials/plant-card.ejs') %> <%-
-    include('../partials/plant-card.ejs') %> <%-
-    include('../partials/plant-card.ejs') %> <%-
-    include('../partials/plant-card.ejs') %> <%-
-    include('../partials/plant-card.ejs') %> <%-
-    include('../partials/plant-card.ejs') %> <%-
-    include('../partials/plant-card.ejs') %> <%-
-    include('../partials/plant-card.ejs') %> <%-
-    include('../partials/plant-card.ejs') %>
+    <% plants.forEach((p) => { %>
+      <%- include('../partials/plant-card.ejs', {plant: p}) %>
+    <% }) %>
   </div>
 </main>

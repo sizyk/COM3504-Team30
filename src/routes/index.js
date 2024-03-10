@@ -23,7 +23,29 @@ const upload = multer({ storage });
 
 /* GET home page. */
 router.get('/', (req, res) => {
-  renderLayout(res, 'index');
+  const result = plants.getAll();
+  result.then(JSON.parse).then((allPlants) => {
+    allPlants.forEach((p) => {
+      const dt = new Date(p.dateTimeSeen);
+      let day = dt.getDate().toString(); // Days are 1-indexed
+      day = day > 9 ? day : `0${day}`;
+
+      let month = (dt.getMonth() + 1).toString(); // Months are 0-indexed (consistency!)
+      month = month > 9 ? month : `0${month}`;
+
+      const year = dt.getFullYear();
+
+      const hour = dt.getHours();
+      const min = dt.getMinutes();
+
+      const tz = dt.getTimezoneOffset();
+
+      // eslint-disable-next-line no-param-reassign
+      p.spottedString = `${hour}:${min} on ${day}/${month}/${year} (UTC+${tz}), in Sheffield 🇬🇧`;
+    });
+
+    renderLayout(res, 'index', { title: 'All Plants', plants: allPlants });
+  });
 });
 
 router.get('/page-2', (req, res) => {
@@ -32,15 +54,6 @@ router.get('/page-2', (req, res) => {
 
 router.get('/page-3', (req, res) => {
   renderLayout(res, 'page3');
-});
-
-router.get('/form-test', (req, res) => {
-  const result = plants.getAll();
-  result.then((students) => {
-    const data = JSON.parse(students);
-    log(data.length);
-    renderLayout(res, 'form_test', { title: 'Form Test', data });
-  });
 });
 
 router.post('/form-test', upload.single('image'), (req, res) => {
