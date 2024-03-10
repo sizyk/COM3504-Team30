@@ -40,13 +40,11 @@ exports.create = (plantData) => {
 };
 
 // Function to get all plants
-exports.getAll = () => {
-  PlantModel.find({})
-    .then((plants) => JSON.stringify(plants))
-    .catch((error) => {
-      log(error);
+exports.getAll = () => PlantModel.find({})
+  .then((plants) => JSON.stringify(plants))
+  .catch((error) => {
+    log(error);
 
-      // return null in case of an error
-      return null;
-    });
-};
+    // return null in case of an error
+    return null;
+  });
