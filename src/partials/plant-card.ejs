@@ -12,10 +12,57 @@
       ></div>
     </div>
     <p class="flex-fill-remaining-space my-2 px-2"><%= plant.description %></p>
-    <div class="flex flex-row justify-stretch gap-2 p-2">
-      <a href="/plant/1" class="hover-button w-1/2 rounded-lg px-4 py-2"
-        >Chat/More Details</a
+    <div
+      class="m-2 flex flex-row justify-evenly gap-2 rounded-lg bg-background p-2 dark:bg-background-inverse"
+    >
+      <div class="has-tooltip">
+        <img
+          src="/public/img/icons/has-leaf-<%= plant.hasLeaves %>.svg"
+          alt="An icon showing that the plant has <%= plant.hasLeaves ? '' : 'no ' %>leaves"
+        />
+        <span class="tooltip-content tooltip-top">
+          <%= plant.hasLeaves ? "Has " : "Has no " %>leaves
+        </span>
+      </div>
+
+      <div class="has-tooltip">
+        <img
+          src="/public/img/icons/flowers-<%= plant.hasFlowers %>.svg"
+          alt="An icon showing that the plant has <%= plant.hasFlowers ? '' : 'no ' %>flowers"
+        />
+        <span class="tooltip-content tooltip-top">
+          <%= plant.hasFlowers ? "Has " : "Has no " %>flowers
+        </span>
+      </div>
+      <div class="has-tooltip">
+        <img
+          src="/public/img/icons/sun-<%= plant.sunExposure.toLowerCase() %>.svg"
+          alt="An icon showing that the plant has <%= plant.sunExposure.toLowerCase() %> sun exposure"
+        />
+        <span class="tooltip-content tooltip-top">
+          <%= plant.sunExposure.replace("ne", "") %> sun exposure
+        </span>
+      </div>
+      <div class="has-tooltip">
+        <img
+          src="/public/img/icons/fruits-or-nuts-<%= plant.hasFruit || plant.hasSeeds %>.svg"
+          alt="An icon showing that the plant has <%= plant.hasFruit || plant.hasSeeds ? '' : 'no ' %>fruits or nuts"
+        />
+        <span class="tooltip-content tooltip-top">
+          <%= plant.hasFruit || plant.hasSeeds ? "Has " : "Has no " %>fruit/nuts
+        </span>
+      </div>
+      <div
+        class="has-tooltip aspect-square h-full rounded-full"
+        style="background-color: <%= plant.colour %>"
       >
+        <span class="tooltip-content tooltip-top"> Colour of plant </span>
+      </div>
+    </div>
+    <div class="flex flex-row justify-stretch gap-2 p-2">
+      <a href="/plant/1" class="hover-button w-1/2 rounded-lg px-4 py-2">
+        Chat/More Details
+      </a>
       <button class="hover-button-secondary w-1/2 rounded-lg px-4 py-2">
         Suggest Edit
       </button>

@@ -325,3 +325,66 @@ main {
   max-height: calc(100vh - 210px);
   overflow-y: auto;
 }
+
+.has-tooltip {
+  position: relative;
+
+  .tooltip-content {
+    @apply text-sm;
+    @apply text-center;
+    @apply w-24;
+    @apply rounded-lg;
+    @apply px-1;
+    @apply py-2;
+
+    position: absolute;
+    z-index: 100;
+
+    background-color: black;
+    color: #f1eee7;
+
+    opacity: 0;
+    transition: opacity .5s ease-in-out;
+    pointer-events: none;
+
+    &.tooltip-bottom {
+      top: calc(105% + 10px);
+      left: 50%;
+      transform: translateX(-50%);
+
+      &::after {
+        content: " ";
+        position: absolute;
+        bottom: 100%;  /* At the top of the tooltip */
+        left: 50%;
+        margin-left: -10px;
+        border-width: 10px;
+        border-style: solid;
+        border-color: transparent transparent black transparent;
+      }
+    }
+
+    &.tooltip-top {
+      bottom: calc(105% + 10px);
+      left: 50%;
+      transform: translateX(-50%);
+
+      &::after {
+        content: " ";
+        position: absolute;
+        top: 100%;  /* At the bottom of the tooltip */
+        left: 50%;
+        margin-left: -10px;
+        border-width: 10px;
+        border-style: solid;
+        border-color: black transparent transparent transparent;
+      }
+    }
+  }
+
+  &:hover {
+    .tooltip-content {
+      opacity: 1;
+    }
+  }
+}
