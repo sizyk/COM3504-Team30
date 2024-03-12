@@ -86,6 +86,18 @@ main {
 
 /*===UTILITIES================================================================*/
 @layer utilities {
+  .font-dm-sans {
+    font-family: "DM Sans", sans-serif;
+    font-optical-sizing: auto;
+  }
+
+  .font-emoji {
+    font-family: "Noto Color Emoji", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+
+
   .flex-fill-remaining-space {
     flex: 1 0 auto;
   }

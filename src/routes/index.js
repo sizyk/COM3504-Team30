@@ -41,7 +41,9 @@ router.get('/', (req, res) => {
       const tz = dt.getTimezoneOffset();
 
       // eslint-disable-next-line no-param-reassign
-      p.spottedString = `${hour}:${min} on ${day}/${month}/${year} (UTC+${tz}), in Sheffield 🇬🇧`;
+      p.spottedString = `${hour}:${min} on ${day}/${month}/${year} (UTC+${tz}), in Sheffield `;
+      // eslint-disable-next-line no-param-reassign
+      p.emoji = '🇬🇧';
     });
 
     renderLayout(res, 'index', { title: 'All Plants', plants: allPlants });
