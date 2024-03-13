@@ -173,6 +173,10 @@ main {
 }
 
 /*===SITE-WIDE================================================================*/
+input[type="checkbox"] {
+  accent-color: var(--primary);
+}
+
 #nav-links {
   @media screen(max-md) {
     @apply pt-4;
