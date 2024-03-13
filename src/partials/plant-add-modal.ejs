@@ -39,6 +39,7 @@
           action="/create-plant"
           method="POST"
           enctype="multipart/form-data"
+          id="createPlantForm"
         >
           <div class="form-group mb-4">
             <label for="name" class="block text-text">Name</label>
@@ -178,10 +179,33 @@
               accept="image/png, image/jpeg"
             />
           </div>
-          <p>todo: geolocation</p>
+          <div class="form-group mb-4">
+            <button class="form-input hover-button rounded px-4 py-2 font-bold" type="button" onclick="getLocation()">Get Location</button>
+            <br><br>
+            <label for="latitude">Latitude:</label>
+            <input
+              type="text"
+              id="latitude"
+              name="latitude"
+              class="form-input mt-1 block w-full rounded border border-gray-300 bg-[--background-light] pl-2 text-text"
+              required
+              readonly
+            >
+            <label for="longitude">Longitude:</label>
+            <input
+              type="text"
+              id="longitude"
+              name="longitude"
+              class="form-input mt-1 block w-full rounded border border-gray-300 bg-[--background-light] pl-2 text-text"
+              required
+              readonly
+            >
+          </div>
           <button
+            id="submitButton"
             type="submit"
             class="form-input hover-button rounded px-4 py-2 font-bold"
+            disabled
           >
             Submit
           </button>
@@ -205,4 +229,19 @@
       modal.classList.remove('active');
     });
   });
+
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+      alert("Geolocation is not supported by this browser.");
+    }
+  }
+
+  function showPosition(position) {
+    document.getElementById("latitude").value = position.coords.latitude;
+    document.getElementById("longitude").value = position.coords.longitude;
+    // Enable the submit button once the geolocation is obtained
+    document.getElementById("submitButton").disabled = false;
+  }
 </script>

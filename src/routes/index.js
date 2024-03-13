@@ -61,6 +61,7 @@ router.get('/page-3', (req, res) => {
 router.post('/create-plant', upload.single('image'), (req, res) => {
   const plantData = req.body;
   const filepath = req.file.path.replace(/\\/g, '/');
+
   let hasFlowers;
   let hasLeaves;
   let hasFruit;
@@ -98,8 +99,8 @@ router.post('/create-plant', upload.single('image'), (req, res) => {
     size: parseFloat(plantData.size),
     sunExposure: plantData.sunExposure,
     colour: plantData.colour,
-    longitude: 0,
-    latitude: 0,
+    longitude: plantData.longitude,
+    latitude: plantData.latitude,
     image: filepath,
     hasFlowers,
     hasLeaves,
