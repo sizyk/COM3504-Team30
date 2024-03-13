@@ -9,5 +9,9 @@
     "ignorePatterns": [
         "node_modules",
         "*.config.js"
-    ]
+    ],
+
+    "rules": {
+        "no-param-reassign": "off"
+    }
 }

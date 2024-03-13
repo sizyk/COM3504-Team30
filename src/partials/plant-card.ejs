@@ -1,6 +1,10 @@
 <div
   class="plant-card touchscreen-hover h-[28rem] overflow-hidden border-8 border-text bg-cover bg-center"
   style="background-image: url('<%= plant.image %>')"
+  data-hasleaves="<%= plant.hasLeaves %>"
+  data-hasflowers="<%= plant.hasFlowers %>"
+  data-hasfruitsnuts="<%= plant.hasFruit || plant.hasSeeds %>"
+  data-sunexposure="<%= plant.sunExposure.toLowerCase() %>"
 >
   <div class="plant-info flex h-full flex-col gap-2 text-background">
     <div class="plant-name relative isolate px-2">
@@ -56,7 +60,7 @@
         </span>
       </div>
       <div
-        class="has-tooltip aspect-square h-full rounded-full touchscreen-hover"
+        class="has-tooltip touchscreen-hover aspect-square h-full rounded-full"
         style="background-color: <%= plant.colour %>"
       >
         <span class="tooltip-content tooltip-top"> Colour of plant </span>

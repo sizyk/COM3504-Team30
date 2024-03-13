@@ -193,6 +193,22 @@ input[type="checkbox"] {
       content: "✔";
     }
   }
+
+  &:indeterminate {
+    background-color: var(--secondary);
+
+    &:after {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: var(--text);
+      @apply dark:text-background;
+      @apply font-extrabold;
+      margin: auto;
+      content: "—";
+    }
+  }
 }
 
 #nav-links {

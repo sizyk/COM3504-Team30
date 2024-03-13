@@ -40,13 +40,13 @@ router.get('/', (req, res) => {
 
       const tz = dt.getTimezoneOffset();
 
-      // eslint-disable-next-line no-param-reassign
+      // eslint-disable-next-line
       p.spottedString = `${hour}:${min} on ${day}/${month}/${year} (UTC+${tz}), in Sheffield `;
       // eslint-disable-next-line no-param-reassign
       p.emoji = '🇬🇧';
     });
 
-    renderLayout(res, 'index', { title: 'All Plants', plants: allPlants });
+    renderLayout(res, 'index', { title: 'All Plants', plants: allPlants, scripts: ['filters'] });
   });
 });
 
