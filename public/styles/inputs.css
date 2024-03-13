@@ -1,0 +1,67 @@
+/* Make cursor into a pointer, to indicate interactivity */
+select, option, input {
+  cursor: pointer;
+}
+
+input {
+  /* Change cursor for text-input inputs */
+  &[type="text"],
+  &[type="textarea"],
+  &[type="password"],
+  &[type="email"],
+  &[type="number"],
+  &[type="date"],
+  &[type="datetime-local"],
+  &[type="month"] {
+    cursor: text;
+  }
+
+  /* Custom checkbox styling */
+  &[type="checkbox"] {
+    cursor: pointer;
+    position: relative;
+    appearance: none;
+    border: 2px solid var(--background-inverse);
+    background-color: var(--error);
+
+    &:after {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      margin-top: -2px;
+      color: var(--background);
+      content: "✘";
+    }
+
+    &:checked {
+      background-color: var(--primary);
+
+      &:after {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: var(--background);
+        margin: auto;
+        content: "✔";
+      }
+    }
+
+    &:indeterminate {
+      background-color: var(--secondary);
+
+      &:after {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: var(--text);
+        @apply dark:text-background;
+        @apply font-extrabold;
+        margin: auto;
+        content: "—";
+      }
+    }
+  }
+}

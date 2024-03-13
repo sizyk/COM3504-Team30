@@ -1,0 +1,215 @@
+/*===TAILWIND UTILS===========================================================*/
+@layer utilities {
+  .font-dm-sans {
+    font-family: "DM Sans", sans-serif;
+    font-optical-sizing: auto;
+  }
+
+  .font-emoji {
+    font-family: "Noto Color Emoji", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+
+
+  .flex-fill-remaining-space {
+    flex: 1 0 auto;
+  }
+
+  .hover-button {
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease-in-out,
+      color 0.2s ease-in-out,
+      stroke 0.2s ease-in-out;
+    background-color: var(--primary);
+    color: var(--background);
+    stroke: var(--background);
+
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--primary-hover);
+      }
+    }
+
+    &-secondary {
+      cursor: pointer;
+      transition:
+        background-color 0.2s ease-in-out,
+        color 0.2s ease-in-out,
+        stroke 0.2s ease-in-out;
+
+      background-color: var(--secondary);
+      color: var(--on-secondary);
+      stroke: var(--on-secondary);
+
+      &:hover {
+        @media (hover: hover) {
+          background-color: var(--secondary-hover);
+        }
+      }
+    }
+  }
+
+  .hover-link {
+    cursor: pointer;
+    transition:
+      color 0.2s ease-in-out,
+      stroke 0.2s ease-in-out;
+
+    color: var(--text);
+    stroke: var(--text);
+
+    &:hover {
+      @media (hover: hover) {
+        color: var(--text-hover);
+        stroke: var(--text-hover);
+      }
+    }
+
+    &-inverse {
+      cursor: pointer;
+      transition:
+        color 0.2s ease-in-out,
+        stroke 0.2s ease-in-out;
+
+      color: var(--text-inverse);
+      stroke: var(--text-inverse);
+
+      &:hover {
+        @media (hover: hover) {
+          color: var(--text-inverse-hover);
+          stroke: var(--text-inverse-hover);
+        }
+      }
+    }
+  }
+
+  .material-symbols-outlined {
+    /* Recommended icon sizes */
+    &.opsz-20 {
+      font-size: 20px;
+      font-variation-settings:
+        'FILL' 1,
+        'OPSZ' 20;
+    }
+    &.opsz-24 {
+      font-size: 24px;
+      font-variation-settings:
+        'FILL' 1,
+        'OPSZ' 24;
+    }
+    &.opsz-40 {
+      font-size: 40px;
+      font-variation-settings:
+        'FILL' 1,
+        'OPSZ' 40;
+    }
+    &.opsz-48 {
+      font-size: 48px;
+      font-variation-settings:
+        'FILL' 1,
+        'OPSZ' 48;
+    }
+  }
+}
+
+/*===MODAL====================================================================*/
+.modal {
+  pointer-events: none;
+  z-index: 1000;
+
+  .modal-overlay {
+    opacity: 0;
+    transition: opacity .5s ease-in-out;
+  }
+
+  .modal-container {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity .5s ease-in-out, transform .5s ease-in-out;
+  }
+
+  &.active {
+    pointer-events: auto;
+
+    .modal-overlay {
+      opacity: 0.5;
+    }
+
+    .modal-container {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+.modal-body {
+  max-height: calc(100vh - 210px);
+  overflow-y: auto;
+}
+
+
+/*===TOOLTIPS=================================================================*/
+.has-tooltip {
+  position: relative;
+
+  .tooltip-content {
+    @apply text-sm;
+    @apply text-center;
+    @apply w-24;
+    @apply rounded-lg;
+    @apply px-1;
+    @apply py-2;
+
+    position: absolute;
+    z-index: 100;
+
+    background-color: black;
+    color: #f1eee7;
+
+    opacity: 0;
+    transition: opacity .5s ease-in-out;
+    pointer-events: none;
+
+    &.tooltip-bottom {
+      top: calc(105% + 10px);
+      left: 50%;
+      transform: translateX(-50%);
+
+      &::after {
+        content: " ";
+        position: absolute;
+        bottom: 100%;  /* At the top of the tooltip */
+        left: 50%;
+        margin-left: -10px;
+        border-width: 10px;
+        border-style: solid;
+        border-color: transparent transparent black transparent;
+      }
+    }
+
+    &.tooltip-top {
+      bottom: calc(105% + 10px);
+      left: 50%;
+      transform: translateX(-50%);
+
+      &::after {
+        content: " ";
+        position: absolute;
+        top: 100%;  /* At the bottom of the tooltip */
+        left: 50%;
+        margin-left: -10px;
+        border-width: 10px;
+        border-style: solid;
+        border-color: black transparent transparent transparent;
+      }
+    }
+  }
+
+  &:hover, &.hover {
+    .tooltip-content {
+      opacity: 1;
+    }
+  }
+}
