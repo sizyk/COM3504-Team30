@@ -394,7 +394,7 @@ main {
     }
   }
 
-  &:hover {
+  &:hover, &.hover {
     .tooltip-content {
       opacity: 1;
     }

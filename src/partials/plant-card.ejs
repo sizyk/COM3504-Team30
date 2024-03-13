@@ -18,7 +18,7 @@
     <div
       class="m-2 flex flex-row justify-evenly gap-2 rounded-lg bg-background p-2 dark:bg-background-inverse"
     >
-      <div class="has-tooltip">
+      <div class="has-tooltip touchscreen-hover">
         <img
           src="/public/img/icons/has-leaf-<%= plant.hasLeaves %>.svg"
           alt="An icon showing that the plant has <%= plant.hasLeaves ? '' : 'no ' %>leaves"
@@ -28,7 +28,7 @@
         </span>
       </div>
 
-      <div class="has-tooltip">
+      <div class="has-tooltip touchscreen-hover">
         <img
           src="/public/img/icons/flowers-<%= plant.hasFlowers %>.svg"
           alt="An icon showing that the plant has <%= plant.hasFlowers ? '' : 'no ' %>flowers"
@@ -37,7 +37,7 @@
           <%= plant.hasFlowers ? "Has " : "Has no " %>flowers
         </span>
       </div>
-      <div class="has-tooltip">
+      <div class="has-tooltip touchscreen-hover">
         <img
           src="/public/img/icons/sun-<%= plant.sunExposure.toLowerCase() %>.svg"
           alt="An icon showing that the plant has <%= plant.sunExposure.toLowerCase() %> sun exposure"
@@ -46,7 +46,7 @@
           <%= plant.sunExposure.replace("ne", "") %> sun exposure
         </span>
       </div>
-      <div class="has-tooltip">
+      <div class="has-tooltip touchscreen-hover">
         <img
           src="/public/img/icons/fruits-or-nuts-<%= plant.hasFruit || plant.hasSeeds %>.svg"
           alt="An icon showing that the plant has <%= plant.hasFruit || plant.hasSeeds ? '' : 'no ' %>fruits or nuts"
@@ -56,7 +56,7 @@
         </span>
       </div>
       <div
-        class="has-tooltip aspect-square h-full rounded-full"
+        class="has-tooltip aspect-square h-full rounded-full touchscreen-hover"
         style="background-color: <%= plant.colour %>"
       >
         <span class="tooltip-content tooltip-top"> Colour of plant </span>
