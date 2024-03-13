@@ -35,14 +35,16 @@ router.get('/', (req, res) => {
 
       const year = dt.getFullYear();
 
-      const hour = dt.getHours();
-      const min = dt.getMinutes();
+      let hour = dt.getHours().toString();
+      hour = hour > 9 ? hour : `0${hour}`;
+
+      let min = dt.getMinutes().toString();
+      min = min > 9 ? min : `0${min}`;
 
       const tz = dt.getTimezoneOffset();
 
-      // eslint-disable-next-line
       p.spottedString = `${hour}:${min} on ${day}/${month}/${year} (UTC+${tz}), in Sheffield `;
-      // eslint-disable-next-line no-param-reassign
+
       p.emoji = '🇬🇧';
     });
 
