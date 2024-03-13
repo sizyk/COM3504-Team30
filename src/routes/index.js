@@ -114,4 +114,6 @@ router.post('/create-plant', upload.single('image'), (req, res) => {
   res.redirect('/');
 });
 
+router.post('/chat')
+
 module.exports = router;
