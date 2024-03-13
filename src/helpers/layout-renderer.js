@@ -39,6 +39,8 @@ module.exports = function renderLayout(res, view, options, layout) {
     opts.scripts = [];
   }
 
+  opts.scripts.push('global');
+
   if (!('dataset' in opts) || typeof opts.dataset !== 'object') {
     if ('dataset' in opts) {
       // Must be that dataset is not an object, warn developer

@@ -288,7 +288,7 @@ main {
     transform: translateY(-100%);
   }
 
-  &:hover {
+  &:hover, &.hover {
     .plant-info,
     .plant-name {
       transform: translateY(0);
