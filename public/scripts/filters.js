@@ -10,18 +10,19 @@ const CURRENT_FILTERS = {};
  */
 function handleCheckbox(checkbox) {
   if (checkbox.dataset.checked === 'true') {
-    checkbox.dataset.indeterminate = 'true';
+    checkbox.dataset.indeterminate = 'false';
     checkbox.dataset.checked = 'false';
 
-    CURRENT_FILTERS[checkbox.dataset.filterfeature] = 'any';
-  } else if (checkbox.dataset.indeterminate !== 'true') {
+    CURRENT_FILTERS[checkbox.dataset.filterfeature] = 'false';
+  } else if (checkbox.dataset.indeterminate === 'true') {
+    checkbox.dataset.indeterminate = 'false';
     checkbox.dataset.checked = 'true';
 
     CURRENT_FILTERS[checkbox.dataset.filterfeature] = 'true';
   } else {
-    checkbox.dataset.indeterminate = 'false';
+    checkbox.dataset.indeterminate = 'true';
 
-    CURRENT_FILTERS[checkbox.dataset.filterfeature] = 'false';
+    CURRENT_FILTERS[checkbox.dataset.filterfeature] = 'any';
   }
 
   checkbox.checked = checkbox.dataset.checked === 'true';
