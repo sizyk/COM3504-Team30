@@ -174,7 +174,25 @@ main {
 
 /*===SITE-WIDE================================================================*/
 input[type="checkbox"] {
-  accent-color: var(--primary);
+  position: relative;
+  appearance: none;
+  border: 2px solid var(--background-inverse);
+  background-color: var(--background);
+  @apply dark:bg-background-inverse;
+
+  &:checked {
+    background-color: var(--primary);
+
+    &:after {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: var(--background);
+      margin: auto;
+      content: "✔";
+    }
+  }
 }
 
 #nav-links {

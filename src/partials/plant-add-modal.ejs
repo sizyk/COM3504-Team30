@@ -125,7 +125,7 @@
                 name="hasFlowers"
                 type="checkbox"
                 value="true"
-                class="form-input focus:primary-hover h-4 w-4 rounded border-text-hover bg-text text-primary"
+                class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
               />
               <label for="hasFlowers" class="ms-2 text-sm font-medium text-text"
                 >Flowers</label
@@ -137,7 +137,7 @@
                 name="hasLeaves"
                 type="checkbox"
                 value="true"
-                class="form-input focus:primary-hover h-4 w-4 rounded border-text-hover bg-text text-primary"
+                class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
               />
               <label for="hasLeaves" class="ms-2 text-sm font-medium text-text"
                 >Leaves</label
@@ -149,7 +149,7 @@
                 name="hasFruit"
                 type="checkbox"
                 value="true"
-                class="form-input focus:primary-hover h-4 w-4 rounded border-text-hover bg-text text-primary"
+                class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
               />
               <label for="hasFruit" class="ms-2 text-sm font-medium text-text"
                 >Fruit</label
@@ -161,7 +161,7 @@
                 name="hasSeeds"
                 type="checkbox"
                 value="true"
-                class="form-input focus:primary-hover h-4 w-4 rounded border-text-hover bg-text text-primary"
+                class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
               />
               <label for="hasSeeds" class="ms-2 text-sm font-medium text-text"
                 >Seeds</label
@@ -184,32 +184,38 @@
               type="text"
               id="latitude"
               name="latitude"
-              class="hidden form-input mt-1 block w-full rounded border border-gray-300 bg-[--background-light] pl-2 text-text"
+              class="form-input mt-1 block hidden w-full rounded border border-gray-300 bg-[--background-light] pl-2 text-text"
               value="0"
               required
               readonly
-            >
+            />
             <input
               type="text"
               id="longitude"
               name="longitude"
-              class="hidden form-input mt-1 block w-full rounded border border-gray-300 bg-[--background-light] pl-2 text-text"
+              class="form-input mt-1 block hidden w-full rounded border border-gray-300 bg-[--background-light] pl-2 text-text"
               value="0"
               readonly
-            >
+            />
             <div class="w-3/4">
               <label for="coordinates">Coordinates:</label>
               <input
-                      type="text"
-                      id="coordinates"
-                      name="coordinates"
-                      class="form-input w-full mt-1 block rounded border border-gray-300 bg-[--background-light] pl-2 text-text grow-0"
-                      value="(0,0)"
-                      required
-                      readonly
-              >
+                type="text"
+                id="coordinates"
+                name="coordinates"
+                class="form-input mt-1 block w-full grow-0 rounded border border-gray-300 bg-[--background-light] pl-2 text-text"
+                value="(0,0)"
+                required
+                readonly
+              />
             </div>
-            <button class="form-input hover-button rounded px-4 py-2 font-bold w-1/4 grow-0" type="button" onclick="getLocation()">Get</button>
+            <button
+              class="form-input hover-button w-1/4 grow-0 rounded px-4 py-2 font-bold"
+              type="button"
+              onclick="getLocation()"
+            >
+              Get
+            </button>
           </div>
           <button
             id="submitButton"
@@ -243,13 +249,14 @@
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(showPosition);
     } else {
-      alert("Geolocation is not supported by this browser.");
+      alert('Geolocation is not supported by this browser.');
     }
   }
 
   function showPosition(position) {
-    document.getElementById("latitude").value = position.coords.latitude;
-    document.getElementById("longitude").value = position.coords.longitude;
-    document.getElementById("coordinates").value = "(" + position.coords.latitude + ", " + position.coords.longitude + ")";
+    document.getElementById('latitude').value = position.coords.latitude;
+    document.getElementById('longitude').value = position.coords.longitude;
+    document.getElementById('coordinates').value =
+      '(' + position.coords.latitude + ', ' + position.coords.longitude + ')';
   }
 </script>
