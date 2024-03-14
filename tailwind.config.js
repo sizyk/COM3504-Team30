@@ -14,13 +14,18 @@ module.exports = {
         'text-inverse-hover': 'var(--text-inverse-hover)',
 
         'background': 'var(--background)',
+        'background-light': 'var(--background-light)',
         'background-hover': 'var(--background-hover)',
         'background-inverse': 'var(--background-inverse)',
         'background-inverse-hover': 'var(--background-inverse-hover)',
 
         'primary': 'var(--primary)',
+        'primary-hover': 'var(--primary-hover)',
         'secondary': 'var(--secondary)',
+        'secondary-hover': 'var(--secondary-hover)',
+        'on-secondary': 'var(--on-secondary)',
         'accent': 'var(--accent)',
+        'error': 'var(--error)',
       },
 
       screens: {
