@@ -72,3 +72,10 @@ exports.getAll = () => PlantModel.find({})
     // return null in case of an error
     return null;
   });
+
+exports.getPlantById = (id) => PlantModel.find({ _id: id })
+  .then((plants) => JSON.stringify(plants))
+  .catch((error) => {
+    log(error);
+    return null;
+  });
