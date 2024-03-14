@@ -2,20 +2,20 @@
   type="button"
   class="hover-button flex items-center gap-2 rounded px-3 py-2 text-center font-bold"
   data-toggle="modal"
-  data-target="#plantModal"
+  data-target="plantModal"
 >
   Add Plant <span class="material-symbols-outlined"> library_add </span>
 </button>
 
 <div
-  class="modal fixed left-0 top-0 flex h-full w-full items-center justify-center"
+  class="modal fixed left-0 top-0 flex h-full w-full items-center justify-center invisible"
   id="plantModal"
   tabindex="-1"
   role="dialog"
 >
   <div
     class="modal-overlay absolute h-full w-full bg-gray-900 opacity-50"
-    data-close
+    data-close-modal
   ></div>
   <div
     class="modal-container z-50 mx-auto w-5/6 overflow-y-auto rounded bg-background shadow-lg md:max-w-md"
@@ -29,7 +29,7 @@
           class="close-modal flex justify-center rounded border border-gray-300 bg-[--background] hover:bg-red-400"
           aria-label="Close modal"
           title="Close modal"
-          data-close
+          data-close-modal
         >
           <span class="material-symbols-outlined">close</span>
         </button>
@@ -231,17 +231,34 @@
 </div>
 
 <script>
+  function setModalVisibility(modal) {
+    if (modal.classList.contains('active')) {
+      modal.classList.remove('invisible');
+    } else {
+      // Timeout ensures modal finishes its CSS transitions before being made invisible
+      setTimeout(() => {
+        modal.classList.add('invisible');
+      }, 510);
+    }
+  }
+
   document.querySelectorAll('[data-toggle="modal"]').forEach((btn) => {
     btn.addEventListener('click', function () {
-      let modalId = btn.getAttribute('data-target');
-      document.querySelector(modalId).classList.toggle('active');
+      const modal = document.getElementById(btn.getAttribute('data-target'));
+      modal.classList.toggle('active');
+
+      setModalVisibility(modal);
+
     });
   });
 
-  document.querySelectorAll('[data-close]').forEach((btn) => {
+  document.querySelectorAll('[data-close-modal]').forEach((btn) => {
     btn.addEventListener('click', function () {
-      let modal = btn.closest('.modal');
+      const modal = btn.closest('.modal');
+
       modal.classList.remove('active');
+
+      setModalVisibility(modal);
     });
   });
 
