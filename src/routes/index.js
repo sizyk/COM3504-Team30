@@ -41,35 +41,6 @@ router.post('/create-plant', upload.single('image'), (req, res) => {
   const plantData = req.body;
   const filepath = req.file.path.replace(/\\/g, '/');
 
-  let hasFlowers;
-  let hasLeaves;
-  let hasFruit;
-  let hasSeeds;
-
-  // deal with checkboxes, as they have no value if not checked
-  if (plantData.hasFlowers === 'true') {
-    hasFlowers = true;
-  } else {
-    hasFlowers = false;
-  }
-  if (plantData.hasLeaves === 'true') {
-    hasLeaves = true;
-  } else {
-    hasLeaves = false;
-  }
-
-  if (plantData.hasFruit === 'true') {
-    hasFruit = true;
-  } else {
-    hasFruit = false;
-  }
-
-  if (plantData.hasSeeds === 'true') {
-    hasSeeds = true;
-  } else {
-    hasSeeds = false;
-  }
-
   const plant = {
     author: 'placeholder', // replace with user when implemented
     name: plantData.name,
@@ -81,10 +52,10 @@ router.post('/create-plant', upload.single('image'), (req, res) => {
     longitude: plantData.longitude,
     latitude: plantData.latitude,
     image: filepath,
-    hasFlowers,
-    hasLeaves,
-    hasFruit,
-    hasSeeds,
+    hasFlowers: plantData.hasFlowers === 'true', // Checkboxes have no value if not checked, so manually check whether they are true
+    hasLeaves: plantData.hasLeaves === 'true',
+    hasFruit: plantData.hasFruit === 'true',
+    hasSeeds: plantData.hasSeeds === 'true',
   };
 
   const result = plants.create(plant);
