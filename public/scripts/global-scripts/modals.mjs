@@ -8,7 +8,9 @@ function setModalVisibility(modal) {
   } else {
     // Timeout ensures modal finishes its CSS transitions before being made invisible
     setTimeout(() => {
-      modal.classList.add('invisible');
+      if (!modal.classList.contains('active')) {
+        modal.classList.add('invisible');
+      }
     }, 510);
   }
 }
