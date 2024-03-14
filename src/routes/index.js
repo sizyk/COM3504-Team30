@@ -29,14 +29,6 @@ router.get('/', (req, res) => {
   });
 });
 
-router.get('/page-2', (req, res) => {
-  renderLayout(res, 'page2');
-});
-
-router.get('/page-3', (req, res) => {
-  renderLayout(res, 'page3');
-});
-
 router.post('/create-plant', upload.single('image'), (req, res) => {
   const plantData = req.body;
   const filepath = req.file.path.replace(/\\/g, '/');
@@ -62,6 +54,10 @@ router.post('/create-plant', upload.single('image'), (req, res) => {
   log(result);
 
   res.redirect('/');
+});
+
+router.get('/chat', (req, res) => {
+  renderLayout(res, 'chat', { scripts: ['chat'] });
 });
 
 module.exports = router;
