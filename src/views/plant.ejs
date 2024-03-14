@@ -1,0 +1,87 @@
+<main class="mx-auto mt-24 w-10/12">
+  <div class="mb-5">
+    <a
+            href="/"
+            class="hover-button w-1/2 rounded-lg px-4 py-2 text-center text-sm font-bold"
+    >
+      Back
+    </a>
+  </div>
+
+  <div
+          class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2"
+  >
+<!--  Image Div  -->
+    <div>
+      <img src="../<%= plant.image %>" alt="" class="overflow-hidden border-8 border-text">
+    </div>
+<!--  Content Div  -->
+    <div class="h-[100%]  overflow-hidden flex flex-col">
+      <div class="border-b-4 border-text">
+        <h2 class="text-3xl font-bold"><%= plant.name %></h2>
+        <p class="italic">Flower Scientific Name</p>
+        <div class="inline-block mr-5 py-1">
+          <p>
+            <%= plant.spottedString %>
+            <span class="font-emoji"><%= plant.emoji %></span>
+          </p>
+        </div>
+        <div class="inline-block py-1">
+          <a
+                  class="hover-button w-1/2 px-4  py-1 rounded-lg text-center text-sm font-bold"
+          >
+            Map
+          </a>
+        </div>
+      </div>
+
+      <p class="flex-fill-remaining-space"><%= plant.description %></p>
+      <div class="mt-auto">
+        <div class="m-2 flex flex-row justify-evenly gap-2 rounded-lg bg-background p-2 dark:bg-background-inverse">
+          <div class="has-tooltip touchscreen-hover">
+            <img
+                    src="/public/img/icons/has-leaf-<%= plant.hasLeaves %>.svg"
+                    alt="An icon showing that the plant has <%= plant.hasLeaves ? '' : 'no ' %>leaves"
+            />
+            <span class="tooltip-content tooltip-top"> <%= plant.hasLeaves ? "Has " : "Has no " %>leaves </span>
+          </div>
+
+          <div class="has-tooltip touchscreen-hover">
+            <img
+                    src="/public/img/icons/flowers-<%= plant.hasFlowers %>.svg"
+                    alt="An icon showing that the plant has <%= plant.hasFlowers ? '' : 'no ' %>flowers"
+            />
+            <span class="tooltip-content tooltip-top"><%= plant.hasFlowers ? "Has " : "Has no " %>flowers</span>
+          </div>
+          <div class="has-tooltip touchscreen-hover">
+            <img
+                    src="/public/img/icons/sun-<%= plant.sunExposure.toLowerCase() %>.svg"
+                    alt="An icon showing that the plant has <%= plant.sunExposure.toLowerCase() %> sun exposure"
+            />
+            <span class="tooltip-content tooltip-top"><%= plant.sunExposure.replace("ne", "") %> sun exposure</span>
+          </div>
+          <div class="has-tooltip touchscreen-hover">
+            <img
+                    src="/public/img/icons/fruits-or-nuts-<%= plant.hasFruit || plant.hasSeeds %>.svg"
+                    alt="An icon showing that the plant has <%= plant.hasFruit || plant.hasSeeds ? '' : 'no ' %>fruits or nuts"
+            />
+            <span class="tooltip-content tooltip-top"><%= plant.hasFruit || plant.hasSeeds ? "Has " : "Has no " %>fruit/nuts</span>
+          </div>
+          <div
+                  class="has-tooltip touchscreen-hover aspect-square h-[3rem] rounded-full"
+                  style="background-color: <%= plant.colour %>"
+          >
+            <span class="tooltip-content tooltip-top"> Colour of plant </span>
+          </div>
+        </div>
+        <div class="flex flex-row justify-around gap-2 p-2">
+          <button
+                  class="hover-button-secondary text-center21 w-1/2 rounded-lg px-4 py-2 text-sm font-bold"
+          >
+            Suggest Edit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
