@@ -16,4 +16,8 @@ router.get('/page-3', (req, res) => {
   renderLayout(res, 'page3');
 });
 
+router.get('/chat', (req, res) => {
+  renderLayout(res, 'chat', { scripts: ['chat'] });
+});
+
 module.exports = router;
