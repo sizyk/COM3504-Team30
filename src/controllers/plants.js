@@ -41,7 +41,31 @@ exports.create = (plantData) => {
 
 // Function to get all plants
 exports.getAll = () => PlantModel.find({})
-  .then((plants) => JSON.stringify(plants))
+  .then((plants) => {
+    plants.forEach((p) => {
+      const dt = new Date(p.dateTimeSeen.toString());
+      let day = dt.getDate().toString(); // Days are 1-indexed
+      day = day > 9 ? day : `0${day}`;
+
+      let month = (dt.getMonth() + 1).toString(); // Months are 0-indexed (consistency!)
+      month = month > 9 ? month : `0${month}`;
+
+      const year = dt.getFullYear();
+
+      let hour = dt.getHours().toString();
+      hour = hour > 9 ? hour : `0${hour}`;
+
+      let min = dt.getMinutes().toString();
+      min = min > 9 ? min : `0${min}`;
+
+      const tz = dt.getTimezoneOffset();
+
+      p.spottedString = `${hour}:${min} on ${day}/${month}/${year} (UTC+${tz}), in Sheffield `;
+
+      p.emoji = '🇬🇧';
+    });
+    return plants;
+  })
   .catch((error) => {
     log(error);
 
