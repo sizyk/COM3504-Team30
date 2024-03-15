@@ -1,6 +1,6 @@
 <main class="mx-auto mt-24 w-10/12">
   <div
-    class="mb-8 flex flex-row items-end justify-between border-b-4 border-text pb-2"
+    class="mb-8 flex flex-col lg:flex-row items-center lg:items-end justify-between border-b-4 border-text pb-2"
   >
     <h1 class="text-4xl font-bold"><%= title %></h1>
     <div
@@ -8,7 +8,7 @@
     >
       <div
         id="filters"
-        class="flex h-16 w-1/3 flex-row items-stretch justify-evenly gap-4 text-xl"
+        class="flex h-16 flex-row items-stretch justify-evenly gap-4 text-xl"
       >
         <div class="flex flex-col items-center">
           <label for="has-leaves-filter">Leaves?</label>
@@ -55,7 +55,15 @@
           </select>
         </div>
       </div>
-      <%- include('../partials/plant-add-modal.ejs') %>
+      <button
+              type="button"
+              class="hover-button flex items-center gap-2 rounded px-3 py-2 text-center font-bold"
+              data-toggle="modal"
+              data-target="plant-add-modal"
+      >
+        Add Plant <span class="material-symbols-outlined"> library_add </span>
+      </button>
+      <%- include('../partials/modal.ejs', { modalID: 'plant-add-modal', modalTitle: 'Create a new plant sighting', modalContent: 'plant-form'}) %>
     </div>
   </div>
   <div

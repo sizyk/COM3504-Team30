@@ -41,8 +41,14 @@ function toggleDarkMode() {
   }
 }
 
-setTheme(localStorage.getItem('current-theme') || 'light');
+/**
+ * Initialises the theme toggle script
+ */
+export default function initThemeToggle() {
+  // Use light theme as a fallback if nothing found in localStorage
+  setTheme(localStorage.getItem('current-theme') || 'light');
 
-if (toggleSwitch !== null) {
-  toggleSwitch.addEventListener('click', toggleDarkMode);
+  if (toggleSwitch !== null) {
+    toggleSwitch.addEventListener('click', toggleDarkMode);
+  }
 }
