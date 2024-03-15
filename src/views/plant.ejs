@@ -1,37 +1,29 @@
 <main class="mx-auto mt-24 w-10/12">
-  <div class="mb-5">
-    <a
-            href="/"
-            class="hover-button w-1/2 rounded-lg px-4 py-2 text-center text-sm font-bold"
-    >
-      Back
-    </a>
-  </div>
 
   <div
           class="grid grid-cols-1 gap-4 2xl:grid-cols-2"
   >
 <!--  Image Div  -->
-    <div>
-      <img src="../<%= plant.image %>" alt="" class="overflow-hidden border-8 border-text">
+    <div class="m-auto">
+      <img src="../<%= plant.image %>" alt="" class="overflow-hidden max-h-[65vh] border-8 border-text">
     </div>
 <!--  Content Div  -->
     <div class="h-[100%]  overflow-hidden flex flex-col">
       <div class="border-b-4 border-text">
         <h2 class="text-3xl font-bold"><%= plant.name %></h2>
         <p class="italic">Flower Scientific Name</p>
-        <div class="inline-block mr-5 py-1">
+        <p>Discovered by <b><%= plant.author%></b></p>
+        <div class="flex flex-row justify-between mb-1">
           <p>
             <%= plant.spottedString %>
             <span class="font-emoji"><%= plant.emoji %></span>
           </p>
-        </div>
-        <div class="inline-block py-1">
+
           <a
-                  class="hover-button w-1/2 px-4  py-1 rounded-lg text-center text-sm font-bold"
+                  class="hover-button px-4  py-1 rounded-lg text-center text-sm font-bold"
                   href="https://www.google.com/maps/place/<%= plant.latitude%>, <%= plant.longitude%>"
           >
-            Map
+            View on Map
           </a>
         </div>
       </div>
