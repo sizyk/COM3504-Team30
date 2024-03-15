@@ -23,7 +23,7 @@ const upload = multer({ storage });
 
 /* GET home page. */
 router.get('/', (req, res) => {
-  const result = plants.getAll();
+  const result = plants.getPlants({});
   result.then((allPlants) => {
     renderLayout(res, 'index', { title: 'All Plants', plants: allPlants, scripts: ['filters'] });
   });
