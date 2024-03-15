@@ -1,192 +1,193 @@
 <form
-        action="/create-plant"
-        method="POST"
-        enctype="multipart/form-data"
-        id="createPlantForm"
+  action="/create-plant"
+  method="POST"
+  enctype="multipart/form-data"
+  id="createPlantForm"
 >
-    <div class="form-group mb-4">
-        <label for="name" class="block text-text">Name</label>
-        <input
-                type="text"
-                class="form-input mt-1 block w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
-                id="name"
-                name="name"
-                maxlength="40"
-                required
-        />
-    </div>
-    <div class="form-group mb-4">
-        <label for="description" class="block text-text">Description</label>
-        <textarea
-                type="textarea"
-                class="form-input mt-1 block w-full resize-none rounded border border-gray-300 bg-background-light pl-2 text-text"
-                id="description"
-                name="description"
-                rows="3"
-                maxlength="256"
-                required
-        ></textarea>
-    </div>
-    <div class="form-group mb-4">
-        <label for="dateTimeSeen" class="block text-text">Time seen</label>
-        <input
-                type="datetime-local"
-                id="dateTimeSeen"
-                name="dateTimeSeen"
-                class="form-input mt-1 block w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
-        />
-    </div>
-    <div class="form-group mb-4">
-        <label for="size" class="block text-text">Size (cm)</label>
-        <input
-                type="number"
-                class="form-input mt-1 block w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
-                id="size"
-                name="size"
-                min="0"
-                value="0"
-                step=".01"
-                required
-        />
-    </div>
-    <!-- Select -->
-    <div class="form-group mb-4">
-        <label for="sunExposure" class="block text-text"
-        >Sun Exposure</label
-        >
-        <select
-                id="sunExposure"
-                name="sunExposure"
-                class="form-input block w-full rounded-lg border border-gray-300 bg-background-light p-2.5 text-sm text-text focus:border-background-hover focus:ring-background"
-        >
-            <option>None</option>
-            <option>Partial</option>
-            <option>Full</option>
-        </select>
-    </div>
+  <div class="form-group mb-4">
+    <label for="name" class="block text-text">Name</label>
+    <input
+      type="text"
+      class="form-input mt-1 block w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
+      id="name"
+      name="name"
+      maxlength="40"
+      required
+    />
+  </div>
+  <div class="form-group mb-4">
+    <label for="description" class="block text-text">Description</label>
+    <textarea
+      type="textarea"
+      class="form-input mt-1 block w-full resize-none rounded border border-gray-300 bg-background-light pl-2 text-text"
+      id="description"
+      name="description"
+      rows="3"
+      maxlength="256"
+      required
+    ></textarea>
+  </div>
+  <div class="form-group mb-4">
+    <label for="dateTimeSeen" class="block text-text">Time seen</label>
+    <input
+      type="datetime-local"
+      id="dateTimeSeen"
+      name="dateTimeSeen"
+      class="form-input mt-1 block w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
+    />
+  </div>
+  <div class="form-group mb-4">
+    <label for="size" class="block text-text">Size (cm)</label>
+    <input
+      type="number"
+      class="form-input mt-1 block w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
+      id="size"
+      name="size"
+      min="0"
+      value="0"
+      step=".01"
+      required
+    />
+  </div>
+  <!-- Select -->
+  <div class="form-group mb-4">
+    <label for="sunExposure" class="block text-text">Sun Exposure</label>
+    <select
+      id="sunExposure"
+      name="sunExposure"
+      class="form-input block w-full rounded-lg border border-gray-300 bg-background-light p-2.5 text-sm text-text focus:border-background-hover focus:ring-background"
+    >
+      <option>None</option>
+      <option>Partial</option>
+      <option>Full</option>
+    </select>
+  </div>
 
-    <div class="form-group mb-4">
-        <label for="colour" class="block text-text">Plant Colour</label>
-        <input
-                type="color"
-                name="colour"
-                class="form-input block h-10 w-14 cursor-pointer rounded border border-gray-300 bg-background-light p-1 text-text"
-                id="hs-color-input"
-                value="#2d5936"
-                title="Select plant colour"
-        />
-    </div>
+  <div class="form-group mb-4">
+    <label for="colour" class="block text-text">Plant Colour</label>
+    <input
+      type="color"
+      name="colour"
+      class="form-input block h-10 w-14 cursor-pointer rounded border border-gray-300 bg-background-light p-1 text-text"
+      id="hs-color-input"
+      value="#2d5936"
+      title="Select plant colour"
+    />
+  </div>
 
-    <!-- Checkboxes -->
-    <!-- In checkboxes: hasFlowers, hasLeaves & sunExposure -->
-    <!-- TODO change color of selected checkbox to --primary -->
-    <label for="properties" class="block text-text">Properties</label>
-    <div id="properties" class="form-group mb-4 flex justify-between">
-        <div class="mb-2 flex items-center">
-            <input
-                    id="hasFlowers"
-                    name="hasFlowers"
-                    type="checkbox"
-                    value="true"
-                    class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
-            />
-            <label for="hasFlowers" class="ms-2 text-sm font-medium text-text"
-            >Flowers</label
-            >
-        </div>
-        <div class="mb-2 flex items-center">
-            <input
-                    id="hasLeaves"
-                    name="hasLeaves"
-                    type="checkbox"
-                    value="true"
-                    class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
-            />
-            <label for="hasLeaves" class="ms-2 text-sm font-medium text-text"
-            >Leaves</label
-            >
-        </div>
-        <div class="mb-2 flex items-center">
-            <input
-                    id="hasFruit"
-                    name="hasFruit"
-                    type="checkbox"
-                    value="true"
-                    class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
-            />
-            <label for="hasFruit" class="ms-2 text-sm font-medium text-text"
-            >Fruit</label
-            >
-        </div>
-        <div class="mb-2 flex items-center">
-            <input
-                    id="hasSeeds"
-                    name="hasSeeds"
-                    type="checkbox"
-                    value="true"
-                    class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
-            />
-            <label for="hasSeeds" class="ms-2 text-sm font-medium text-text"
-            >Seeds</label
-            >
-        </div>
+  <!-- Checkboxes -->
+  <!-- In checkboxes: hasFlowers, hasLeaves & sunExposure -->
+  <!-- TODO change color of selected checkbox to --primary -->
+  <label for="properties" class="block text-text">Properties</label>
+  <div
+    id="properties"
+    class="form-group mb-4 flex flex-col justify-between sm:flex-row"
+  >
+    <div class="mb-2 flex items-center">
+      <input
+        id="hasFlowers"
+        name="hasFlowers"
+        type="checkbox"
+        value="true"
+        class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
+      />
+      <label for="hasFlowers" class="ms-2 text-sm font-medium text-text"
+        >Flowers</label
+      >
     </div>
-    <div class="form-group mb-4">
-        <label class="block text-text" for="file_input">Upload Image</label>
-        <input
-                class="file:form-input file:hover-button w-full cursor-pointer file:rounded file:px-4 file:py-2 file:font-bold"
-                id="image"
-                name="image"
-                type="file"
-                aria-describedby="file_input_help"
-                accept="image/png, image/jpeg"
-        />
+    <div class="mb-2 flex items-center">
+      <input
+        id="hasLeaves"
+        name="hasLeaves"
+        type="checkbox"
+        value="true"
+        class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
+      />
+      <label for="hasLeaves" class="ms-2 text-sm font-medium text-text"
+        >Leaves</label
+      >
     </div>
-    <div class="form-group mb-4 flex space-x-2">
-        <input
-                type="text"
-                id="latitude"
-                name="latitude"
-                class="form-input mt-1 block hidden w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
-                value="0"
-                required
-                readonly
-        />
-        <input
-                type="text"
-                id="longitude"
-                name="longitude"
-                class="form-input mt-1 block hidden w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
-                value="0"
-                readonly
-        />
-        <div class="w-3/4">
-            <label for="coordinates">Coordinates:</label>
-            <input
-                    type="text"
-                    id="coordinates"
-                    name="coordinates"
-                    class="form-input mt-1 block w-full grow-0 rounded border border-gray-300 bg-background-light pl-2 text-text"
-                    value="(0,0)"
-                    required
-                    readonly
-            />
-        </div>
-        <button
-                class="form-input hover-button w-1/4 grow-0 rounded px-4 py-2 font-bold"
-                type="button"
-                onclick="getLocation()"
-        >
-            Get
-        </button>
+    <div class="mb-2 flex items-center">
+      <input
+        id="hasFruit"
+        name="hasFruit"
+        type="checkbox"
+        value="true"
+        class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
+      />
+      <label for="hasFruit" class="ms-2 text-sm font-medium text-text"
+        >Fruit</label
+      >
+    </div>
+    <div class="mb-2 flex items-center">
+      <input
+        id="hasSeeds"
+        name="hasSeeds"
+        type="checkbox"
+        value="true"
+        class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
+      />
+      <label for="hasSeeds" class="ms-2 text-sm font-medium text-text"
+        >Seeds</label
+      >
+    </div>
+  </div>
+  <div class="form-group mb-4">
+    <label class="block text-text" for="file_input">Upload Image</label>
+    <input
+      class="file:form-input file:hover-button w-full cursor-pointer file:rounded file:px-4 file:py-2 file:font-bold"
+      id="image"
+      name="image"
+      type="file"
+      aria-describedby="file_input_help"
+      accept="image/png, image/jpeg, image/gif"
+    />
+  </div>
+  <div class="form-group mb-4 flex space-x-2">
+    <input
+      type="text"
+      id="latitude"
+      name="latitude"
+      class="form-input mt-1 block hidden w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
+      value="0"
+      required
+      readonly
+    />
+    <input
+      type="text"
+      id="longitude"
+      name="longitude"
+      class="form-input mt-1 block hidden w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
+      value="0"
+      readonly
+    />
+    <div class="w-3/4">
+      <label for="coordinates">Coordinates:</label>
+      <input
+        type="text"
+        id="coordinates"
+        name="coordinates"
+        class="form-input mt-1 block w-full grow-0 rounded border border-gray-300 bg-background-light pl-2 text-text"
+        value="(0,0)"
+        required
+        readonly
+      />
     </div>
     <button
-            id="submitButton"
-            type="submit"
-            class="form-input hover-button rounded px-4 py-2 font-bold"
+      class="form-input hover-button w-1/4 grow-0 rounded px-4 py-2 font-bold"
+      type="button"
+      onclick="getLocation()"
     >
-        Submit
+      Get
     </button>
+  </div>
+  <button
+    id="submitButton"
+    type="submit"
+    class="form-input hover-button rounded px-4 py-2 font-bold"
+  >
+    Submit
+  </button>
 </form>
 
 <script>
@@ -201,6 +202,7 @@
   function showPosition(position) {
     document.getElementById('latitude').value = position.coords.latitude;
     document.getElementById('longitude').value = position.coords.longitude;
-    document.getElementById('coordinates').value = `(${position.coords.latitude}, ${position.coords.longitude})`;
+    document.getElementById('coordinates').value =
+      `(${position.coords.latitude}, ${position.coords.longitude})`;
   }
 </script>

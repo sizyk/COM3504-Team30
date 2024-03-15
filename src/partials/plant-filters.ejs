@@ -1,0 +1,76 @@
+<!-- FILTERS -->
+<!-- In a row at the top of the page on desktop, in a modal on mobile -->
+
+<button
+  type="button"
+  class="hover-button-secondary flex items-center gap-2 rounded px-3 py-2 text-center font-bold lg:hidden"
+  data-toggle="modal"
+  data-target="filters"
+>
+  Filters <span class="material-symbols-outlined"> filter_alt </span>
+</button>
+
+<div id="filters" class="max-lg:modal invisible lg:visible" data-modal>
+  <div class="modal-overlay lg:hidden" data-close="modal"></div>
+  <div class="max-lg:modal-container">
+    <div class="mb-4 flex items-center justify-between lg:hidden">
+      <h5 class="modal-title text-xl font-semibold">Filter Plants</h5>
+      <button
+        class="close-modal flex justify-center rounded border border-gray-300 bg-background hover:bg-error hover:text-background"
+        aria-label="Close modal"
+        title="Close modal"
+        data-close="modal"
+      >
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div
+      class="max-lg:modal-body flex flex-col items-center gap-4 text-xl lg:h-16 lg:flex-row lg:items-stretch lg:justify-evenly"
+    >
+      <div class="flex items-center gap-2 lg:flex-col lg:gap-0">
+        <label for="has-leaves-filter">Leaves?</label>
+        <input
+          type="checkbox"
+          id="has-leaves-filter"
+          class="lg:flex-fill-remaining-space aspect-square h-8"
+          data-filterfeature="hasleaves"
+          data-filtervalue="any"
+        />
+      </div>
+      <div class="flex items-center gap-2 lg:flex-col lg:gap-0">
+        <label for="has-flowers-filter">Flowers?</label>
+        <input
+          type="checkbox"
+          id="has-flowers-filter"
+          class="lg:flex-fill-remaining-space aspect-square h-8"
+          data-filterfeature="hasflowers"
+          data-filtervalue="any"
+        />
+      </div>
+      <div class="flex items-center gap-2 lg:flex-col lg:gap-0">
+        <label for="has-fruits-nuts-filter">Fruits/Nuts?</label>
+        <input
+          type="checkbox"
+          id="has-fruits-nuts-filter"
+          class="lg:flex-fill-remaining-space aspect-square h-8"
+          data-filterfeature="hasfruitsnuts"
+          data-filtervalue="any"
+        />
+      </div>
+      <div class="flex items-center gap-2 lg:flex-col lg:gap-0">
+        <label for="sun-exposure-filter">Sun Exposure</label>
+        <select
+          id="sun-exposure-filter"
+          class="lg:flex-fill-remaining-space h-8 border-2 border-text border-text bg-background px-2 text-text dark:bg-background-inverse dark:text-background"
+          data-filterfeature="sunexposure"
+          data-filtervalue="any"
+        >
+          <option>None</option>
+          <option>Partial</option>
+          <option>Full</option>
+          <option selected>Any</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>

@@ -29,7 +29,8 @@ module.exports = {
       },
 
       screens: {
-        'max-md': {'max': '767px'}
+        'max-lg': {'max': '1023px'},
+        'max-md': {'max': '767px'},
       }
     },
   },
