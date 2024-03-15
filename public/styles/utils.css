@@ -154,7 +154,7 @@
 
   .modal-container {
     @apply w-5/6;
-    @apply md:max-w-md;
+    @apply max-w-md;
     @apply shadow-lg;
 
     margin-left: auto;
@@ -171,6 +171,7 @@
 
   .modal-body {
     max-height: calc(100vh - 210px);
+    padding-right: 5px;
     overflow-y: auto;
   }
 
