@@ -1,0 +1,33 @@
+<div
+        class="modal fixed left-0 top-0 flex h-full w-full items-center justify-center invisible"
+        id="<%= modalID %>"
+        tabindex="-1"
+        role="dialog"
+>
+    <div
+            class="modal-overlay absolute h-full w-full bg-gray-900 opacity-50"
+            data-close="modal"
+    ></div>
+    <div
+            class="modal-container z-50 mx-auto w-5/6 overflow-y-auto rounded bg-background shadow-lg md:max-w-md"
+    >
+        <div class="modal-content px-6 py-4">
+            <div class="mb-4 flex items-center justify-between">
+                <h5 class="modal-title text-xl font-semibold">
+                    <%= modalTitle %>
+                </h5>
+                <button
+                        class="close-modal flex justify-center rounded border border-gray-300 bg-background hover:bg-error hover:text-background"
+                        aria-label="Close modal"
+                        title="Close modal"
+                        data-close="modal"
+                >
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <%- include(`./modal-content/${modalContent}.ejs`) %>
+            </div>
+        </div>
+    </div>
+</div>

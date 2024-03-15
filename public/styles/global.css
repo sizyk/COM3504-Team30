@@ -1,21 +1,29 @@
+@import "utils.css";
+@import "inputs.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/*===COLOUR SCHEME============================================================*/
 @layer base {
   /* For some unknown reason, dark mode needs to be the default as
        the .dark selector doesn't seem to be picked up.
      */
   :root {
-    --text: #F1EEE7;
+    --text: #f1eee7;
     --background: #212121;
-    --primary: #A7C957;
+    --primary: #a7c957;
     --secondary: #9adcc7;
     --accent: #2d5936;
+    --error: #FF4D50;
+
+    /* Secondary is too light to use 'text colour' on dark theme, so need this */
+    --on-secondary: var(--background);
 
     /* Light mode colours */
-    --background-inverse: #F1EEE7;
-    --text-inverse: #262C26;
+    --background-inverse: #f1eee7;
+    --text-inverse: #262c26;
 
     /* Mix to get a hover colours */
     --text-hover: color-mix(in srgb, var(--text), #000 33%);
@@ -27,18 +35,32 @@
       var(--background-inverse),
       #000 20%
     );
+
+    --background-light: color-mix(in srgb, var(--background), #fff 20%);
+    --background-inverse-light: color-mix(
+      in srgb,
+      var(--background-inverse),
+      #000 20%
+    );
+
+    --primary-hover: color-mix(in srgb, var(--primary), #000 33%);
+    --secondary-hover: color-mix(in srgb, var(--secondary), #000 33%);
   }
 
   .light {
-    --text: #262C26;
-    --background: #F1EEE7;
+    --text: #262c26;
+    --background: #f1eee7;
     --primary: #2d5936;
     --secondary: #9adcc7;
     --accent: #b9d478;
+    --error: #BC4749;
+
+    /* Secondary is too light to use 'text colour' on dark theme, so need this */
+    --on-secondary: var(--text);
 
     /* Dark mode colours */
     --background-inverse: #212121;
-    --text-inverse: #F1EEE7;
+    --text-inverse: #f1eee7;
 
     /* Mix to get a hover colours */
     --text-hover: color-mix(in srgb, var(--text), #fff 33%);
@@ -50,6 +72,16 @@
       var(--background-inverse),
       #fff 20%
     );
+
+    --background-light: color-mix(in srgb, var(--background), #fff 20%);
+    --background-inverse-light: color-mix(
+      in srgb,
+      var(--background-inverse),
+      #000 20%
+    );
+
+    --primary-hover: color-mix(in srgb, var(--primary), #fff 33%);
+    --secondary-hover: color-mix(in srgb, var(--secondary), #000 33%);
   }
 }
 
@@ -58,83 +90,8 @@ main {
   @apply flex-fill-remaining-space;
 }
 
-/*===UTILITIES================================================================*/
-@layer utilities {
-  .flex-fill-remaining-space {
-    flex: 1 0 auto;
-  }
-
-  .hover-button {
-    cursor: pointer;
-    transition:
-      background-color 0.2s ease-in-out,
-      color 0.2s ease-in-out,
-      stroke 0.2s ease-in-out;
-    background-color: var(--background);
-    color: var(--text);
-    stroke: var(--text);
-
-    &:hover {
-      @media (hover: hover) {
-        background-color: var(--background-hover);
-      }
-    }
-
-    &-inverse {
-      cursor: pointer;
-      transition:
-        background-color 0.2s ease-in-out,
-        color 0.2s ease-in-out,
-        stroke 0.2s ease-in-out;
-
-      background-color: var(--background-inverse);
-      color: var(--text-inverse);
-      stroke: var(--text-inverse);
-
-      &:hover {
-        @media (hover: hover) {
-          background-color: var(--background-inverse-hover);
-        }
-      }
-    }
-  }
-
-  .hover-link {
-    cursor: pointer;
-    transition:
-      color 0.2s ease-in-out,
-      stroke 0.2s ease-in-out;
-
-    color: var(--text);
-    stroke: var(--text);
-
-    &:hover {
-      @media (hover: hover) {
-        color: var(--text-hover);
-        stroke: var(--text-hover);
-      }
-    }
-
-    &-inverse {
-      cursor: pointer;
-      transition:
-        color 0.2s ease-in-out,
-        stroke 0.2s ease-in-out;
-
-      color: var(--text-inverse);
-      stroke: var(--text-inverse);
-
-      &:hover {
-        @media (hover: hover) {
-          color: var(--text-inverse-hover);
-          stroke: var(--text-inverse-hover);
-        }
-      }
-    }
-  }
-}
-
 /*===SITE-WIDE================================================================*/
+
 #nav-links {
   @media screen(max-md) {
     @apply pt-4;
@@ -197,30 +154,43 @@ main {
   }
 }
 
-.material-symbols-outlined {
-  /* Recommended icon sizes */
-  &.opsz-20 {
-    font-size: 20px;
-    font-variation-settings:
-      'FILL' 1,
-      'OPSZ' 20;
+.plant-card {
+  .plant-info,
+  .plant-name,
+  .plant-name div {
+    transition:
+      transform 0.35s ease-out,
+      padding-top 0.35s ease-out,
+      opacity 0.35s ease-out;
   }
-  &.opsz-24 {
-    font-size: 24px;
-    font-variation-settings:
-      'FILL' 1,
-      'OPSZ' 24;
+
+  .plant-info {
+    background-color: color-mix(
+      in srgb,
+      var(--text),
+      rgba(255, 255, 255, 0) 20%
+    );
+    transform: translateY(100%);
+    /* Prevent issues when card is fractional pixels wide */
+    width: calc(100% + 1px);
   }
-  &.opsz-40 {
-    font-size: 40px;
-    font-variation-settings:
-      'FILL' 1,
-      'OPSZ' 40;
+
+  .plant-name {
+    transform: translateY(-100%);
   }
-  &.opsz-48 {
-    font-size: 48px;
-    font-variation-settings:
-      'FILL' 1,
-      'OPSZ' 48;
+
+  &:hover, &.hover {
+    .plant-info,
+    .plant-name {
+      transform: translateY(0);
+    }
+
+    .plant-name {
+      padding-top: 0;
+
+      div {
+        opacity: 0;
+      }
+    }
   }
 }

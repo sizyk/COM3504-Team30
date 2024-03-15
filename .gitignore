@@ -134,3 +134,6 @@ dist
 
 # Tailwind compiled styles file
 public/styles/tailwind-out.css
+
+# Uploaded images
+/public/img/uploads

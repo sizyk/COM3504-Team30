@@ -9,9 +9,12 @@
     rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400..700,0..1,-50..200"
   />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Noto+Color+Emoji&display=swap" rel="stylesheet">
 </head>
-<body class="flex min-h-screen flex-col bg-background text-text">
-  <%- include('../partials/nav.ejs') %>
+<body class="flex min-h-screen flex-col bg-background text-text font-dm-sans">
+  <%- include('../partials/themeToggle.ejs') %>
   <% /* Render child elements of the layout here */%>
   <%- include(children) %>
   <%- include('../partials/footer.ejs') %>
@@ -20,6 +23,6 @@
 <% for(let i=0; i<scripts.length; i++) { %>
   <script
     src="/public/scripts/<%= scripts[i] %>.js"
-    type="text/javascript"
+    type="module"
   ></script>
 <% } %>

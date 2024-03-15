@@ -61,9 +61,8 @@ module.exports = function renderLayout(res, view, options, layout) {
   });
   opts.dataset = dataset.join(' '); // Join with spaces to be in HTML dataset format
 
-  // Add global scripts to requested ones
-  opts.scripts.push('themeToggle');
-  opts.scripts.push('navButton');
+  // Add global script to user-specified ones
+  opts.scripts.push('global');
 
   // Add main view to options
   opts.children = `../views/${view}.ejs`;
