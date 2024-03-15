@@ -40,7 +40,7 @@ exports.create = (plantData) => {
 };
 
 // Function to get all plants
-exports.getAll = () => PlantModel.find({})
+exports.getPlants = (filter) => PlantModel.find(filter)
   .then((plants) => {
     plants.forEach((p) => {
       const dt = new Date(p.dateTimeSeen.toString());
@@ -64,18 +64,12 @@ exports.getAll = () => PlantModel.find({})
 
       p.emoji = '🇬🇧';
     });
+
     return plants;
   })
   .catch((error) => {
     log(error);
 
     // return null in case of an error
-    return null;
-  });
-
-exports.getPlantById = (id) => PlantModel.find({ _id: id })
-  .then((plants) => JSON.stringify(plants))
-  .catch((error) => {
-    log(error);
     return null;
   });
