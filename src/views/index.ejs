@@ -1,69 +1,30 @@
 <main class="mx-auto mt-24 w-10/12">
   <div
-    class="mb-8 flex flex-col lg:flex-row items-center lg:items-end justify-between border-b-4 border-text pb-2"
+    class="mb-8 flex flex-col items-center justify-between border-b-4 border-text pb-2 lg:flex-row lg:items-end"
   >
     <h1 class="text-4xl font-bold"><%= title %></h1>
     <div
-      class="flex-fill-remaining-space flex max-h-full flex-row items-end justify-end gap-4"
+      class="lg:flex-fill-remaining-space fixed bottom-0 z-50 flex max-h-full w-screen flex-row items-end justify-center gap-4 border-t-2 border-text bg-background p-2 lg:relative lg:w-auto lg:justify-end lg:border-0"
     >
-      <div
-        id="filters"
-        class="flex h-16 flex-row items-stretch justify-evenly gap-4 text-xl"
-      >
-        <div class="flex flex-col items-center">
-          <label for="has-leaves-filter">Leaves?</label>
-          <input
-            type="checkbox"
-            id="has-leaves-filter"
-            class="flex-fill-remaining-space aspect-square"
-            data-filterfeature="hasleaves"
-            data-filtervalue="any"
-          />
-        </div>
-        <div class="flex flex-col items-center">
-          <label for="has-flowers-filter">Flowers?</label>
-          <input
-            type="checkbox"
-            id="has-flowers-filter"
-            class="flex-fill-remaining-space aspect-square"
-            data-filterfeature="hasflowers"
-            data-filtervalue="any"
-          />
-        </div>
-        <div class="flex flex-col items-center">
-          <label for="has-fruits-nuts-filter">Fruits/Nuts?</label>
-          <input
-            type="checkbox"
-            id="has-fruits-nuts-filter"
-            class="flex-fill-remaining-space aspect-square"
-            data-filterfeature="hasfruitsnuts"
-            data-filtervalue="any"
-          />
-        </div>
-        <div class="flex flex-col items-center">
-          <label for="sun-exposure-filter">Sun Exposure</label>
-          <select
-            id="sun-exposure-filter"
-            class="flex-fill-remaining-space border-2 border-text border-text bg-background px-2 text-text dark:bg-background-inverse dark:text-background"
-            data-filterfeature="sunexposure"
-            data-filtervalue="any"
-          >
-            <option>None</option>
-            <option>Partial</option>
-            <option>Full</option>
-            <option selected>Any</option>
-          </select>
-        </div>
-      </div>
+      <%- include('../partials/plant-filters.ejs') %>
+
       <button
-              type="button"
-              class="hover-button flex items-center gap-2 rounded px-3 py-2 text-center font-bold"
-              data-toggle="modal"
-              data-target="plant-add-modal"
+        type="button"
+        class="hover-button flex items-center gap-2 rounded px-3 py-2 text-center font-bold"
+        data-toggle="modal"
+        data-target="plant-add-modal"
       >
         Add Plant <span class="material-symbols-outlined"> library_add </span>
       </button>
-      <%- include('../partials/modal.ejs', { modalID: 'plant-add-modal', modalTitle: 'Create a new plant sighting', modalContent: 'plant-form'}) %>
+
+      <!-- prettier-ignore -->
+      <%-
+        include('../partials/modal.ejs', {
+            modalID: 'plant-add-modal',
+            modalTitle: 'Create a new plant sighting',
+            modalContent: 'plant-form'
+        });
+      %>
     </div>
   </div>
   <div

@@ -32,7 +32,7 @@ export default function initModals() {
   // Add click event listeners to all modal close buttons
   document.querySelectorAll('[data-close="modal"]').forEach((btn) => {
     btn.addEventListener('click', () => {
-      const modal = btn.closest('.modal');
+      const modal = btn.closest('.modal, [data-modal]');
 
       modal.classList.remove('active');
 
