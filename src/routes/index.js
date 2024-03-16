@@ -93,24 +93,24 @@ router.post('/edit-plant', upload.single('image'), async (req, res) => {
 
   // Update the plant in the database
   try {
-    const updatedModel = await PlantModel.findByIdAndUpdate(plantData._id, plant, {new: true});
+    const updatedModel = await PlantModel.findByIdAndUpdate(plantData.id, plant, { new: true });
+    log(updatedModel);
     // Redirect to some page or send a response indicating success
     res.redirect('/');
   } catch (error) {
-    log(error)
+    log(error);
   }
 });
 
-
 router.post('/delete-plant', upload.single('image'), async (req, res) => {
   // Delete the plant from the database
-  console.log("Deleting plant" + req.body._id);
   try {
-    const updatedModel = await PlantModel.findByIdAndDelete(req.body._id);
+    const updatedModel = await PlantModel.findByIdAndDelete(req.body.id);
+    log(updatedModel);
     // Redirect to some page or send a response indicating success
     res.redirect('/');
   } catch (error) {
-    log(error)
+    log(error);
   }
 });
 

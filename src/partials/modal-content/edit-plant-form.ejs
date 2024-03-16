@@ -5,8 +5,8 @@
   id="editPlantForm"
 >
   <input
-    id="_id"
-    name="_id"
+    id="id"
+    name="id"
     type="hidden"
     value="<%= plant._id %>"
   />
@@ -295,10 +295,9 @@
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ _id: plantID }),
+        body: JSON.stringify({ id: plantID }),
       });
       window.location.href = '/';
     }
-
   }
 </script>
