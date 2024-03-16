@@ -133,9 +133,9 @@
 
   .modal-container {
     @apply w-5/6;
-    @apply max-w-md;
     @apply shadow-lg;
 
+    width: max-content;
     margin-left: auto;
     margin-right: auto;
     padding: 1rem 1.5rem;
