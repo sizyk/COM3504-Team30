@@ -2,7 +2,7 @@
   action="/edit-plant"
   method="POST"
   enctype="multipart/form-data"
-  id="createPlantForm"
+  id="editPlantForm"
 >
   <input
     id="_id"
@@ -235,16 +235,16 @@
       class="form-input hover-button rounded px-4 py-2 font-bold"
     >Submit
     </button>
-    <!-- delete button -->
     <button
       id="deleteButton"
       type="button"
       class="form-input hover-button-error rounded px-4 py-2 font-bold"
       onclick="deletePlant('<%= plant._id %>')">Delete</button>
   </div>
-
-
 </form>
+    <!-- delete button -->
+
+
 
 <script>
   function editGetLocation(plantID) {
@@ -286,4 +286,19 @@
 
     return isoString;
   };
+
+  function deletePlant(plantID) {
+    const confirmation = confirm('Are you sure you want to delete this plant? This action cannot be undone.');
+    if (confirmation) {
+      fetch('/delete-plant', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ _id: plantID }),
+      });
+      window.location.href = '/';
+    }
+
+  }
 </script>

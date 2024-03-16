@@ -101,4 +101,17 @@ router.post('/edit-plant', upload.single('image'), async (req, res) => {
   }
 });
 
+
+router.post('/delete-plant', upload.single('image'), async (req, res) => {
+  // Delete the plant from the database
+  console.log("Deleting plant" + req.body._id);
+  try {
+    const updatedModel = await PlantModel.findByIdAndDelete(req.body._id);
+    // Redirect to some page or send a response indicating success
+    res.redirect('/');
+  } catch (error) {
+    log(error)
+  }
+});
+
 module.exports = router;
