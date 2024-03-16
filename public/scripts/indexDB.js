@@ -68,5 +68,6 @@ const handleSuccess = () => {
 requestIDB.addEventListener('upgradeneeded', handleUpgrade);
 requestIDB.addEventListener('success', handleSuccess);
 requestIDB.addEventListener('error', (err) => {
-  console.log(`ERROR : ${JSON.stringify(err)}`);
+  // eslint-disable-next-line no-alert
+  alert(`ERROR : ${JSON.stringify(err)}`);
 });
