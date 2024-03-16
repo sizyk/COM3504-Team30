@@ -226,13 +226,24 @@
       Get
     </button>
   </div>
-  <button
-    id="submitButton"
-    type="submit"
-    class="form-input hover-button rounded px-4 py-2 font-bold"
-  >
-    Submit
-  </button>
+  <div
+    class="flex mt-4 w-full space-x-4"
+    id="buttonsDiv">
+    <button
+      id="submitButton"
+      type="submit"
+      class="form-input hover-button rounded px-4 py-2 font-bold"
+    >Submit
+    </button>
+    <!-- delete button -->
+    <button
+      id="deleteButton"
+      type="button"
+      class="form-input hover-button-error rounded px-4 py-2 font-bold"
+      onclick="deletePlant('<%= plant._id %>')">Delete</button>
+  </div>
+
+
 </form>
 
 <script>

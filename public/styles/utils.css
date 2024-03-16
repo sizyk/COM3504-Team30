@@ -49,6 +49,25 @@
         }
       }
     }
+
+    &-error {
+      cursor: pointer;
+      transition:
+        background-color 0.2s ease-in-out,
+        color 0.2s ease-in-out,
+        stroke 0.2s ease-in-out;
+
+      background-color: var(--error);
+      color: var(--background);
+      stroke: var(--background);
+
+      &:hover {
+        @media (hover: hover) {
+          background-color: var(--error-hover);
+        }
+      }
+
+    }
   }
 
   .hover-link {

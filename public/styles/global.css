@@ -45,6 +45,7 @@
 
     --primary-hover: color-mix(in srgb, var(--primary), #000 33%);
     --secondary-hover: color-mix(in srgb, var(--secondary), #000 33%);
+    --error-hover: color-mix(in srgb, var(--error), #000 33%);
   }
 
   .light {
@@ -82,6 +83,7 @@
 
     --primary-hover: color-mix(in srgb, var(--primary), #fff 33%);
     --secondary-hover: color-mix(in srgb, var(--secondary), #000 33%);
+    --error-hover: color-mix(in srgb, var(--error), #000 33%);
   }
 }
 
