@@ -11,7 +11,19 @@ router.get('/:id', (req, res) => {
   result.then((plants) => {
     const plant = plants[0];
     renderLayout(res, 'plant', {
+<<<<<<< HEAD
       title: 'Individual Plant', plant, scripts: ['plantForm', 'chat'],
+=======
+      title: 'Individual Plant',
+      plant,
+      scripts: ['map-test'],
+      useLeaflet: true,
+      dataset: {
+        plant: {
+          coordinates: [plant.latitude, plant.longitude],
+        },
+      },
+>>>>>>> 05a5084 (Added leaflet)
     });
   });
 });

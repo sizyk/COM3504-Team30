@@ -51,13 +51,9 @@ module.exports = function renderLayout(res, view, options, layout) {
   const dataset = [];
 
   // Construct HTML dataset attribute for each entry in dataset object
-
+  warn(opts.dataset);
   Object.keys(opts.dataset).forEach((key) => {
-    if (opts.dataset[key].length > 0) {
-      // Replace double quotes with single to stop breaking data attributes
-      const val = opts.dataset[key].replace('"', "'");
-      dataset.push(`data-${key}="${val}"`);
-    }
+    dataset.push(`data-${key}='${JSON.stringify(opts.dataset[key])}'`);
   });
   opts.dataset = dataset.join(' '); // Join with spaces to be in HTML dataset format
 
