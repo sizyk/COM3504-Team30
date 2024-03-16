@@ -27,12 +27,22 @@
             <span data-emoji><%= plant.emoji %></span>
           </p>
 
-          <a
+          <button
             class="hover-button rounded-lg px-4 py-1 text-center text-sm font-bold"
-            href="https://www.google.com/maps/place/<%= plant.latitude%>, <%= plant.longitude%>"
+            data-toggle="modal"
+            data-target="plant-map-modal"
           >
             View on Map
-          </a>
+          </button>
+
+          <!-- prettier-ignore -->
+          <%-
+          include('../partials/modal.ejs', {
+            modalID: 'plant-map-modal',
+            modalTitle: 'Plant Location',
+            modalContent: 'map-modal'
+          });
+          %>
         </div>
       </div>
 

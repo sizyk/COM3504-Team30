@@ -137,3 +137,6 @@ public/styles/tailwind-out.css
 
 # Uploaded images
 /public/img/uploads
+
+# Leaflet source code
+leaflet/debugging/
