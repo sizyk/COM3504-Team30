@@ -9,11 +9,12 @@
     "ignorePatterns": [
         "node_modules",
         "*.config.js",
+        "leaflet/",
         "*.min.js"
     ],
 
     "parserOptions": {
-        "ecmaVersion": 13
+        "ecmaVersion": "latest"
     },
 
     "rules": {
