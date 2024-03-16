@@ -139,4 +139,4 @@ public/styles/tailwind-out.css
 /public/img/uploads
 
 # Leaflet source code
-leaflet/debugging/
+**/leaflet/debugging/

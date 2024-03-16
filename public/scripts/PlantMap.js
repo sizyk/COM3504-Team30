@@ -20,12 +20,16 @@ L.GridLayer.include({
   },
 });
 
+/**
+ * A class used as a wrapper for leaflet mapping functionalities
+ * @class PlantMap
+ * @constructor
+ * @public
+ */
 export default class PlantMap {
   static MIN_ZOOM = 0;
 
   static MAX_ZOOM = 18;
-
-  static BASE_OPACITY = 0.66;
 
   /**
    * Constructor for the PlantMap class
@@ -52,15 +56,31 @@ export default class PlantMap {
 
     // Get variables from view
     const JSVarDiv = document.getElementById(variablesID);
-    this.plant = JSON.parse(JSVarDiv.dataset.plant);
+    if (JSVarDiv !== null) {
+      this._plant = JSON.parse(JSVarDiv.dataset.plant);
+    } else {
+      this._plant = null;
+    }
+
+    this._plantIcon = new L.Icon({
+      iconUrl: '/public/img/map-icons/plant-pin.png',
+
+      iconSize: [45, 64],
+      iconAnchor: [23, 64],
+    });
 
     this.resetMapView();
+    this.placePin(this._plant.coordinates);
   }
 
   /**
    * Resets the map view, ensuring it is centred on the desired plant
    */
   resetMapView() {
-    this._map.setView(this.plant.coordinates, 15);
+    this._map.setView(this._plant.coordinates, 15);
+  }
+
+  placePin(coordinates) {
+    new L.Marker(coordinates, { icon: this._plantIcon }).addTo(this._map);
   }
 }
