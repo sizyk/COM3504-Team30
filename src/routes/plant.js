@@ -19,9 +19,10 @@ router.get('/:id', (req, res) => {
       scripts: ['map-test'],
       useLeaflet: true,
       dataset: {
-        plant: {
+        centre: [plant.latitude, plant.longitude],
+        plants: [{
           coordinates: [plant.latitude, plant.longitude],
-        },
+        }],
       },
 >>>>>>> 05a5084 (Added leaflet)
     });

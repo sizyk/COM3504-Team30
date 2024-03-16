@@ -31,6 +31,13 @@ export default class PlantMap {
 
   static MAX_ZOOM = 18;
 
+  static PLANT_ICON = new L.Icon({
+    iconUrl: '/public/img/map-icons/plant-pin.png',
+
+    iconSize: [45, 64],
+    iconAnchor: [23, 64],
+  });
+
   /**
    * Constructor for the PlantMap class
    * @param id {string} The ID of the map's div (usually 'map')
@@ -57,30 +64,27 @@ export default class PlantMap {
     // Get variables from view
     const JSVarDiv = document.getElementById(variablesID);
     if (JSVarDiv !== null) {
-      this._plant = JSON.parse(JSVarDiv.dataset.plant);
+      this._plants = JSON.parse(JSVarDiv.dataset.plants);
+      this._mapCentre = JSON.parse(JSVarDiv.dataset.centre);
     } else {
-      this._plant = null;
+      this._plants = [];
+      this._mapCentre = [0, 0];
     }
 
-    this._plantIcon = new L.Icon({
-      iconUrl: '/public/img/map-icons/plant-pin.png',
-
-      iconSize: [45, 64],
-      iconAnchor: [23, 64],
-    });
-
     this.resetMapView();
-    this.placePin(this._plant.coordinates);
+    this.pinPlants();
   }
 
   /**
    * Resets the map view, ensuring it is centred on the desired plant
    */
   resetMapView() {
-    this._map.setView(this._plant.coordinates, 15);
+    this._map.setView(this._mapCentre, 15);
   }
 
-  placePin(coordinates) {
-    new L.Marker(coordinates, { icon: this._plantIcon }).addTo(this._map);
+  pinPlants() {
+    this._plants.forEach((plant) => {
+      new L.Marker(plant.coordinates, { icon: PlantMap.PLANT_ICON }).addTo(this._map);
+    });
   }
 }
