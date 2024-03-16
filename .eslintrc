@@ -8,7 +8,8 @@
 
     "ignorePatterns": [
         "node_modules",
-        "*.config.js"
+        "*.config.js",
+        "sw.js"
     ],
 
     "rules": {
