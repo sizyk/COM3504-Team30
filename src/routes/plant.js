@@ -9,7 +9,7 @@ router.get('/:id', (req, res) => {
   const result = get({ _id: req.params.id });
   result.then((plants) => {
     const plant = plants[0];
-    renderLayout(res, 'plant', { title: 'Individual Plant', plant, scripts: ['plantForm'] });
+    renderLayout(res, 'plant', { title: 'Individual Plant', plant, scripts: ['plantForm', 'chat'] });
   });
 });
 
