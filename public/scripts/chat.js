@@ -30,7 +30,7 @@ closeChatButton.addEventListener('click', toggleChatbox);
 function addUserMessage(message) {
   const messageElement = document.createElement('div');
   messageElement.classList.add('mb-2', 'text-right');
-  messageElement.innerHTML = `<p class="bg-accent rounded-lg py-2 px-4 inline-block">${message}</p>`;
+  messageElement.innerHTML = `<p class="bg-primary text-white dark:text-on-secondary rounded-lg py-2 px-4 inline-block">${message}</p>`;
   chatbox.appendChild(messageElement);
   chatbox.scrollTop = chatbox.scrollHeight;
 }
