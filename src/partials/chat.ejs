@@ -1,12 +1,14 @@
 <div class="fixed bottom-0 right-0 mb-10 mr-10">
-    <button id="open-chat" class="bg-accent rounded-md hover:bg-primary p-2.5">
-        <img src="/public/img/icons/chat.svg" alt="open chat">
+    <button id="open-chat" class="bg-accent rounded-lg hover-button p-2.5">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" class="fill-white dark:fill-black">
+            <path d="M280-240q-17 0-28.5-11.5T240-280v-80h520v-360h80q17 0 28.5 11.5T880-680v600L720-240H280ZM80-280v-560q0-17 11.5-28.5T120-880h520q17 0 28.5 11.5T680-840v360q0 17-11.5 28.5T640-440H240L80-280Zm520-240v-280H160v280h440Zm-440 0v-280 280Z"/>
+        </svg>
     </button>
 </div>
-<div id="chat-interface" class="hidden fixed bottom-16 right-4 w-96">
+<div id="chat-interface" class="hidden fixed bottom-10 right-10 w-96">
     <div class="bg-white shadow-md rounded-lg max-w-lg w-full">
-        <div class="p-4 border-b bg-accent rounded-t-lg flex justify-between items-center">
-            <p class="text-lg font-semibold">Comments</p>
+        <div class="p-4 border-b bg-primary rounded-t-lg flex justify-between items-center">
+            <p class="dark:text-on-secondary text-white font-semibold">Comments</p>
             <button id="close-chat" class="text-lg hover:text-gray-400 focus:outline-none focus:text-gray-400">
                 <img src="/public/img/icons/close.svg" alt="close chat">
             </button>
@@ -17,7 +19,7 @@
                 <%if (Array.isArray(chats)) { %>
                     <% chats.forEach((chat) => {%>
                         <div class="mb-2 text-right">
-                            <p class="bg-blue-500 text-white rounded-lg py-2 px-4 inline-block"><%=chat.message%>></p>
+                            <p class="bg-primary text-white dark:text-on-secondary rounded-lg py-2 px-4 inline-block"><%=chat.message%>></p>
                         </div>
                     <% });%>
                 <%}%>
@@ -25,7 +27,7 @@
         </div>
         <div class="p-4 border-t flex">
             <input id="user-input" type="text" placeholder="Type a message" class="text-gray-700 w-full px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-accent">
-            <button id="send-button" class="bg-accent px-4 py-2 rounded-r-md hover:bg-primary transition duration-300">Send</button>
+            <button id="send-button" class="bg-primary px-4 py-2 rounded-r-md hover-button transition duration-300">Send</button>
         </div>
     </div>
 </div>
