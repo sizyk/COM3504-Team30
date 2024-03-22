@@ -16,7 +16,7 @@ const ChatSchema = new Schema({
 ChatSchema.set('toObject', { getters: true, virtuals: true });
 
 // Create the mongoose model 'Plant' based on the defined schema
-const Chat = mongoose.model('plant', ChatSchema);
+const Chat = mongoose.model('chat', ChatSchema);
 
 // Export the model for use in other modules
 module.exports = Chat;
