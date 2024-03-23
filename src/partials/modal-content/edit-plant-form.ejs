@@ -157,9 +157,7 @@
         type="checkbox"
         value="true"
         class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
-        <% if (plant.hasSeeds) { %>
-          checked
-        <% } %>
+        <%= plant.hasSeeds ? 'checked' : '' %>
       />
       <label for="hasSeeds" class="ms-2 text-sm font-medium text-text"
         >Seeds</label
