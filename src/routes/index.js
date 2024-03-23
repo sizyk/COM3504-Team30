@@ -5,7 +5,6 @@ const renderLayout = require('../helpers/layout-renderer');
 
 const router = express.Router();
 const plants = require('../controllers/plants');
-const PlantModel = require('../models/plants');
 
 /* IMAGE CODE (move into seperate route eventually) */
 
@@ -39,79 +38,30 @@ router.get('/page-3', (req, res) => {
 });
 
 router.post('/create-plant', upload.single('image'), (req, res) => {
-  const plantData = req.body;
-  const filepath = req.file.path.replace(/\\/g, '/');
-
-  const plant = {
-    author: 'placeholder', // replace with user when implemented
-    name: plantData.name,
-    description: plantData.description,
-    dateTimeSeen: new Date(plantData.dateTimeSeen),
-    size: parseFloat(plantData.size),
-    sunExposure: plantData.sunExposure,
-    colour: plantData.colour,
-    longitude: plantData.longitude,
-    latitude: plantData.latitude,
-    image: filepath,
-    hasFlowers: plantData.hasFlowers === 'true', // Checkboxes have no value if not checked, so manually check whether they are true
-    hasLeaves: plantData.hasLeaves === 'true',
-    hasFruit: plantData.hasFruit === 'true',
-    hasSeeds: plantData.hasSeeds === 'true',
-  };
-
-  const result = plants.create(plant);
+  // Create the plant in the database
+  const result = plants.create(req.body, req.file);
   log(result);
 
+  // Redirect back to root upon success
   res.redirect('/');
 });
 
 router.post('/edit-plant', upload.single('image'), async (req, res) => {
-  const plantData = req.body;
-
-  const plant = { // Get data from the form
-    author: 'placeholder', // replace with user when implemented
-    name: plantData.name,
-    description: plantData.description,
-    dateTimeSeen: new Date(plantData.dateTimeSeen),
-    size: parseFloat(plantData.size),
-    sunExposure: plantData.sunExposure,
-    colour: plantData.colour,
-    longitude: plantData.longitude,
-    latitude: plantData.latitude,
-    hasFlowers: plantData.hasFlowers === 'true', // Checkboxes have no value if not checked, so manually check whether they are true
-    hasLeaves: plantData.hasLeaves === 'true',
-    hasFruit: plantData.hasFruit === 'true',
-    hasSeeds: plantData.hasSeeds === 'true',
-  };
-
-  if (req.file) { // If a new image is uploaded, update the image path
-    const filepath = req.file.path.replace(/\\/g, '/');
-    plant.image = filepath;
-  }
-
-  // TODO delete the old image if a new one is uploaded
-
   // Update the plant in the database
-  try {
-    const updatedModel = await PlantModel.findByIdAndUpdate(plantData.id, plant, { new: true });
-    log(updatedModel);
-    // Redirect to some page or send a response indicating success
-    res.redirect('/');
-  } catch (error) {
-    log(error);
-  }
+  const result = plants.update(req.body, req.file);
+  log(result);
+
+  // Redirect back to root upon success
+  res.redirect('/');
 });
 
 router.post('/delete-plant', upload.single('image'), async (req, res) => {
   // Delete the plant from the database
-  try {
-    const updatedModel = await PlantModel.findByIdAndDelete(req.body.id);
-    log(updatedModel);
-    // Redirect to some page or send a response indicating success
-    res.redirect('/');
-  } catch (error) {
-    log(error);
-  }
+  const result = plants.delete(req.body.id);
+  log(result);
+
+  // Redirect back to root upon success
+  res.redirect('/');
 });
 
 module.exports = router;
