@@ -70,18 +70,9 @@
       name="sunExposure"
       class="form-input block w-full rounded-lg border border-gray-300 bg-background-light p-2.5 text-sm text-text focus:border-background-hover focus:ring-background"
     >
-      <option <% if (plant.sunExposure === "None") { %>
-        selected="selected"
-        <% } %>
-      >None</option>
-      <option <% if (plant.sunExposure === "Partial") { %>
-        selected="selected"
-        <% } %>
-      >Partial</option>
-      <option <% if (plant.sunExposure === "Full") { %>
-        selected="selected"
-        <% } %>
-      >Full</option>
+      <option <%= (plant.sunExposure === "None") ? 'selected' : '' %>>None</option>
+      <option <%= (plant.sunExposure === "Partial") ? 'selected' : '' %>>Partial</option>
+      <option <%= (plant.sunExposure === "Full") ? 'selected' : '' %>>Full</option>
     </select>
   </div>
 
