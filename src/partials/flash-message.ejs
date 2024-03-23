@@ -1,0 +1,16 @@
+<div id="flash-message" class="flash -translate-y-full">
+  <div
+    class="flash-<%= flash.type %> rounded border-2 border-text px-4 py-2 text-center text-2xl"
+  >
+    <%= flash.message %>
+  </div>
+</div>
+
+<script>
+  const alertDiv = document.getElementById('flash-message');
+  alertDiv.classList.remove('-translate-y-full');
+
+  setTimeout(() => {
+    alertDiv.classList.add('-translate-y-full');
+  }, 5000);
+</script>
