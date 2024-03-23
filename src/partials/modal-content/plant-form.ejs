@@ -137,12 +137,12 @@
     <label class="block text-text" for="file_input">Upload Image</label>
     <input
       class="file:form-input file:hover-button w-full cursor-pointer file:rounded file:px-4 file:py-2 file:font-bold"
-      id="image"
+      id="imageNew"
       name="image"
       type="file"
       aria-describedby="file_input_help"
       accept="image/png, image/jpeg, image/gif"
-      onchange="previewImage()"
+      onchange="previewImage('New')"
       required
     />
   </div>
@@ -151,7 +151,7 @@
     class="hidden">
     <label class="block text-text" for="preview">Image Preview</label>
     <img
-      id="preview"
+      id="previewNew"
       src="#"
       alt="your image"
       class="w-1/2"
@@ -160,7 +160,7 @@
   <div class="form-group mb-4 flex space-x-2">
     <input
       type="text"
-      id="latitude"
+      id="latitudeNew"
       name="latitude"
       class="form-input mt-1 block hidden w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
       value="0"
@@ -169,7 +169,7 @@
     />
     <input
       type="text"
-      id="longitude"
+      id="longitudeNew"
       name="longitude"
       class="form-input mt-1 block hidden w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
       value="0"
@@ -179,7 +179,7 @@
       <label for="coordinates">Coordinates:</label>
       <input
         type="text"
-        id="coordinates"
+        id="coordinatesNew"
         name="coordinates"
         class="form-input mt-1 block w-full grow-0 rounded border border-gray-300 bg-background-light pl-2 text-text"
         value="(0,0)"
@@ -190,7 +190,7 @@
     <button
       class="form-input hover-button w-1/4 grow-0 rounded px-4 py-2 font-bold"
       type="button"
-      onclick="getLocation()"
+      onclick="getLocation('New')"
     >
       Get
     </button>
@@ -204,29 +204,4 @@
   </button>
 </form>
 
-<script>
-  function getLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(showPosition);
-    } else {
-      alert('Geolocation is not supported by this browser.');
-    }
-  }
 
-  function showPosition(position) {
-    document.getElementById('latitude').value = position.coords.latitude;
-    document.getElementById('longitude').value = position.coords.longitude;
-    document.getElementById('coordinates').value =
-      `(${position.coords.latitude}, ${position.coords.longitude})`;
-  }
-
-  function previewImage() {
-    let image = document.getElementById('image')
-    let [file] = image.files
-    let preview = document.getElementById('preview')
-    if (file) {
-      preview.src = URL.createObjectURL(file)
-      imagePreviewContainer.classList.remove('hidden')
-    }
-  }
-</script>
