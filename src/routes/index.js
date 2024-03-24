@@ -53,11 +53,11 @@ router.post('/create-plant', upload.single('image'), (req, res) => {
   plants.create(req.body, filepath)
     .then((result) => {
       log(result);
-      flashData = { message: 'Plant created successfully', type: 'success' };
+      flashData = { message: 'Plant created successfully!', type: 'success', icon: 'check_circle' };
     })
     .catch((error) => {
       log(error);
-      flashData = { message: 'Error occurred whilst creating new plant', type: 'error' };
+      flashData = { message: 'Error occurred whilst creating new plant!', type: 'error', icon: 'error' };
     });
   res.redirect('/');
 });
@@ -77,11 +77,11 @@ router.post('/edit-plant', upload.single('image'), async (req, res) => {
   plants.update(req.body, filepath)
     .then((result) => {
       log(result);
-      flashData = { message: 'Plant updated successfully', type: 'success' };
+      flashData = { message: 'Plant updated successfully!', type: 'success', icon: 'check_circle' };
     })
     .catch((error) => {
       log(error);
-      flashData = { message: 'Error occurred whilst updating plant', type: 'error' };
+      flashData = { message: 'Error occurred whilst updating plant!', type: 'error' };
     });
   res.redirect('/');
 });
@@ -91,11 +91,11 @@ router.post('/delete-plant', upload.single('image'), async (req, res) => {
   plants.delete(req.body.id)
     .then((result) => {
       log(result);
-      flashData = { message: 'Plant deleted successfully', type: 'success' };
+      flashData = { message: 'Plant deleted successfully!', type: 'success', icon: 'check_circle' };
     })
     .catch((error) => {
       log(error);
-      flashData = { message: 'Error occurred whilst deleting plant', type: 'error' };
+      flashData = { message: 'Error occurred whilst deleting plant!', type: 'error', type: 'error' };
     });
   res.redirect('/');
 });
