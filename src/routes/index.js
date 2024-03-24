@@ -6,6 +6,8 @@ const renderLayout = require('../helpers/layout-renderer');
 const router = express.Router();
 const plants = require('../controllers/plants');
 
+let flashData = {message: "testing123", type: "success"};
+
 /* IMAGE CODE (move into seperate route eventually) */
 
 const storage = multer.diskStorage({
@@ -25,42 +27,55 @@ const upload = multer({ storage });
 router.get('/', (req, res) => {
   const result = plants.getPlants({});
   result.then((allPlants) => {
-    renderLayout(res, 'index', { title: 'All Plants', plants: allPlants, scripts: ['filters'] });
+    const data = {
+      title: 'All Plants',
+      plants: allPlants,
+      scripts: ['filters']
+    };
+    if (flashData.message !== null) {
+      data.flash = flashData;
+    }
+    renderLayout(res, 'index', data);
+    flashData.message = null;
   });
-});
-
-router.get('/page-2', (req, res) => {
-  renderLayout(res, 'page2');
-});
-
-router.get('/page-3', (req, res) => {
-  renderLayout(res, 'page3');
 });
 
 router.post('/create-plant', upload.single('image'), (req, res) => {
   // Create the plant in the database
-  const result = plants.create(req.body, req.file);
-  log(result);
-
-  // Redirect back to root upon success
+  plants.create(req.body, req.file)
+    .then((result) => {
+      log(result);
+      flashData = {message: "Plant created successfully", type: "success"};})
+    .catch((error) => {
+      log(error);
+      flashData = {message: "Error occurred whilst creating new plant", type: "error"};
+    });
   res.redirect('/');
 });
 
 router.post('/edit-plant', upload.single('image'), async (req, res) => {
   // Update the plant in the database
-  const result = plants.update(req.body, req.file);
-  log(result);
-
-  // Redirect back to root upon success
+  plants.update(req.body, req.file)
+    .then((result) => {
+      log(result);
+      flashData = {message: "Plant updated successfully", type: "success"};})
+    .catch((error) => {
+      log(error);
+      flashData = {message: "Error occurred whilst updating plant", type: "error"};
+    });
   res.redirect('/');
 });
 
 router.post('/delete-plant', upload.single('image'), async (req, res) => {
   // Delete the plant from the database
-  const result = plants.delete(req.body.id);
-  log(result);
-
-  // Redirect back to root upon success
+  plants.delete(req.body.id)
+    .then((result) => {
+      log(result);
+      flashData = {message: "Plant deleted successfully", type: "success"};})
+    .catch((error) => {
+      log(error);
+      flashData = {message: "Error occurred whilst deleting plant", type: "error"};
+    });
   res.redirect('/');
 });
 
