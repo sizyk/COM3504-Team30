@@ -6,7 +6,7 @@ const renderLayout = require('../helpers/layout-renderer');
 const router = express.Router();
 const plants = require('../controllers/plants');
 
-let flashData = {message: null, type: "info"};
+let flashData = { message: null, type: 'info' };
 
 /* IMAGE CODE (move into seperate route eventually) */
 
@@ -30,7 +30,7 @@ router.get('/', (req, res) => {
     const data = {
       title: 'All Plants',
       plants: allPlants,
-      scripts: ['filters']
+      scripts: ['filters'],
     };
     if (flashData.message !== null) {
       data.flash = flashData;
@@ -45,10 +45,11 @@ router.post('/create-plant', upload.single('image'), (req, res) => {
   plants.create(req.body, req.file)
     .then((result) => {
       log(result);
-      flashData = {message: "Plant created successfully", type: "success"};})
+      flashData = { message: 'Plant created successfully', type: 'success' };
+    })
     .catch((error) => {
       log(error);
-      flashData = {message: "Error occurred whilst creating new plant", type: "error"};
+      flashData = { message: 'Error occurred whilst creating new plant', type: 'error' };
     });
   res.redirect('/');
 });
@@ -58,10 +59,11 @@ router.post('/edit-plant', upload.single('image'), async (req, res) => {
   plants.update(req.body, req.file)
     .then((result) => {
       log(result);
-      flashData = {message: "Plant updated successfully", type: "success"};})
+      flashData = { message: 'Plant updated successfully', type: 'success' };
+    })
     .catch((error) => {
       log(error);
-      flashData = {message: "Error occurred whilst updating plant", type: "error"};
+      flashData = { message: 'Error occurred whilst updating plant', type: 'error' };
     });
   res.redirect('/');
 });
@@ -71,10 +73,11 @@ router.post('/delete-plant', upload.single('image'), async (req, res) => {
   plants.delete(req.body.id)
     .then((result) => {
       log(result);
-      flashData = {message: "Plant deleted successfully", type: "success"};})
+      flashData = { message: 'Plant deleted successfully', type: 'success' };
+    })
     .catch((error) => {
       log(error);
-      flashData = {message: "Error occurred whilst deleting plant", type: "error"};
+      flashData = { message: 'Error occurred whilst deleting plant', type: 'error' };
     });
   res.redirect('/');
 });
