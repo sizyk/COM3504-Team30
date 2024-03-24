@@ -8,6 +8,7 @@ const logger = require('morgan');
 const indexRouter = require('./routes');
 const plantRouter = require('./routes/plant');
 const usersRouter = require('./routes/users');
+const apiRouter = require('./routes/api');
 
 const app = express();
 app.use(favicon(path.join('public', 'img', 'favicon.ico')));
@@ -24,6 +25,7 @@ app.use(cookieParser());
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/plant', plantRouter);
+app.use('/api', apiRouter);
 
 app.use('/public', express.static('public'));
 
