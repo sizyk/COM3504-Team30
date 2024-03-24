@@ -29,7 +29,7 @@ router.get('/', (req, res) => {
   result.then((allPlants) => {
     const data = {
       title: 'All Plants',
-      plants: allPlants,
+      plants: allPlants || [],
       scripts: ['filters'],
     };
     if (flashData.message !== null) {

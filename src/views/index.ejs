@@ -27,6 +27,9 @@
       %>
     </div>
   </div>
+  <% if (plants.length === 0) { %>
+    <h3 class="text-2xl font-bold m-auto w-max">No plants yet! Click 'Add Plant' to get started.</h3>
+  <% } %>
   <div
     class="grid grid-cols-1 gap-10 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
   >
