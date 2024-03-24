@@ -1,0 +1,81 @@
+@font-face {
+    font-family: 'Material Symbols Outlined';
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+    src: url("/public/fonts/material-symbols.woff2") format("woff");
+}
+
+@font-face {
+    font-family: 'Noto Color Emoji';
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+    src: url("/public/fonts/NotoColorEmoji-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: 'DM Sans';
+    font-display: block;
+    src: url("/public/fonts/dm-sans.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: 'DM Sans Italic';
+    font-display: block;
+    src: url("/public/fonts/dm-sans-italic.ttf") format("truetype");
+}
+
+@layer utilities {
+    .material-symbols-outlined {
+        font-family: 'Material Symbols Outlined';
+        font-weight: normal;
+        font-style: normal;
+        font-size: 24px;  /* Preferred icon size */
+        display: inline-block;
+        line-height: 1;
+        text-transform: none;
+        letter-spacing: normal;
+        word-wrap: normal;
+        white-space: nowrap;
+        direction: ltr;
+
+        font-variation-settings: 'FILL' 1;
+
+        &.opsz-20 {
+            font-size: 20px;
+            font-variation-settings:
+                    'FILL' 1,
+                    'OPSZ' 20;
+        }
+        &.opsz-24 {
+            font-size: 24px;
+            font-variation-settings:
+                    'FILL' 1,
+                    'OPSZ' 24;
+        }
+        &.opsz-40 {
+            font-size: 40px;
+            font-variation-settings:
+                    'FILL' 1,
+                    'OPSZ' 40;
+        }
+        &.opsz-48 {
+            font-size: 48px;
+            font-variation-settings:
+                    'FILL' 1,
+                    'OPSZ' 48;
+        }
+    }
+
+    .font-dm-sans {
+        font-family: "DM Sans", sans-serif;
+        font-optical-sizing: auto;
+    }
+
+    .font-emoji {
+        font-family: "Noto Color Emoji", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+    }
+}

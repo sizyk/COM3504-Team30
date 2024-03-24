@@ -1,5 +1,6 @@
 @import "utils.css";
 @import "inputs.css";
+@import "fonts.css";
 
 @tailwind base;
 @tailwind components;
