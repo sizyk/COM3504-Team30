@@ -6,7 +6,7 @@ const renderLayout = require('../helpers/layout-renderer');
 const router = express.Router();
 const plants = require('../controllers/plants');
 
-let flashData = {message: "testing123", type: "success"};
+let flashData = {message: null, type: "info"};
 
 /* IMAGE CODE (move into seperate route eventually) */
 
