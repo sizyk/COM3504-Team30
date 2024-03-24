@@ -1,3 +1,4 @@
+<% var editModalName = plant._id + "-edit-plant-modal"%>
 <main class="mx-auto mt-24 w-10/12">
 
   <div
@@ -70,6 +71,8 @@
         <div class="flex flex-row justify-around gap-2 p-2">
           <button
                   class="hover-button-secondary text-center21 w-1/2 rounded-lg px-4 py-2 text-sm font-bold"
+                  data-toggle="modal"
+                  data-target="<%= editModalName %>"
           >
             Suggest Edit
           </button>
@@ -78,3 +81,14 @@
     </div>
   </div>
 </main>
+
+<!-- prettier-ignore -->
+<%-
+include('../partials/modal.ejs', {
+modalID: editModalName,
+modalTitle: 'Edit a plant sighting',
+modalContent: 'edit-plant-form',
+});
+%>
+
+<script src="/public/scripts/plantForm.js"></script>
