@@ -1,3 +1,4 @@
+const fs = require('fs');
 const log = require('debug')('app:db');
 // Import the plants model
 const PlantModel = require('../models/plants');
@@ -40,6 +41,7 @@ exports.upsert = async (plantData, file) => {
       object: newPlant,
     };
   } catch (error) {
+    log(error);
     return {
       code: 500,
       message: 'Plant failed to upload to MongoDB!',
@@ -52,7 +54,16 @@ exports.upsert = async (plantData, file) => {
 exports.delete = async (id) => {
   // Delete the plant from the database
   try {
-    await PlantModel.findByIdAndDelete(id);
+    const deleted = await PlantModel.findByIdAndDelete(id);
+
+    // Delete image of deleted plant, to prevent clogging up storage
+    fs.unlink(deleted.image, (err) => {
+      if (err) {
+        log(err);
+      }
+
+      log('path/file.txt was deleted');
+    });
 
     return {
       code: 200,
@@ -60,6 +71,7 @@ exports.delete = async (id) => {
     };
     // Redirect to some page or send a response indicating success
   } catch (error) {
+    log(error);
     return {
       code: 500,
       message: 'Failed to delete plant!',
