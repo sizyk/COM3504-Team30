@@ -5,7 +5,7 @@
   "scripts": {
     "build-css": "postcss public/styles/global.css --dir public/styles/dist",
     "watch-css": "postcss public/styles/global.css --dir public/styles/dist --watch",
-    "watch-js": "nodemon ./src/bin/www",
+    "watch-js": "nodemon ./src/bin/www -e js,mjs,ejs,css",
     "start": "concurrently --raw --kill-others \"npm:watch-*\"",
     "prettify": "prettier -w **/*.ejs",
     "lint": "eslint --color '**/*.js' '**/bin/www' '**/*.mjs'",
