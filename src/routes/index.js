@@ -41,8 +41,17 @@ router.get('/', (req, res) => {
 });
 
 router.post('/create-plant', upload.single('image'), (req, res) => {
+  let filepath;
+  if (req.body.imageInput === 'url') {
+    filepath = req.body.url;
+  }
+  else {
+    filepath = req.file.path.replace(/\\/g, '/');
+  }
+
+
   // Create the plant in the database
-  plants.create(req.body, req.file)
+  plants.create(req.body, filepath)
     .then((result) => {
       log(result);
       flashData = { message: 'Plant created successfully', type: 'success' };
