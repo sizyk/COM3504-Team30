@@ -144,7 +144,8 @@
         type="checkbox"
         value="url"
         class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
-        onchange="toggleImageInput('New')"
+        data-change="toggle-input"
+        data-plant="New"
       />
       <label for="imageInputCheckbox" class="ms-2 text-sm font-medium text-text">Use URL for image?</label>
     </div>
@@ -171,7 +172,8 @@
       type="file"
       aria-describedby="file_input_help"
       accept="image/png, image/jpeg, image/gif"
-      onchange="previewImage('New')"
+      data-change="preview"
+      data-plant="New"
       required
     />
   </div>
@@ -188,7 +190,8 @@
     <button
       class="form-input hover-button w-1/4 grow-0 rounded px-4 py-2 font-bold"
       type="button"
-      onclick="previewImage('New')"
+      data-click="preview"
+      data-plant="New"
     >
       Preview
     </button>
@@ -239,7 +242,8 @@
 
       class="form-input hover-button w-1/4 grow-0 rounded px-4 py-2 font-bold"
       type="button"
-      onclick="getLocation('New')"
+      data-click="geolocation"
+      data-plant="New"
     >
       Get
     </button>

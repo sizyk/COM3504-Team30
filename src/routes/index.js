@@ -30,7 +30,7 @@ router.get('/', (req, res) => {
     const data = {
       title: 'All Plants',
       plants: allPlants || [],
-      scripts: ['filters'],
+      scripts: ['filters', 'plantForm'],
     };
     if (flashData.message !== null) {
       data.flash = flashData;

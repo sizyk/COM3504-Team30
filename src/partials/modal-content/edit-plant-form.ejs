@@ -168,7 +168,8 @@
         type="checkbox"
         value="url"
         class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
-        onchange="toggleImageInput('<%=plant._id%>')"
+        data-change="toggle-input"
+        data-plant="<%= plant._id %>"
       />
       <label for="imageInputCheckbox" class="ms-2 text-sm font-medium text-text">Use URL for image?</label>
     </div>
@@ -196,7 +197,8 @@
       type="file"
       aria-describedby="file_input_help"
       accept="image/png, image/jpeg, image/gif"
-      onchange="previewImage('<%=plant._id%>')"
+      data-change="preview"
+      data-plant="<%= plant._id %>"
     />
   </div>
   <div class="form-group mb-4 flex space-x-2 hidden" id="urlDiv<%=plant._id%>">
@@ -212,7 +214,8 @@
     <button
       class="form-input hover-button w-1/4 grow-0 rounded px-4 py-2 font-bold"
       type="button"
-      onclick="previewImage('<%=plant._id%>')"
+      data-click="preview"
+      data-plant="<%= plant._id %>"
     >
       Preview
     </button>
@@ -261,7 +264,8 @@
     <button
       class="form-input hover-button w-1/4 grow-0 rounded px-4 py-2 font-bold"
       type="button"
-      onclick="getLocation('<%= plant._id%>')"
+      data-click="geolocation"
+      data-plant="<%=plant._id%>"
     >
       Get
     </button>
@@ -279,6 +283,10 @@
       id="deleteButton"
       type="button"
       class="form-input hover-button-error rounded px-4 py-2 font-bold"
-      onclick="deletePlant('<%= plant._id %>')">Delete</button>
+      data-click="delete"
+      data-plant="<%=plant._id%>"
+    >
+      Delete
+    </button>
   </div>
 </form>

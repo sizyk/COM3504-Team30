@@ -3,7 +3,7 @@ function showPosition(position, plantID) {
   document.getElementById(`longitude${plantID}`).value = position.coords.longitude;
   document.getElementById(`coordinates${plantID}`).value = `(${position.coords.latitude}, ${position.coords.longitude})`;
 }
-// eslint-disable-next-line no-unused-vars
+
 function getLocation(plantID) {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -44,7 +44,6 @@ function handleCorsError(plantID) {
   document.getElementById(`imageValidated${plantID}`).checked = false;
 }
 
-// eslint-disable-next-line no-unused-vars
 async function previewImage(plantID) {
   const preview = document.getElementById(`preview${plantID}`);
   const checkbox = document.getElementById(`imageValidated${plantID}`);
@@ -89,23 +88,14 @@ async function previewImage(plantID) {
   }
 }
 
-// eslint-disable-next-line no-unused-vars
 function deletePlant(plantID) {
   // eslint-disable-next-line no-alert
   const confirmation = window.confirm('Are you sure you want to delete this plant? This action cannot be undone.');
   if (confirmation) {
-    fetch('/delete-plant', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ id: plantID }),
-    });
-    window.location.href = '/';
+    console.log(`delete ${plantID}`);
   }
 }
 
-// eslint-disable-next-line no-unused-vars
 function toggleImageInput(plantID) {
   // get all the relevant elements
   const imageValidatedCheckbox = document.getElementById(`imageValidated${plantID}`);
@@ -135,3 +125,24 @@ function toggleImageInput(plantID) {
     urlDiv.classList.add('hidden');
   }
 }
+
+// Add required event listeners
+document.querySelectorAll('[data-click="geolocation"]').forEach((elem) => {
+  elem.addEventListener('click', () => getLocation(elem.dataset.plant));
+});
+
+document.querySelectorAll('[data-click="delete"]').forEach((elem) => {
+  elem.addEventListener('click', () => deletePlant(elem.dataset.plant));
+});
+
+document.querySelectorAll('[data-change="preview"]').forEach((elem) => {
+  elem.addEventListener('change', () => previewImage(elem.dataset.plant));
+});
+
+document.querySelectorAll('[data-click="preview"]').forEach((elem) => {
+  elem.addEventListener('click', () => previewImage(elem.dataset.plant));
+});
+
+document.querySelectorAll('[data-change="toggle-input"]').forEach((elem) => {
+  elem.addEventListener('change', () => toggleImageInput(elem.dataset.plant));
+});
