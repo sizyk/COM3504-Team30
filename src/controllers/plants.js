@@ -3,9 +3,7 @@ const log = require('debug')('app:db');
 const PlantModel = require('../models/plants');
 
 // Function to create new plants
-exports.create = (plantData, file) => {
-  const filepath = file.path.replace(/\\/g, '/');
-
+exports.create = (plantData, filepath) => {
   // Create a new plant model
   const plant = new PlantModel({
     author: 'placeholder', // replace with user when implemented
