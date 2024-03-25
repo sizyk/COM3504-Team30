@@ -1,3 +1,7 @@
+import DBController from './utils/DBController.mjs';
+import { showMessage } from './utils/flash-messages.mjs';
+import updateCard from './utils/plantUtils.mjs';
+
 function showPosition(position, plantID) {
   document.getElementById(`latitude${plantID}`).value = position.coords.latitude;
   document.getElementById(`longitude${plantID}`).value = position.coords.longitude;
@@ -92,7 +96,21 @@ function deletePlant(plantID) {
   // eslint-disable-next-line no-alert
   const confirmation = window.confirm('Are you sure you want to delete this plant? This action cannot be undone.');
   if (confirmation) {
-    console.log(`delete ${plantID}`);
+    DBController.delete(
+      'plants',
+      plantID,
+      (message) => {
+        showMessage(message, 'success', 'delete');
+
+        // Remove plant card
+        document.getElementById(plantID.toString()).remove();
+
+        const plantModal = document.getElementById(`${plantID}-edit-plant-modal`);
+        if (plantModal !== null) {
+          plantModal.classList.remove('active');
+        }
+      },
+    );
   }
 }
 
@@ -123,6 +141,21 @@ function toggleImageInput(plantID) {
   } else {
     imageDiv.classList.remove('hidden');
     urlDiv.classList.add('hidden');
+    DBController.delete(
+      'plants',
+      plantID,
+      (message) => {
+        showMessage(message, 'success', 'delete');
+
+        // Remove plant card
+        document.getElementById(plantID.toString()).remove();
+
+        const plantModal = document.getElementById(`${plantID}-edit-plant-modal`);
+        if (plantModal !== null) {
+          plantModal.classList.remove('active');
+        }
+      },
+    );
   }
 }
 
@@ -145,4 +178,64 @@ document.querySelectorAll('[data-click="preview"]').forEach((elem) => {
 
 document.querySelectorAll('[data-change="toggle-input"]').forEach((elem) => {
   elem.addEventListener('change', () => toggleImageInput(elem.dataset.plant));
+});
+
+document.querySelectorAll('[data-form="plant"]').forEach((formElem) => {
+  formElem.addEventListener('submit', () => {
+    const params = new FormData(formElem);
+
+    // Checkboxes have no value if not checked, so manually check whether they are true
+    params.set('hasFlowers', params.get('hasFlowers') === 'true');
+    params.set('hasLeaves', params.get('hasLeaves') === 'true');
+    params.set('hasFruit', params.get('hasFruit') === 'true');
+    params.set('hasSeeds', params.get('hasSeeds') === 'true');
+
+    if (/^\d+$/.test(params.get('_id').toString())) {
+      // Convert ID to hex string if it's just an integer
+      const hexID = parseInt(params.get('_id').toString(), 10).toString(16);
+      params.set('_id', hexID.padStart(24, '0'));
+    }
+
+    const plant = { // Get data from the form
+      _id: params.get('_id'),
+      author: 'placeholder', // replace with user when implemented
+      name: params.get('name'),
+      description: params.get('description'),
+      dateTimeSeen: new Date(params.get('dateTimeSeen')),
+      size: parseFloat(params.get('size')),
+      sunExposure: params.get('sunExposure'),
+      colour: params.get('colour'),
+      longitude: params.get('longitude'),
+      latitude: params.get('latitude'),
+      hasFlowers: params.get('hasFlowers'),
+      hasLeaves: params.get('hasLeaves'),
+      hasFruit: params.get('hasFruit'),
+      hasSeeds: params.get('hasSeeds'),
+      image: params.get('image'),
+    };
+
+    DBController.createOrUpdate(
+      'plants',
+      { obj: plant, formData: params },
+      (message, plantObject) => {
+        showMessage(message, 'success', 'check_circle');
+
+        const plantModal = document.getElementById(`${plantObject._id}-edit-plant-modal`);
+        if (plantModal !== null) {
+          plantModal.classList.remove('active');
+        } else {
+          // plantModal is null - therefore this is a new plant
+          window.location.reload(); // Refresh page to get EJS to generate new cards
+          return;
+        }
+
+        const addModal = document.getElementById('plant-add-modal');
+        if (addModal !== null) {
+          addModal.classList.remove('active');
+        }
+
+        updateCard(plantObject);
+      },
+    );
+  });
 });

@@ -1,10 +1,12 @@
 <form
-  action="/create-plant"
-  method="POST"
-  enctype="multipart/form-data"
   id="createPlantForm"
   autocomplete="off"
+  target="fakesubmit"
+  data-form="plant"
+  enctype="multipart/form-data"
+  method="POST"
 >
+  <input id="_id" name="_id" type="hidden" value="<%= Date.now() %>" />
   <div class="form-group mb-4">
     <label for="name" class="block text-text">Name</label>
     <input
@@ -93,9 +95,9 @@
         value="true"
         class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
       />
-      <label for="hasFlowers" class="ms-2 text-sm font-medium text-text"
-        >Flowers</label
-      >
+      <label for="hasFlowers" class="ms-2 text-sm font-medium text-text">
+        Flowers
+      </label>
     </div>
     <div class="mb-2 flex items-center">
       <input
@@ -105,9 +107,9 @@
         value="true"
         class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
       />
-      <label for="hasLeaves" class="ms-2 text-sm font-medium text-text"
-        >Leaves</label
-      >
+      <label for="hasLeaves" class="ms-2 text-sm font-medium text-text">
+        Leaves
+      </label>
     </div>
     <div class="mb-2 flex items-center">
       <input
@@ -117,9 +119,9 @@
         value="true"
         class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
       />
-      <label for="hasFruit" class="ms-2 text-sm font-medium text-text"
-        >Fruit</label
-      >
+      <label for="hasFruit" class="ms-2 text-sm font-medium text-text">
+        Fruit
+      </label>
     </div>
     <div class="mb-2 flex items-center">
       <input
@@ -129,9 +131,9 @@
         value="true"
         class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
       />
-      <label for="hasSeeds" class="ms-2 text-sm font-medium text-text"
-        >Seeds</label
-      >
+      <label for="hasSeeds" class="ms-2 text-sm font-medium text-text">
+        Seeds
+      </label>
     </div>
   </div>
   <!-- checkbox for using a file or a url for image -->
@@ -239,7 +241,6 @@
       />
     </div>
     <button
-
       class="form-input hover-button w-1/4 grow-0 rounded px-4 py-2 font-bold"
       type="button"
       data-click="geolocation"

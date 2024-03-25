@@ -1,4 +1,4 @@
-import IDB from '../IDB.mjs';
+import IDB from '../utils/IDB.mjs';
 
 /**
  * Fires when internet connection is detected.
@@ -8,12 +8,12 @@ import IDB from '../IDB.mjs';
 function connectHandler() {
   console.log('You are now online, syncing...');
   // Sync all plants to indexedDB
-  fetch('/api/get-plants')
+  fetch('/api/plants/get-all')
     .then((res) => res.json())
     .then((plants) => {
       plants.forEach((p) => {
         // Attempt to remove current plant from indexedDB, to be replaced with updated one
-        IDB.remove(
+        IDB.delete(
           'plants',
           // (blame mongoDB)
           // eslint-disable-next-line no-underscore-dangle

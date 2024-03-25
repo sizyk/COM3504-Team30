@@ -2,46 +2,14 @@ const log = require('debug')('app:db');
 // Import the plants model
 const PlantModel = require('../models/plants');
 
-// Function to create new plants
-exports.create = (plantData, filepath) => {
-  // Create a new plant model
-  const plant = new PlantModel({
-    author: 'placeholder', // replace with user when implemented
-    name: plantData.name,
-    description: plantData.description,
-    dateTimeSeen: new Date(plantData.dateTimeSeen),
-    size: parseFloat(plantData.size),
-    sunExposure: plantData.sunExposure,
-    colour: plantData.colour,
-    longitude: plantData.longitude,
-    latitude: plantData.latitude,
-    image: filepath,
-    hasFlowers: plantData.hasFlowers === 'true', // Checkboxes have no value if not checked, so manually check whether they are true
-    hasLeaves: plantData.hasLeaves === 'true',
-    hasFruit: plantData.hasFruit === 'true',
-    hasSeeds: plantData.hasSeeds === 'true',
-  });
-
-  // Save the new plant to the database and handle success or failure
-  return plant
-    .save()
-    .then(() => {
-      log(plant);
-
-      // return plant data as a JSON string
-      return JSON.stringify(plant);
-    })
-    .catch((error) => {
-      log(error);
-
-      // return null in case of an error
-      return null;
-    });
-};
-
-// Function to update plant
-exports.update = async (plantData, filepath) => {
+/**
+ * 'Upserts' (updates or creates) a plant object to the database
+ * @param plantData {Record<string, string | number>} plant data from the form
+ * @param file {{path: string}} the file object from multer
+ */
+exports.upsert = async (plantData, file) => {
   const plant = { // Get data from the form
+    _id: plantData._id,
     author: 'placeholder', // replace with user when implemented
     name: plantData.name,
     description: plantData.description,
@@ -58,12 +26,25 @@ exports.update = async (plantData, filepath) => {
     hasSeeds: plantData.hasSeeds === 'true',
   };
 
+  if (file) { // If a new image is uploaded, update the image path
+    plant.image = file.path.replace(/\\/g, '/');
+  }
+
   // Update the plant in the database
+  let newPlant = null;
   try {
-    const updatedModel = await PlantModel.findByIdAndUpdate(plantData.id, plant, { new: true });
-    log(updatedModel);
+    newPlant = await PlantModel.findByIdAndUpdate(plant._id, plant, { upsert: true, new: true });
+    return {
+      code: 200,
+      message: 'Plant updated successfully!',
+      object: newPlant,
+    };
   } catch (error) {
-    log(error);
+    return {
+      code: 500,
+      message: 'Plant failed to upload to MongoDB!',
+      object: newPlant,
+    };
   }
 };
 
@@ -71,16 +52,23 @@ exports.update = async (plantData, filepath) => {
 exports.delete = async (id) => {
   // Delete the plant from the database
   try {
-    const updatedModel = await PlantModel.findByIdAndDelete(id);
-    log(updatedModel);
+    await PlantModel.findByIdAndDelete(id);
+
+    return {
+      code: 200,
+      message: 'Successfully deleted plant!',
+    };
     // Redirect to some page or send a response indicating success
   } catch (error) {
-    log(error);
+    return {
+      code: 500,
+      message: 'Failed to delete plant!',
+    };
   }
 };
 
 // Function to get all plants
-exports.getPlants = (filter) => PlantModel.find(filter)
+exports.get = (filter) => PlantModel.find(filter)
   .then((plants) => {
     plants.forEach((p) => {
       const dt = new Date(p.dateTimeSeen.toString());
@@ -98,9 +86,9 @@ exports.getPlants = (filter) => PlantModel.find(filter)
       let min = dt.getMinutes().toString();
       min = min > 9 ? min : `0${min}`;
 
-      const tz = dt.getTimezoneOffset();
+      // const tz = dt.getTimezoneOffset();
 
-      p.spottedString = `${hour}:${min} on ${day}/${month}/${year} (UTC+${tz}), in Sheffield `;
+      p.spottedString = `${hour}:${min} on ${day}/${month}/${year}, in Sheffield `;
 
       p.emoji = '🇬🇧';
     });
