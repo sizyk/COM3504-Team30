@@ -50,13 +50,12 @@ function handleCorsError(plantID) {
 async function previewImage(plantID) {
   const preview = document.getElementById(`preview${plantID}`);
   const checkbox = document.getElementById(`imageValidated${plantID}`);
-
+  // loading image changes on whether you use a file or a URL
   if (document.getElementById(`imageInputCheckbox${plantID}`).checked) {
     const url = document.getElementById(`url${plantID}`).value;
-
     try {
+      // do a fetch request to the url to test for errors
       const response = await fetch(url, {});
-
       if (response.ok) {
         document.getElementById(`imagePreviewContainer${plantID}`).classList.remove('hidden');
         preview.src = url;
