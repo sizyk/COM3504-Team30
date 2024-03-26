@@ -40,7 +40,7 @@ exports.create = (plantData, filepath) => {
 };
 
 // Function to update plant
-exports.update = async (plantData, file) => {
+exports.update = async (plantData, filepath) => {
   const plant = { // Get data from the form
     author: 'placeholder', // replace with user when implemented
     name: plantData.name,
@@ -49,6 +49,7 @@ exports.update = async (plantData, file) => {
     size: parseFloat(plantData.size),
     sunExposure: plantData.sunExposure,
     colour: plantData.colour,
+    image: filepath,
     longitude: plantData.longitude,
     latitude: plantData.latitude,
     hasFlowers: plantData.hasFlowers === 'true', // Checkboxes have no value if not checked, so manually check whether they are true
@@ -56,11 +57,6 @@ exports.update = async (plantData, file) => {
     hasFruit: plantData.hasFruit === 'true',
     hasSeeds: plantData.hasSeeds === 'true',
   };
-
-  if (file) { // If a new image is uploaded, update the image path
-    const filepath = file.path.replace(/\\/g, '/');
-    plant.image = filepath;
-  }
 
   // Update the plant in the database
   try {
