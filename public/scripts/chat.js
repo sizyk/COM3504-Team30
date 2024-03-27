@@ -1,11 +1,14 @@
+import DBController from './uitls/DBController.mjs';
+
 const sendButton = document.getElementById('send-button');
 const userInput = document.getElementById('user-input');
 const chatbox = document.getElementById('chatbox');
 const chatContainer = document.getElementById('chat-interface');
 const openChatButton = document.getElementById('open-chat');
 const closeChatButton = document.getElementById('close-chat');
-const roomId = document.getElementById('plant-id').innerText;
-const userId = document.getElementById('user-id').innerText;
+const roomId = document.getElementById('plant-id').value;
+const userId = document.getElementById('user-id').value;
+// const formElem = document.getElementById('chat-form');
 
 const socket = io();
 
@@ -17,6 +20,7 @@ function connectToRoom() {
 
 function toggleChatbox() {
   chatContainer.classList.toggle('hidden');
+  console.log('Toggled chatbox');
   isChatboxOpen = !isChatboxOpen;
   if (isChatboxOpen) {
     connectToRoom();
@@ -35,32 +39,54 @@ function addUserMessage(message) {
   chatbox.scrollTop = chatbox.scrollHeight;
 }
 
-sendButton.addEventListener('click', () => {
+function sendChatMessage() {
   const userMessage = userInput.value;
   if (userMessage.trim() !== '') {
-    socket.emit('chat', roomId, userId, userMessage);
+    const newChat = {
+      user: userId,
+      plant: roomId,
+      message: userMessage,
+      dateTime: Date.now(),
+    };
+    socket.emit('chat', roomId, newChat);
     userInput.value = '';
   }
+}
+
+sendButton.addEventListener('click', (event) => {
+  event.preventDefault();
+  sendChatMessage();
 });
 
 userInput.addEventListener('keyup', (event) => {
   if (event.key === 'Enter') {
-    const userMessage = userInput.value;
-    if (userMessage.trim() !== '') {
-      socket.emit('chat', roomId, userId, userMessage);
-      userInput.value = '';
-    }
+    event.preventDefault();
+    sendChatMessage();
   }
 });
 
 function init() {
   // socket.on('joined', (roomNo, userId) {
   // }
-  socket.on('chat', (room, user, chatText) => {
-    addUserMessage(chatText);
 
-    console.log(chatText);
+  socket.on('chat', (params) => {
+    try {
+      const newChat = {
+        _id: Date.now().toString(), // Auto-generate id
+        user: params.user,
+        plant: params.plant,
+        message: params.message,
+        dateTime: params.dateTime,
+      };
+      console.log(newChat);
+      DBController.addChat(newChat);
+      addUserMessage(params.message);
+    } catch (error) {
+      console.error('Error saving message:', error);
+    }
+    console.log(params);
   });
+
   socket.on('oldMessages', (messages) => {
     messages.forEach((chat) => {
       addUserMessage(chat.message);
@@ -70,20 +96,4 @@ function init() {
 
 window.onload = () => {
   init();
-  // if('serviceWorker' in navigator) {
-  //   navigator.serviceWorker.register('/sw.js', { scope: `/plant/${roomId}` })
-  //     .then(r  =>{
-  //
-  //     })
-  //     .catch(err => {
-  //
-  //   });
-  // }
-  // if (navigator.onLine) {
-  //   fetch('')
-  // }
 };
-
-// const insertChatInList = (chat) => {
-//   chat.forEach()
-// }

@@ -26,10 +26,12 @@
             <%}%>
         </div>
         <div class="p-4 border-t flex">
-            <input id="user-input" type="text" placeholder="Type a message" class="text-gray-700 w-full px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-accent">
-            <button id="send-button" class="bg-primary px-4 py-2 rounded-r-md hover-button transition duration-300">Send</button>
+            <form id="chat-form" class="w-full flex">
+                <input id="user-id" type="text" class="hidden" value="user-placeholder">
+                <input id="plant-id" type="text" class="hidden" value="<%= plant.id %>">
+                <input id="user-input" type="text" placeholder="Type a message" class="text-gray-700 w-full px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-accent">
+                <button id="send-button" class="bg-primary px-4 py-2 rounded-r-md hover-button transition duration-300">Send</button>
+            </form>
         </div>
     </div>
 </div>
-<p id="plant-id" class="hidden"><%= plant.id %></p>
-<p id="user-id" class="hidden">user-placeholder</p>

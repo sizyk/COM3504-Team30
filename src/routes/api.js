@@ -14,10 +14,13 @@
  */
 
 const Express = require('express');
+
 const plantsController = require('../controllers/plants');
+const chatController = require('../controllers/chat');
 
 const collectionControllers = {
   plants: plantsController,
+  chat: chatController,
 };
 
 const router = Express.Router();

@@ -16,13 +16,13 @@
 </div>
 
 <% if (typeof flash !== 'undefined') { %>
-<script>
-  const alertDiv = document.getElementById('flash-message');
-  alertDiv.style.transform = 'translateY(0)';
-  console.log(alertDiv.style);
+  <script>
+    const alertDiv = document.getElementById('flash-message');
+    alertDiv.style.transform = 'translateY(0)';
+    console.log(alertDiv.style);
 
-  setTimeout(() => {
-    alertDiv.style.transform = 'translateY(-100%)';
-  }, 3500);
-</script>
+    setTimeout(() => {
+      alertDiv.style.transform = 'translateY(-100%)';
+    }, 3500);
+  </script>
 <% } %>
