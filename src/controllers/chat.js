@@ -29,6 +29,33 @@ exports.create = (chatData) => {
     });
 };
 
+exports.add = async (chatData) => {
+  const chat = { // Get data from the form
+    user: chatData.user,
+    plant: chatData.plant,
+    message: chatData.message,
+    dateTime: chatData.dateTime,
+  };
+
+  // Update the plant in the database
+  let newChat = null;
+  try {
+    newChat = await ChatModel.create(chat);
+    return {
+      code: 200,
+      message: 'Plant updated successfully!',
+      object: newChat,
+    };
+  } catch (error) {
+    log(error);
+    return {
+      code: 500,
+      message: 'Plant failed to upload to MongoDB!',
+      object: newChat,
+    };
+  }
+};
+
 // Function to get all plants
 exports.getAll = () => ChatModel.find({})
   .then((plants) => JSON.stringify(plants))
