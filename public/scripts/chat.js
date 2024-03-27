@@ -43,12 +43,18 @@ function sendChatMessage() {
   const userMessage = userInput.value;
   if (userMessage.trim() !== '') {
     const newChat = {
+      _id: Date.now().toString(),
       user: userId,
       plant: roomId,
       message: userMessage,
       dateTime: Date.now(),
     };
-    socket.emit('chat', roomId, newChat);
+    if (navigator.onLine) {
+      socket.emit('chat', roomId, newChat);
+    } else {
+      addUserMessage(userMessage);
+      DBController.addChat(newChat);
+    }
     userInput.value = '';
   }
 }
