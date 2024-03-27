@@ -1,0 +1,28 @@
+<div
+        id="flash-message"
+        class="flash z-[1000]"
+        style="transform: translateY(-100%)"
+>
+    <div
+            class="flash-<%= (typeof flash !== 'undefined' && flash.type) || 'info' %> flex items-center justify-center gap-2 rounded border-2 border-text px-4 py-2 text-center text-2xl"
+    >
+        <i class="material-symbols-outlined !leading-8">
+            <%= (typeof flash !== 'undefined' && flash.icon) || '' %>
+        </i>
+        <span class="pb-0.5">
+      <%= (typeof flash !== 'undefined' && flash.message) || '' %>
+    </span>
+    </div>
+</div>
+
+<% if (typeof flash !== 'undefined') { %>
+    <script>
+      const alertDiv = document.getElementById('flash-message');
+      alertDiv.style.transform = 'translateY(0)';
+      console.log(alertDiv.style);
+
+      setTimeout(() => {
+        alertDiv.style.transform = 'translateY(-100%)';
+      }, 3500);
+    </script>
+<% } %>

@@ -10,22 +10,12 @@ exports.init = function (io) {
         const messages = await ChatModel.find({ plant: room });
         socket.emit('oldMessages', messages);
         socket.join(room);
+        console.log(room);
       });
 
-      socket.on('chat', async (room, userId, chatText) => {
-        try {
-          const newChat = new ChatModel({
-            user: userId,
-            plant: room,
-            message: chatText,
-            dateTime: Date.now(),
-          });
-          console.log(JSON.stringify(newChat));
-          await newChat.save();
-          io.sockets.to(room).emit('chat', room, userId, chatText);
-        } catch (error) {
-          console.error('Error saving message:', error);
-        }
+      socket.on('chat', (room, params) => {
+        console.log(params);
+        io.to(room).emit('chat', params);
       });
 
       socket.on('disconnect', () => {
