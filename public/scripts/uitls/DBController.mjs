@@ -39,8 +39,7 @@ class DBController {
     const store = tx.objectStore(collection);
     await store.add(chat);
     await tx.done;
-
-   DBController.mongoAddChat(collection, chat, onSuccess, onError);
+    DBController.mongoAddChat(collection, chat, onSuccess, onError);
   }
 
   /**
