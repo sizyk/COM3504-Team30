@@ -1,4 +1,5 @@
 import IDB from '../utils/IDB.mjs';
+import DBController from '../utils/DBController.mjs';
 
 /**
  * Fires when internet connection is detected.
@@ -6,25 +7,35 @@ import IDB from '../utils/IDB.mjs';
  * Also pushes all plants from sync-queue to mongoDB
  */
 function connectHandler() {
-  console.log('You are now online, syncing...');
-  // Sync all plants to indexedDB
-  fetch('/api/plants/get-all')
-    .then((res) => res.json())
-    .then((plants) => {
-      plants.forEach((p) => {
-        // Attempt to remove current plant from indexedDB, to be replaced with updated one
-        IDB.delete(
-          'plants',
-          // (blame mongoDB)
-          // eslint-disable-next-line no-underscore-dangle
-          p._id,
-          () => {
-            // Removal was successful, attempt to update with new plant
-            IDB.put('plants', p, () => {});
-          },
-        );
+  // Use event listener to prevent sync attempts occurring before IDB is open
+  window.addEventListener('idb-open', () => {
+    console.log('You are now online, syncing...');
+    // Synchronise all events that were performed offline
+    DBController.synchronise();
+
+    // Sync all plants to indexedDB
+    fetch('/api/plants/get-all')
+      .then((res) => res.json())
+      .then((plants) => {
+        plants.forEach((p) => {
+          // Attempt to remove current plant from indexedDB, to be replaced with updated one
+          IDB.delete(
+            'plants',
+            // (blame mongoDB)
+            // eslint-disable-next-line no-underscore-dangle
+            p._id,
+            () => {
+              // Removal was successful, attempt to update with new plant
+              IDB.put('plants', p, () => {});
+            },
+          );
+        });
       });
-    });
+  });
+
+  if (IDB.db) {
+    window.dispatchEvent(new Event('idb-open'));
+  }
 }
 
 /**

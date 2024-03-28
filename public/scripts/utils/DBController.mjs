@@ -26,30 +26,38 @@ class DBController {
   /**
    * PUTs data from a form to an API endpoint for a given collection
    * @param collection {string} the database collection to PUT to.
-   * @param formData {FormData | Object} the object to send to the API endpoint
-   *        (must be FormData if sending files).
+   * @param toSend {Object} the object to send to the API endpoint.
    * @param onSuccess {function(string, Object): void} callback function to run on success -
    *        takes a message (as a string) and, optionally, the updated/created object.
    * @param onError {function(string): void} callback function to run on error -
    *        takes a message (as a string).
    */
-  static mongoPut(collection, formData, onSuccess = defaultSuccess, onError = defaultError) {
+  mongoPut(collection, toSend, onSuccess = defaultSuccess, onError = defaultError) {
     if (!navigator.onLine) {
-      onSuccess('Successfully saved to local database!');
+      this.idb.queueSync(
+        collection,
+        toSend,
+        'put',
+        () => onSuccess('Successfully saved to local database! Update will be synchronised next time you connect to the internet.', toSend),
+        () => onError('Operation failed to queue! Please try again.'),
+      );
       return;
     }
 
     // Post to mongoDB endpoint
     fetch(`/api/${collection}`, {
       method: 'PUT',
-      body: formData,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(toSend),
     }).then((res) => {
       if (res.ok) {
         return res.json();
       }
 
       // Throw error if status code not 200 (OK)
-      throw new Error(`code ${res.statusCode}`);
+      throw new Error(`code ${res.status}`);
     // Report success/error with respective callback functions
     }).then((resJson) => {
       onSuccess(resJson.message, resJson.object);
@@ -67,9 +75,15 @@ class DBController {
    * @param onError {function(string): void} callback function to run on error -
    *        takes a message (as a string).
    */
-  static mongoDelete(collection, id, onSuccess = defaultSuccess, onError = defaultError) {
+  mongoDelete(collection, id, onSuccess = defaultSuccess, onError = defaultError) {
     if (!navigator.onLine) {
-      onSuccess('Successfully deleted from local database! Deletion will be synchronised when you next connect to the internet.');
+      this.idb.queueSync(
+        collection,
+        id,
+        'delete',
+        () => onSuccess('Successfully deleted from local database! Deletion will be synchronised next time you connect to the internet.'),
+        () => onError('Operation failed to queue! Please try again.'),
+      );
       return;
     }
 
@@ -97,8 +111,7 @@ class DBController {
   /**
    * Creates on object, or, if it already exists, updates it.
    * @param collection {string} the collection to perform the 'upsert' operation on.
-   * @param toUpload {{obj: Object, formData: FormData}} the object to upload to
-   *        IndexedDB, and the FormData to upload to mongoDB (allows files)
+   * @param toUpload {Object} the object to upload to the database
    * @param onSuccess {function(string, Object): void} callback function to run on success -
    *        takes a message (as a string) and, optionally, the updated/created object.
    * @param onError {function(string): void} callback function to run on error -
@@ -106,17 +119,15 @@ class DBController {
    */
   createOrUpdate(collection, toUpload, onSuccess = defaultSuccess, onError = defaultError) {
     // Safety check to ensure id is present
-    if (!Object.prototype.hasOwnProperty.call(toUpload.obj, '_id') || !toUpload.formData.has('_id')) {
+    if (!Object.prototype.hasOwnProperty.call(toUpload, '_id')) {
       onError("'_id' property missing from request!");
     }
-
-    const mongoData = Object.prototype.hasOwnProperty.call(toUpload, 'formData') ? toUpload.formData : toUpload.obj;
 
     // Attempt to PUT to indexedDB, and, if successful, PUT to MongoDB
     this.idb.put(
       collection,
-      toUpload.obj,
-      () => DBController.mongoPut(collection, mongoData, onSuccess, onError),
+      toUpload,
+      () => this.mongoPut(collection, toUpload, onSuccess, onError),
       () => onError('Create operation failed in indexed DB! Please try again.'),
     );
   }
@@ -135,9 +146,28 @@ class DBController {
     this.idb.delete(
       collection,
       id,
-      () => DBController.mongoDelete(collection, id, onSuccess, onError),
+      () => this.mongoDelete(collection, id, onSuccess, onError),
       () => onError(`Failed to delete object with ID ${id} from indexedDB!`),
     );
+  }
+
+  synchronise() {
+    this.idb.getAll('sync-queue', (transaction) => {
+      transaction.target.result.forEach((syncObject) => {
+        switch (syncObject.operation) {
+          case 'put':
+            this.createOrUpdate(syncObject.store, syncObject.queuedObject, () => {});
+            this.idb.delete('sync-queue', syncObject._id, () => {});
+            break;
+          case 'delete':
+            this.delete(syncObject.store, syncObject.queuedObject, () => {});
+            this.idb.delete('sync-queue', syncObject._id, () => {});
+            break;
+          default:
+            defaultError('Illegal operation in synchronise!');
+        }
+      });
+    }, console.error);
   }
 }
 

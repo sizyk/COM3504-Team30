@@ -184,6 +184,11 @@ document.querySelectorAll('[data-form="plant"]').forEach((formElem) => {
   formElem.addEventListener('submit', () => {
     const params = new FormData(formElem);
 
+    if (formElem.id === 'createPlantForm' && !(params.get('image') instanceof File)) {
+      // TODO add error with James' image error box
+      return;
+    }
+
     // Checkboxes have no value if not checked, so manually check whether they are true
     params.set('hasFlowers', params.get('hasFlowers') === 'true');
     params.set('hasLeaves', params.get('hasLeaves') === 'true');
@@ -201,8 +206,8 @@ document.querySelectorAll('[data-form="plant"]').forEach((formElem) => {
       author: 'placeholder', // replace with user when implemented
       name: params.get('name'),
       description: params.get('description'),
-      dateTimeSeen: new Date(params.get('dateTimeSeen')),
-      size: parseFloat(params.get('size')),
+      dateTimeSeen: params.get('dateTimeSeen'),
+      size: params.get('size'),
       sunExposure: params.get('sunExposure'),
       colour: params.get('colour'),
       longitude: params.get('longitude'),
@@ -211,31 +216,38 @@ document.querySelectorAll('[data-form="plant"]').forEach((formElem) => {
       hasLeaves: params.get('hasLeaves'),
       hasFruit: params.get('hasFruit'),
       hasSeeds: params.get('hasSeeds'),
-      image: params.get('image'),
     };
 
-    DBController.createOrUpdate(
-      'plants',
-      { obj: plant, formData: params },
-      (message, plantObject) => {
-        showMessage(message, 'success', 'check_circle');
+    const reader = new FileReader();
 
-        const plantModal = document.getElementById(`${plantObject._id}-edit-plant-modal`);
-        if (plantModal !== null) {
-          plantModal.classList.remove('active');
-        } else {
-          // plantModal is null - therefore this is a new plant
-          window.location.reload(); // Refresh page to get EJS to generate new cards
-          return;
-        }
+    reader.addEventListener('loadend', () => {
+      plant.image = reader.result;
 
-        const addModal = document.getElementById('plant-add-modal');
-        if (addModal !== null) {
-          addModal.classList.remove('active');
-        }
+      DBController.createOrUpdate(
+        'plants',
+        plant,
+        (message, plantObject) => {
+          showMessage(message, 'success', 'check_circle');
 
-        updateCard(plantObject);
-      },
-    );
+          const addModal = document.getElementById('plant-add-modal');
+          if (addModal !== null) {
+            addModal.classList.remove('active');
+          }
+
+          const plantModal = document.getElementById(`${plantObject._id}-edit-plant-modal`);
+          if (plantModal !== null) {
+            plantModal.classList.remove('active');
+          } else {
+            // plantModal is null - therefore this is a new plant
+            window.location.reload(); // Refresh page to get EJS to generate new cards
+            return;
+          }
+
+          updateCard(plantObject);
+        },
+      );
+    });
+
+    reader.readAsDataURL(params.get('image'));
   });
 });

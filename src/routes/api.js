@@ -15,7 +15,6 @@
 
 const Express = require('express');
 const plantsController = require('../controllers/plants');
-const upload = require('../helpers/upload-image');
 
 const collectionControllers = {
   plants: plantsController,
@@ -35,12 +34,12 @@ router.get('/:collection/get-all', (req, res) => {
 /**
  * Wrapper for controller upsert method
  */
-router.put('/:collection', upload.single('image'), async (req, res) => {
+router.put('/:collection', async (req, res) => {
   // Ugly code to get rid of [Object: null prototype]
   const body = JSON.parse(JSON.stringify(req.body));
 
   // Call the get method of the controller that corresponds to the requested collection
-  const controllerRes = await collectionControllers[req.params.collection].upsert(body, req.file);
+  const controllerRes = await collectionControllers[req.params.collection].upsert(body);
 
   res.status(controllerRes.code)
     .json({

@@ -1,36 +1,12 @@
-const fs = require('fs');
 const log = require('debug')('app:db');
 // Import the plants model
 const PlantModel = require('../models/plants');
 
 /**
  * 'Upserts' (updates or creates) a plant object to the database
- * @param plantData {Record<string, string | number>} plant data from the form
- * @param file {{path: string}} the file object from multer
+ * @param plant {Object} plant to upsert
  */
-exports.upsert = async (plantData, file) => {
-  const plant = { // Get data from the form
-    _id: plantData._id,
-    author: 'placeholder', // replace with user when implemented
-    name: plantData.name,
-    description: plantData.description,
-    dateTimeSeen: new Date(plantData.dateTimeSeen),
-    size: parseFloat(plantData.size),
-    sunExposure: plantData.sunExposure,
-    colour: plantData.colour,
-    image: filepath,
-    longitude: plantData.longitude,
-    latitude: plantData.latitude,
-    hasFlowers: plantData.hasFlowers === 'true', // Checkboxes have no value if not checked, so manually check whether they are true
-    hasLeaves: plantData.hasLeaves === 'true',
-    hasFruit: plantData.hasFruit === 'true',
-    hasSeeds: plantData.hasSeeds === 'true',
-  };
-
-  if (file) { // If a new image is uploaded, update the image path
-    plant.image = file.path.replace(/\\/g, '/');
-  }
-
+exports.upsert = async (plant) => {
   // Update the plant in the database
   let newPlant = null;
   try {
@@ -54,16 +30,7 @@ exports.upsert = async (plantData, file) => {
 exports.delete = async (id) => {
   // Delete the plant from the database
   try {
-    const deleted = await PlantModel.findByIdAndDelete(id);
-
-    // Delete image of deleted plant, to prevent clogging up storage
-    fs.unlink(deleted.image, (err) => {
-      if (err) {
-        log(err);
-      }
-
-      log('path/file.txt was deleted');
-    });
+    await PlantModel.findByIdAndDelete(id);
 
     return {
       code: 200,
