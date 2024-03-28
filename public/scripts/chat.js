@@ -16,10 +16,15 @@ const socket = io();
 
 let isChatboxOpen = false;
 
-function addUserMessage(message) {
+function addUserMessage(message, user) {
   const messageElement = document.createElement('div');
-  messageElement.classList.add('mb-2', 'text-right');
-  messageElement.innerHTML = `<p class="bg-primary text-white dark:text-on-secondary rounded-lg py-2 px-4 inline-block">${message}</p>`;
+  if (user === userId) {
+    messageElement.classList.add('mb-2', 'text-right');
+    messageElement.innerHTML = `<p class="bg-primary text-white dark:text-on-secondary rounded-lg py-2 px-4 inline-block">You: ${message}</p>`;
+  } else {
+    messageElement.classList.add('mb-2');
+    messageElement.innerHTML = `<p class="bg-primary text-white dark:text-on-secondary rounded-lg py-2 px-4 inline-block">${user}: ${message}</p>`;
+  }
   chatbox.appendChild(messageElement);
   chatbox.scrollTop = chatbox.scrollHeight;
 }
@@ -33,7 +38,7 @@ function connectToRoom() {
       const chats = event.target.result;
       console.log(chats);
       chats.forEach((chat) => {
-        addUserMessage(chat.message);
+        addUserMessage(chat.message, chat.user);
       });
     });
   }
@@ -72,7 +77,7 @@ function sendChatMessage() {
     if (navigator.onLine) {
       socket.emit('chat', roomId, newChat);
     } else {
-      addUserMessage(userMessage);
+      addUserMessage(userMessage, userId);
       DBController.addChat(newChat);
     }
     userInput.value = '';
@@ -106,7 +111,7 @@ function init() {
       };
       console.log(newChat);
       DBController.addChat(newChat);
-      addUserMessage(params.message);
+      addUserMessage(params.message, params.user);
     } catch (error) {
       console.error('Error saving message:', error);
     }
@@ -116,7 +121,7 @@ function init() {
   socket.on('oldMessages', (messages) => {
     console.log(messages);
     messages.forEach((chat) => {
-      addUserMessage(chat.message);
+      addUserMessage(chat.message, chat.user);
       DBController.addChat(chat, true);
     });
   });
