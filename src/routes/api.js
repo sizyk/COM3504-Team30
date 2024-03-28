@@ -29,7 +29,7 @@ router.use(Express.json());
 router.get('/:collection/get-all', (req, res) => {
   // Call the get method of the controller that corresponds to the requested collection
   collectionControllers[req.params.collection].get({})
-    .then((plants) => res.status(200).json(plants));
+    .then((object) => res.status(200).json(object));
 });
 
 /**
@@ -53,13 +53,25 @@ router.post('/:collection', async (req, res) => {
   const body = JSON.parse(JSON.stringify(req.body));
 
   // Call the get method of the controller that corresponds to the requested collection
-  const controllerRes = await collectionControllers[req.params.collection].add(body);
+  const controllerRes = await collectionControllers[req.params.collection].findOne(
+    { _id: body._id },
+  );
+  console.log(controllerRes);
 
-  res.status(controllerRes.code)
-    .json({
-      message: controllerRes.message,
-      object: controllerRes.object,
-    });
+  if (controllerRes.code === 500) {
+    const insertRes = await collectionControllers[req.params.collection].add(body);
+    res.status(insertRes.code)
+      .json({
+        message: insertRes.message,
+        object: insertRes.object,
+      });
+  } else {
+    res.status(200)
+      .json({
+        message: 'Object already exists',
+        object: controllerRes,
+      });
+  }
 });
 
 /**

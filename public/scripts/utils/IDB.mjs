@@ -63,6 +63,22 @@ class IDB {
   delete(storeName, id, successCallback = defaultSuccess, failureCallback = defaultError) {
     if (this.db) {
       const request = this.db.transaction([storeName], 'readwrite').objectStore(storeName).delete(id);
+      console.log('hey')
+
+      request.onsuccess = successCallback;
+      request.onerror = failureCallback;
+    }
+  }
+
+  /**
+ * Retrieves all objects from a store
+ * @param storeName {string} the store to retrieve from
+ * @param successCallback {function(Event): void} the function to call on transaction success
+ * @param failureCallback {function(Event): void} the function to call on transaction failure
+ */
+  getAll(storeName, successCallback = defaultSuccess, failureCallback = defaultError) {
+    if (this.db) {
+      const request = this.db.transaction([storeName], 'readonly').objectStore(storeName).getAll();
 
       request.onsuccess = successCallback;
       request.onerror = failureCallback;

@@ -1,4 +1,5 @@
-import DBController from './uitls/DBController.mjs';
+import DBController from './utils/DBController.mjs';
+import initSyncing from './global-scripts/syncing.mjs';
 
 const sendButton = document.getElementById('send-button');
 const userInput = document.getElementById('user-input');
@@ -10,26 +11,10 @@ const roomId = document.getElementById('plant-id').value;
 const userId = document.getElementById('user-id').value;
 // const formElem = document.getElementById('chat-form');
 
+// eslint-disable-next-line no-undef
 const socket = io();
 
 let isChatboxOpen = false;
-
-function connectToRoom() {
-  socket.emit('create or join', roomId, userId);
-}
-
-function toggleChatbox() {
-  chatContainer.classList.toggle('hidden');
-  console.log('Toggled chatbox');
-  isChatboxOpen = !isChatboxOpen;
-  if (isChatboxOpen) {
-    connectToRoom();
-  }
-}
-
-openChatButton.addEventListener('click', toggleChatbox);
-
-closeChatButton.addEventListener('click', toggleChatbox);
 
 function addUserMessage(message) {
   const messageElement = document.createElement('div');
@@ -38,6 +23,41 @@ function addUserMessage(message) {
   chatbox.appendChild(messageElement);
   chatbox.scrollTop = chatbox.scrollHeight;
 }
+
+function connectToRoom() {
+  if (navigator.onLine) {
+    socket.emit('create or join', roomId, userId);
+    socket.emit('oldMessages', roomId);
+  } else {
+    DBController.getChatsByPlant(roomId, (event) => {
+      const chats = event.target.result;
+      console.log(chats);
+      chats.forEach((chat) => {
+        addUserMessage(chat.message);
+      });
+    });
+  }
+}
+
+function clearChatbox() {
+  chatbox.innerHTML = '';
+}
+
+function toggleChatbox() {
+  chatContainer.classList.toggle('hidden');
+  console.log('Toggled chatbox');
+  isChatboxOpen = !isChatboxOpen;
+  if (isChatboxOpen && navigator.onLine) {
+    connectToRoom();
+  } else if (!isChatboxOpen) {
+    console.log('Clearing chatbox');
+    clearChatbox();
+  }
+}
+
+openChatButton.addEventListener('click', toggleChatbox);
+
+closeChatButton.addEventListener('click', toggleChatbox);
 
 function sendChatMessage() {
   const userMessage = userInput.value;
@@ -94,12 +114,15 @@ function init() {
   });
 
   socket.on('oldMessages', (messages) => {
+    console.log(messages);
     messages.forEach((chat) => {
       addUserMessage(chat.message);
+      DBController.addChat(chat, true);
     });
   });
 }
 
 window.onload = () => {
   init();
+  initSyncing();
 };
