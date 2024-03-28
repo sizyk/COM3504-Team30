@@ -31,7 +31,7 @@ const router = Express.Router();
 router.get('/:collection/get-all', (req, res) => {
   // Call the get method of the controller that corresponds to the requested collection
   collectionControllers[req.params.collection].get({})
-    .then((plants) => res.status(200).json(plants));
+    .then((object) => res.status(200).json(object));
 });
 
 /**

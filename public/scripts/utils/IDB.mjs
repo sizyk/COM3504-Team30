@@ -33,6 +33,7 @@ class IDB {
       this.db = e.target.result;
 
       this.db.createObjectStore('plants', { keyPath: '_id' });
+      this.db.createObjectStore('chat', { keyPath: '_id' });
       this.db.createObjectStore('sync-queue', { keyPath: '_id', autoIncrement: true });
     };
   }
