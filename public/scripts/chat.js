@@ -23,7 +23,7 @@ function addUserMessage(message, user) {
     messageElement.innerHTML = `<p class="bg-primary text-white dark:text-on-secondary rounded-lg py-2 px-4 inline-block">You: ${message}</p>`;
   } else {
     messageElement.classList.add('mb-2');
-    messageElement.innerHTML = `<p class="bg-background-inverse text-white dark:text-on-secondary rounded-lg py-2 px-4 inline-block">${user}: ${message}</p>`;
+    messageElement.innerHTML = `<p class="bg-gray-300 text-gray-950 dark:text-on-secondary rounded-lg py-2 px-4 inline-block">${user}: ${message}</p>`;
   }
   chatbox.appendChild(messageElement);
   chatbox.scrollTop = chatbox.scrollHeight;
