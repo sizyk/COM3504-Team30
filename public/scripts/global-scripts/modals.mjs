@@ -16,27 +16,29 @@ function setModalVisibility(modal) {
 }
 
 /**
- * Initialises functionality of all modals on the page
+ * Initialises a single modal
+ * @param modal {HTMLDivElement} the modal to initialise
  */
-export default function initModals() {
-  // Add click event listeners to all modal toggle buttons
-  document.querySelectorAll('[data-toggle="modal"]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const modal = document.getElementById(btn.getAttribute('data-target'));
-      modal.classList.toggle('active');
-
-      setModalVisibility(modal);
-    });
+export function initialiseModal(modal) {
+  const toggleBtn = document.querySelector(`[data-toggle="modal"][data-target="${modal.id}"]`);
+  toggleBtn.addEventListener('click', () => {
+    modal.classList.toggle('active');
+    setModalVisibility(modal);
   });
 
-  // Add click event listeners to all modal close buttons
-  document.querySelectorAll('[data-close="modal"]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const modal = btn.closest('.modal, [data-modal]');
-
+  modal.querySelectorAll('[data-close="modal"]').forEach((closeBtn) => {
+    closeBtn.addEventListener('click', () => {
       modal.classList.remove('active');
 
       setModalVisibility(modal);
     });
   });
+}
+
+/**
+ * Initialises functionality of all modals on the page
+ */
+export default function initModals() {
+  // Add click event listeners to all modal toggle buttons
+  document.querySelectorAll('.modal').forEach(initialiseModal);
 }

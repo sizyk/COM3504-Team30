@@ -1,7 +1,7 @@
 <% var editModalName = plant._id + "-edit-plant-modal"%>
 
 <div
-  id="<%= plant._id %>"
+  id="card-<%= plant._id %>"
   class="plant-card touchscreen-hover h-[28rem] overflow-hidden border-8 border-text bg-cover bg-center"
   style="background-image: url('<%= plant.image %>')"
   data-hasleaves="<%= plant.hasLeaves %>"
@@ -88,13 +88,13 @@
       </button>
     </div>
   </div>
-</div>
 
-<!-- prettier-ignore -->
-<%-
-include('../partials/modal.ejs', {
-modalID: editModalName,
-modalTitle: 'Edit a plant sighting',
-modalContent: 'edit-plant-form',
-});
-%>
+  <!-- prettier-ignore -->
+  <%-
+    include('../partials/modal.ejs', {
+      modalID: editModalName,
+      modalTitle: 'Edit a plant sighting',
+      modalContent: 'edit-plant-form',
+    });
+  %>
+</div>

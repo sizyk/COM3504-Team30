@@ -21,7 +21,7 @@ export function buildSpottedString(plant) {
   // TODO - why is this 1.25
   // const tz = dt.getTimezoneOffset();
 
-  return `${hour}:${min} on ${day}/${month}/${year}, in Sheffield `;
+  return `${hour}:${min} on ${day}/${month}/${year}, in Sheffield`;
 }
 
 /**
@@ -29,7 +29,7 @@ export function buildSpottedString(plant) {
  * @param plant {object} the plant whose plant card must be updated
  */
 export default function updateCard(plant) {
-  const card = document.getElementById(plant._id);
+  const card = document.getElementById(`card-${plant._id}`);
   card.style.backgroundImage = `url('${plant.image}')`;
 
   card.querySelector('[data-name]').innerText = plant.name;

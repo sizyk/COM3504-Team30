@@ -1,6 +1,7 @@
 import DBController from './utils/DBController.mjs';
 import { showMessage } from './utils/flash-messages.mjs';
-import updateCard from './utils/plantUtils.mjs';
+import updateCard, { buildSpottedString } from './utils/plantUtils.mjs';
+import { initialiseModal } from './global-scripts/modals.mjs';
 
 function showPosition(position, plantID) {
   document.getElementById(`latitude${plantID}`).value = position.coords.latitude;
@@ -8,6 +9,10 @@ function showPosition(position, plantID) {
   document.getElementById(`coordinates${plantID}`).value = `(${position.coords.latitude}, ${position.coords.longitude})`;
 }
 
+/**
+ * Gets a users's location and updates the plant form
+ * @param plantID {string} the plant to geolocate
+ */
 function getLocation(plantID) {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -48,6 +53,10 @@ function handleCorsError(plantID) {
   document.getElementById(`imageValidated${plantID}`).checked = false;
 }
 
+/**
+ * Shows a preview of an uploaded file
+ * @param plantID {string} the ID of the plant to preview
+ */
 async function previewImage(plantID) {
   const preview = document.getElementById(`preview${plantID}`);
   const checkbox = document.getElementById(`imageValidated${plantID}`);
@@ -92,6 +101,10 @@ async function previewImage(plantID) {
   }
 }
 
+/**
+ * Deletes a plant from the index page
+ * @param plantID {string} the ID of the plant to delete
+ */
 function deletePlant(plantID) {
   // eslint-disable-next-line no-alert
   const confirmation = window.confirm('Are you sure you want to delete this plant? This action cannot be undone.');
@@ -103,11 +116,15 @@ function deletePlant(plantID) {
         showMessage(message, 'success', 'delete');
 
         // Remove plant card
-        document.getElementById(plantID.toString()).remove();
+        document.getElementById(`card-${plantID.toString()}`).remove();
 
         const plantModal = document.getElementById(`${plantID}-edit-plant-modal`);
         if (plantModal !== null) {
           plantModal.classList.remove('active');
+        }
+
+        if (document.getElementById('plant-grid').childElementCount === 0) {
+          document.getElementById('no-plants-warning').classList.remove('hidden');
         }
       },
     );
@@ -159,95 +176,134 @@ function toggleImageInput(plantID) {
   }
 }
 
-// Add required event listeners
-document.querySelectorAll('[data-click="geolocation"]').forEach((elem) => {
-  elem.addEventListener('click', () => getLocation(elem.dataset.plant));
-});
+/**
+ * Submits the add plant form, or a plant's edit form, and updates the page live
+ * @param formElem {HTMLFormElement} the form element that has been submitted
+ */
+function submitPlantForm(formElem) {
+  const params = new FormData(formElem);
 
-document.querySelectorAll('[data-click="delete"]').forEach((elem) => {
-  elem.addEventListener('click', () => deletePlant(elem.dataset.plant));
-});
+  if (formElem.id === 'createPlantForm' && !(params.get('image') instanceof File)) {
+    // TODO add error with James' image error box
+    return;
+  }
 
-document.querySelectorAll('[data-change="preview"]').forEach((elem) => {
-  elem.addEventListener('change', () => previewImage(elem.dataset.plant));
-});
+  // Set ID on form submit, rather than on page load
+  if (!params.has('_id')) {
+    params.set('_id', Date.now());
+  }
 
-document.querySelectorAll('[data-click="preview"]').forEach((elem) => {
-  elem.addEventListener('click', () => previewImage(elem.dataset.plant));
-});
+  // Checkboxes have no value if not checked, so manually check whether they are true
+  params.set('hasFlowers', params.get('hasFlowers') === 'true');
+  params.set('hasLeaves', params.get('hasLeaves') === 'true');
+  params.set('hasFruit', params.get('hasFruit') === 'true');
+  params.set('hasSeeds', params.get('hasSeeds') === 'true');
 
-document.querySelectorAll('[data-change="toggle-input"]').forEach((elem) => {
-  elem.addEventListener('change', () => toggleImageInput(elem.dataset.plant));
-});
+  if (/^\d+$/.test(params.get('_id').toString())) {
+    // Convert ID to hex string if it's just an integer
+    const hexID = parseInt(params.get('_id').toString(), 10).toString(16);
+    params.set('_id', hexID.padStart(24, '0'));
+  }
 
-document.querySelectorAll('[data-form="plant"]').forEach((formElem) => {
-  formElem.addEventListener('submit', () => {
-    const params = new FormData(formElem);
+  const plant = { // Get data from the form
+    _id: params.get('_id'),
+    author: 'placeholder', // replace with user when implemented
+    name: params.get('name').trim(),
+    description: params.get('description').trim(),
+    dateTimeSeen: params.get('dateTimeSeen'),
+    emoji: '🇬🇧',
+    size: params.get('size'),
+    sunExposure: params.get('sunExposure'),
+    colour: params.get('colour'),
+    longitude: params.get('longitude'),
+    latitude: params.get('latitude'),
+    hasFlowers: params.get('hasFlowers'),
+    hasLeaves: params.get('hasLeaves'),
+    hasFruit: params.get('hasFruit'),
+    hasSeeds: params.get('hasSeeds'),
+  };
 
-    if (formElem.id === 'createPlantForm' && !(params.get('image') instanceof File)) {
-      // TODO add error with James' image error box
-      return;
-    }
+  const reader = new FileReader();
 
-    // Checkboxes have no value if not checked, so manually check whether they are true
-    params.set('hasFlowers', params.get('hasFlowers') === 'true');
-    params.set('hasLeaves', params.get('hasLeaves') === 'true');
-    params.set('hasFruit', params.get('hasFruit') === 'true');
-    params.set('hasSeeds', params.get('hasSeeds') === 'true');
-
-    if (/^\d+$/.test(params.get('_id').toString())) {
-      // Convert ID to hex string if it's just an integer
-      const hexID = parseInt(params.get('_id').toString(), 10).toString(16);
-      params.set('_id', hexID.padStart(24, '0'));
-    }
-
-    const plant = { // Get data from the form
-      _id: params.get('_id'),
-      author: 'placeholder', // replace with user when implemented
-      name: params.get('name'),
-      description: params.get('description'),
-      dateTimeSeen: params.get('dateTimeSeen'),
-      size: params.get('size'),
-      sunExposure: params.get('sunExposure'),
-      colour: params.get('colour'),
-      longitude: params.get('longitude'),
-      latitude: params.get('latitude'),
-      hasFlowers: params.get('hasFlowers'),
-      hasLeaves: params.get('hasLeaves'),
-      hasFruit: params.get('hasFruit'),
-      hasSeeds: params.get('hasSeeds'),
-    };
-
-    const reader = new FileReader();
-
-    reader.addEventListener('loadend', () => {
+  reader.addEventListener('loadend', () => {
+    // Only update image if one was actually uploaded
+    if (reader.result.substring(reader.result.indexOf(',') + 1).length > 0) {
       plant.image = reader.result;
+    }
 
-      DBController.createOrUpdate(
-        'plants',
-        plant,
-        (message, plantObject) => {
-          showMessage(message, 'success', 'check_circle');
+    DBController.createOrUpdate(
+      'plants',
+      plant,
+      (message, plantObject) => {
+        showMessage(message, 'success', 'check_circle');
 
-          const addModal = document.getElementById('plant-add-modal');
-          if (addModal !== null) {
-            addModal.classList.remove('active');
-          }
+        const addModal = document.getElementById('plant-add-modal');
+        if (addModal !== null) {
+          addModal.classList.remove('active');
+        }
 
-          const plantModal = document.getElementById(`${plantObject._id}-edit-plant-modal`);
-          if (plantModal !== null) {
-            plantModal.classList.remove('active');
-          } else {
-            // plantModal is null - therefore this is a new plant
-            window.location.reload(); // Refresh page to get EJS to generate new cards
-            return;
-          }
-
+        const plantModal = document.getElementById(`${plantObject._id}-edit-plant-modal`);
+        if (plantModal !== null) {
+          plantModal.classList.remove('active');
           updateCard(plantObject);
-        },
-      );
-    });
+        } else {
+          plantObject.spottedString = buildSpottedString(plantObject);
+          // plantModal is null - therefore this is a new plant
+          // query server to generate its card on-the-fly
+          fetch('/plant/card', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(plantObject),
+          }).then((res) => res.text())
+            .then((p) => {
+              // Add new plant view to HTML & initialise relevant event listeners
+              document.getElementById('plant-grid').insertAdjacentHTML('beforeend', p);
 
-    reader.readAsDataURL(params.get('image'));
+              initialiseModal(document.getElementById(`${plantObject._id}-edit-plant-modal`));
+
+              // eslint-disable-next-line no-use-before-define
+              addEventListeners(document.getElementById(`card-${plantObject._id}`));
+              document.getElementById('no-plants-warning').classList.add('hidden');
+            });
+        }
+      },
+    );
   });
-});
+
+  reader.readAsDataURL(params.get('image'));
+}
+
+/**
+ * Add all event listeners that are required for plant form functionality
+ */
+function addEventListeners(card) {
+  card.querySelectorAll('[data-click="geolocation"]').forEach((elem) => {
+    elem.addEventListener('click', () => getLocation(elem.dataset.plant));
+  });
+
+  card.querySelectorAll('[data-click="delete"]').forEach((elem) => {
+    elem.addEventListener('click', () => deletePlant(elem.dataset.plant));
+  });
+
+  card.querySelectorAll('[data-change="preview"]').forEach((elem) => {
+    elem.addEventListener('change', () => previewImage(elem.dataset.plant));
+  });
+
+  card.querySelectorAll('[data-click="preview"]').forEach((elem) => {
+    elem.addEventListener('click', () => previewImage(elem.dataset.plant));
+  });
+
+  card.querySelectorAll('[data-form="plant"]').forEach((formElem) => {
+    formElem.addEventListener('submit', () => submitPlantForm(formElem));
+  });
+
+  card.querySelectorAll('[data-change="toggle-input"]').forEach((elem) => {
+    elem.addEventListener('change', () => toggleImageInput(elem.dataset.plant));
+  });
+}
+
+addEventListeners(document.getElementById('plant-add-modal'));
+
+document.querySelectorAll('.plant-card').forEach(addEventListeners);

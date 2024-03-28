@@ -27,12 +27,11 @@
       %>
     </div>
   </div>
-  <% if (plants.length === 0) { %>
-  <h3 class="m-auto w-max text-2xl font-bold">
+  <h3 id="no-plants-warning" class="m-auto w-max text-2xl font-bold <%= plants.length === 0 ? '' : 'hidden' %>">
     No plants yet! Click 'Add Plant' to get started.
   </h3>
-  <% } %>
   <div
+    id="plant-grid"
     class="grid grid-cols-1 gap-10 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
   >
     <!-- prettier-ignore -->

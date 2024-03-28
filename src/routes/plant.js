@@ -13,4 +13,13 @@ router.get('/:id', (req, res) => {
   });
 });
 
+/**
+ * Simply renders a single card for a given plant (used for live updates)
+ */
+router.post('/card', (req, res) => {
+  const plant = req.body;
+  plant.dateTimeSeen = new Date(plant.dateTimeSeen);
+  res.render('card-only', { plant });
+});
+
 module.exports = router;
