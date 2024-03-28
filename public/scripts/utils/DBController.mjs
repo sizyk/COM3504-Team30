@@ -33,17 +33,19 @@ class DBController {
    * @param onError {function(string): void} callback function to run on error -
    *        takes a message (as a string).
    */
-  async addChat(chat, onSuccess = defaultSuccess, onError = defaultError) {
+  async addChat(chat, local = false, onSuccess = defaultSuccess, onError = defaultError ) {
     const collection = 'chat';
     const tx = this.idb.db.transaction([collection], 'readwrite');
     const store = tx.objectStore(collection);
     await store.add(chat);
     await tx.done;
-    DBController.mongoAddChat(collection, chat, onSuccess, onError);
+    if (!local) {
+      DBController.mongoAddChat(collection, chat, this.idb, onSuccess, onError);
+    }
   }
 
   /**
-   * PUTs data from a form to an API endpoint for a given collection
+   * POSTs data from a form to an API endpoint for a given collection
    * @param collection {string} the database collection to PUT to.
    * @param chat {Chat} the object to send to the API endpoint
    *        (must be FormData if sending files).
@@ -52,11 +54,14 @@ class DBController {
    * @param onError {function(string): void} callback function to run on error -
    *        takes a message (as a string).
    */
-  static mongoAddChat(collection, chat , onSuccess = defaultSuccess, onError = defaultError) {
+  static mongoAddChat(collection, chat , idb, onSuccess = defaultSuccess, onError = defaultError) {
     if (!navigator.onLine) {
       onSuccess('Successfully saved to local database!');
       return;
     }
+
+    const id = chat._id
+    console.log(id)
 
     // Post to mongoDB endpoint
     fetch(`/api/${collection}`, {
@@ -75,9 +80,35 @@ class DBController {
       // Report success/error with respective callback functions
     }).then((resJson) => {
       onSuccess(resJson.message, resJson.object);
+      this.deleteFromIDB(collection, id, idb)
     }).catch((error) => {
       onError(error);
     });
+  }
+
+  static deleteFromIDB(collection, id, idb, onSuccess = defaultSuccess, onError = defaultError) {
+    // Check if the IndexedDB instance exists
+    if (!idb) {
+      onError('IndexedDB instance not found');
+      return;
+    }
+
+    // Open a transaction to the specified collection in readwrite mode
+    const transaction = idb.db.transaction([collection], 'readwrite');
+
+    // Get the store from the transaction
+    const store = transaction.objectStore(collection);
+
+    // Call the delete method on the store with the specified id
+    const request = store.delete(id);
+
+    // Handle the success and error events of the request
+    request.onsuccess = (event) => {
+      onSuccess(`Successfully deleted object with ID ${id} from IndexedDB`);
+    };
+    request.onerror = (event) => {
+      onError(`Failed to delete object with ID ${id} from IndexedDB`);
+    };
   }
 
   /**
@@ -97,6 +128,44 @@ class DBController {
       () => DBController.mongoDelete(collection, id, onSuccess, onError),
       () => onError(`Failed to delete object with ID ${id} from indexedDB!`),
     );
+  }
+
+  getAll(collection, onSuccess = defaultSuccess, onError = defaultError) {
+    // Check if the IndexedDB instance exists
+    if (!this.idb) {
+      onError('IndexedDB instance not found');
+      return;
+    }
+
+    // Open a transaction to the specified collection in read mode
+    const transaction = this.idb.db.transaction([collection], 'readonly');
+
+    // Get the store from the transaction
+    const store = transaction.objectStore(collection);
+
+    // Call the getAll method on the store
+    const request = store.getAll();
+
+    // Handle the success and error events of the request
+    request.onsuccess = (event) => {
+      onSuccess(request.result);
+    };
+    request.onerror = (event) => {
+      onError(`Failed to get all objects from ${collection} in IndexedDB`);
+    };
+  }
+
+  getChatsByPlant(plantId, onSuccess = defaultSuccess, onError = defaultError) {
+    const collection = 'chat';
+    const tx = this.idb.db.transaction([collection], 'readonly');
+    const store = tx.objectStore(collection);
+    const index = store.index('plant')
+    const request = index.getAll(IDBKeyRange.only(plantId));
+
+    request.onsuccess = () => {
+      onSuccess(request.result);
+    }
+    request.onerror = onError;
   }
 }
 

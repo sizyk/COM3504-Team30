@@ -1,6 +1,7 @@
 const log = require('debug')('app:db');
 // Import the chat model
 const ChatModel = require('../models/chat');
+const e = require('express');
 
 // Function to create new chat
 exports.create = (chatData) => {
@@ -72,3 +73,22 @@ exports.getChat = (filter) => ChatModel.find(filter)
     log(e);
     return null;
   });
+
+exports.findOne = async (filter) => {
+  let chat = null;
+  try {
+    chat = await ChatModel.findOne(filter);
+    return {
+      code: 200,
+      message: 'Chat retrieved successfully!',
+      object: chat,
+    };
+  } catch (error) {
+    log(error);
+    return {
+      code: 500,
+      message: 'Failed to retrieve chat from MongoDB!',
+      object: chat,
+    };
+  }
+};

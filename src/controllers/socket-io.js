@@ -7,10 +7,15 @@ exports.init = function (io) {
        * create or joins a room
        */
       socket.on('create or join', async (room) => {
-        const messages = await ChatModel.find({ plant: room });
-        socket.emit('oldMessages', messages);
+        // const messages = await ChatModel.find({ plant: room });
         socket.join(room);
-        console.log(room);
+        // io.to(room).emit('oldMessages', messages);
+        // console.log(messages);
+      });
+
+      socket.on('oldMessages', async (room) => {
+        const messages = await ChatModel.find({ plant: room });
+        io.to(room).emit('oldMessages', messages);
       });
 
       socket.on('chat', (room, params) => {
