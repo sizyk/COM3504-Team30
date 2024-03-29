@@ -41,8 +41,16 @@ router.get('/', (req, res) => {
 });
 
 router.post('/create-plant', upload.single('image'), (req, res) => {
+  // set up the filepaths as either a file upload or the url
+  let filepath;
+  if (req.body.imageInput === 'url') {
+    filepath = req.body.url;
+  } else {
+    filepath = `/${req.file.path.replace(/\\/g, '/')}`;
+  }
+
   // Create the plant in the database
-  plants.create(req.body, req.file)
+  plants.create(req.body, filepath)
     .then((result) => {
       log(result);
       flashData = { message: 'Plant created successfully', type: 'success' };
@@ -55,8 +63,18 @@ router.post('/create-plant', upload.single('image'), (req, res) => {
 });
 
 router.post('/edit-plant', upload.single('image'), async (req, res) => {
+  // check what type of image input is being used
+  let filepath;
+  if (req.body.imageInput === 'url' && req.body.url !== '') {
+    filepath = req.body.url;
+  } else if (req.file) {
+    filepath = `/${req.file.path.replace(/\\/g, '/')}`;
+  } else { // no new image then use current image
+    filepath = req.body.currentImage;
+  }
+
   // Update the plant in the database
-  plants.update(req.body, req.file)
+  plants.update(req.body, filepath)
     .then((result) => {
       log(result);
       flashData = { message: 'Plant updated successfully', type: 'success' };

@@ -3,12 +3,19 @@
   method="POST"
   enctype="multipart/form-data"
   id="editPlantForm"
+  autocomplete="off"
 >
   <input
     id="id"
     name="id"
     type="hidden"
     value="<%= plant._id %>"
+  />
+  <input
+    id="currentImage"
+    name="currentImage"
+    type="hidden"
+    value="<%= plant.image %>"
   />
   <div class="form-group mb-4">
     <label for="name" class="block text-text">Name</label>
@@ -149,8 +156,39 @@
       >
     </div>
   </div>
-  <div class="form-group mb-4">
-    <label class="block text-text" for="file_input">Upload new image</label>
+
+
+  <!-- checkbox for using a file or a url for image -->
+  <label for="imageSettings<%=plant._id%>" class="block text-text">Image Settings</label>
+  <div id='imageSettings<%=plant._id%>' class="form-group mb-4 flex flex-col justify-between sm:flex-row">
+    <div class="mb-2 flex items-center">
+      <input
+        id="imageInputCheckbox<%=plant._id%>"
+        name="imageInput"
+        type="checkbox"
+        value="url"
+        class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
+        onchange="toggleImageInput('<%=plant._id%>')"
+      />
+      <label for="imageInputCheckbox" class="ms-2 text-sm font-medium text-text">Use URL for image?</label>
+    </div>
+    <div class="mb-2 flex items-center">
+      <input
+        id="imageValidated<%=plant._id%>"
+        name="imageValidated"
+        type="checkbox"
+        value="true"
+        class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
+        required
+        disabled
+        checked
+        oninvalid="this.setCustomValidity('Upload or enter a valid URL and preview to continue')"
+      />
+      <label for="imageValidated<%=plant._id%>" class="ms-2 text-sm font-medium text-text">Image validated?</label>
+    </div>
+  </div>
+  <div class="form-group mb-4" id="imageDiv<%=plant._id%>">
+    <label class="block text-text" for="image<%=plant._id%>">Upload Image</label>
     <input
       class="file:form-input file:hover-button w-full cursor-pointer file:rounded file:px-4 file:py-2 file:font-bold"
       id="image<%=plant._id%>"
@@ -158,19 +196,38 @@
       type="file"
       aria-describedby="file_input_help"
       accept="image/png, image/jpeg, image/gif"
-      onchange="previewImage('<%= plant._id%>')"
+      onchange="previewImage('<%=plant._id%>')"
     />
+  </div>
+  <div class="form-group mb-4 flex space-x-2 hidden" id="urlDiv<%=plant._id%>">
+    <div class="w-3/4">
+      <label for="url<%=plant._id%>">Enter URL:</label>
+      <input
+        type="text"
+        id="url<%=plant._id%>"
+        name="url"
+        class="form-input mt-1 block w-full grow-0 rounded border border-gray-300 bg-background-light pl-2 text-text"
+      />
+    </div>
+    <button
+      class="form-input hover-button w-1/4 grow-0 rounded px-4 py-2 font-bold"
+      type="button"
+      onclick="previewImage('<%=plant._id%>')"
+    >
+      Preview
+    </button>
   </div>
   <div
     id="imagePreviewContainer<%=plant._id%>">
     <label class="block text-text" for="preview">Image Preview</label>
     <img
       id="preview<%=plant._id%>"
-      src="/<%= plant.image %>"
+      src="<%= plant.image %>"
       alt="your image"
       class="w-1/2"
     />
   </div>
+  <p id="previewError<%=plant._id%>" class="hidden text-error font-bold my-2 px-2"></p>
   <div class="form-group mb-4 flex space-x-2">
     <input
       type="text"

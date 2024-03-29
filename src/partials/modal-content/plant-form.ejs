@@ -3,6 +3,7 @@
   method="POST"
   enctype="multipart/form-data"
   id="createPlantForm"
+  autocomplete="off"
 >
   <div class="form-group mb-4">
     <label for="name" class="block text-text">Name</label>
@@ -133,7 +134,35 @@
       >
     </div>
   </div>
-  <div class="form-group mb-4">
+  <!-- checkbox for using a file or a url for image -->
+  <label for="imageSettings" class="block text-text">Image Settings</label>
+  <div id='imageSettings' class="form-group mb-4 flex flex-col justify-between sm:flex-row">
+    <div class="mb-2 flex items-center">
+      <input
+        id="imageInputCheckboxNew"
+        name="imageInput"
+        type="checkbox"
+        value="url"
+        class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
+        onchange="toggleImageInput('New')"
+      />
+      <label for="imageInputCheckbox" class="ms-2 text-sm font-medium text-text">Use URL for image?</label>
+    </div>
+    <div class="mb-2 flex items-center">
+      <input
+        id="imageValidatedNew"
+        name="imageValidated"
+        type="checkbox"
+        value="true"
+        class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
+        required
+        disabled
+        oninvalid="this.setCustomValidity('Upload or enter a valid URL and preview to continue')"
+      />
+      <label for="imageValidated" class="ms-2 text-sm font-medium text-text">Image validated?</label>
+    </div>
+  </div>
+  <div class="form-group mb-4" id="imageDivNew">
     <label class="block text-text" for="file_input">Upload Image</label>
     <input
       class="file:form-input file:hover-button w-full cursor-pointer file:rounded file:px-4 file:py-2 file:font-bold"
@@ -146,17 +175,36 @@
       required
     />
   </div>
+  <div class="form-group mb-4 flex space-x-2 hidden" id="urlDivNew">
+    <div class="w-3/4">
+      <label for="urlNew">Enter URL:</label>
+      <input
+        type="text"
+        id="urlNew"
+        name="url"
+        class="form-input mt-1 block w-full grow-0 rounded border border-gray-300 bg-background-light pl-2 text-text"
+      />
+    </div>
+    <button
+      class="form-input hover-button w-1/4 grow-0 rounded px-4 py-2 font-bold"
+      type="button"
+      onclick="previewImage('New')"
+    >
+      Preview
+    </button>
+  </div>
   <div
-    id="imagePreviewContainer"
+    id="imagePreviewContainerNew"
     class="hidden">
     <label class="block text-text" for="preview">Image Preview</label>
     <img
       id="previewNew"
-      src="#"
+      src="/public/img/logo.svg"
       alt="your image"
-      class="w-1/2"
+      class="w-1/2 hidden"
     />
   </div>
+  <p id="previewErrorNew" class="hidden text-error font-bold my-2 px-2"></p>
   <div class="form-group mb-4 flex space-x-2">
     <input
       type="text"
@@ -204,4 +252,3 @@
     Submit
   </button>
 </form>
-
