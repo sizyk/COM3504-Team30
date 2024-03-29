@@ -49,6 +49,25 @@
         }
       }
     }
+
+    &-error {
+      cursor: pointer;
+      transition:
+        background-color 0.2s ease-in-out,
+        color 0.2s ease-in-out,
+        stroke 0.2s ease-in-out;
+
+      background-color: var(--error);
+      color: var(--background);
+      stroke: var(--background);
+
+      &:hover {
+        @media (hover: hover) {
+          background-color: var(--error-hover);
+        }
+      }
+
+    }
   }
 
   .hover-link {
@@ -236,6 +255,33 @@
       .tooltip-content {
         opacity: 1;
       }
+    }
+  }
+
+  /*===FLASH MESSAGES=========================================================*/
+  .flash {
+    @apply fixed;
+    @apply top-0;
+    @apply p-2;
+    @apply flex;
+    @apply items-center;
+    @apply justify-center;
+    @apply w-screen;
+    @apply transition-transform;
+
+    .flash-error {
+      background: var(--error);
+      color: var(--background);
+    }
+
+    .flash-success {
+      background: var(--primary);
+      color: var(--background);
+    }
+
+    .flash-info {
+      background: var(--secondary);
+      color: var(--on-secondary);
     }
   }
 }

@@ -6,6 +6,8 @@ const renderLayout = require('../helpers/layout-renderer');
 const router = express.Router();
 const plants = require('../controllers/plants');
 
+let flashData = { message: null, type: 'info' };
+
 /* IMAGE CODE (move into seperate route eventually) */
 
 const storage = multer.diskStorage({
@@ -25,42 +27,76 @@ const upload = multer({ storage });
 router.get('/', (req, res) => {
   const result = plants.getPlants({});
   result.then((allPlants) => {
-    renderLayout(res, 'index', { title: 'All Plants', plants: allPlants, scripts: ['filters'] });
+    const data = {
+      title: 'All Plants',
+      plants: allPlants,
+      scripts: ['filters'],
+    };
+    if (flashData.message !== null) {
+      data.flash = flashData;
+    }
+    renderLayout(res, 'index', data);
+    flashData.message = null;
   });
 });
 
-router.get('/page-2', (req, res) => {
-  renderLayout(res, 'page2');
-});
-
-router.get('/page-3', (req, res) => {
-  renderLayout(res, 'page3');
-});
-
 router.post('/create-plant', upload.single('image'), (req, res) => {
-  const plantData = req.body;
-  const filepath = req.file.path.replace(/\\/g, '/');
+  // set up the filepaths as either a file upload or the url
+  let filepath;
+  if (req.body.imageInput === 'url') {
+    filepath = req.body.url;
+  } else {
+    filepath = `/${req.file.path.replace(/\\/g, '/')}`;
+  }
 
-  const plant = {
-    author: 'placeholder', // replace with user when implemented
-    name: plantData.name,
-    description: plantData.description,
-    dateTimeSeen: new Date(plantData.dateTimeSeen),
-    size: parseFloat(plantData.size),
-    sunExposure: plantData.sunExposure,
-    colour: plantData.colour,
-    longitude: plantData.longitude,
-    latitude: plantData.latitude,
-    image: filepath,
-    hasFlowers: plantData.hasFlowers === 'true', // Checkboxes have no value if not checked, so manually check whether they are true
-    hasLeaves: plantData.hasLeaves === 'true',
-    hasFruit: plantData.hasFruit === 'true',
-    hasSeeds: plantData.hasSeeds === 'true',
-  };
+  // Create the plant in the database
+  plants.create(req.body, filepath)
+    .then((result) => {
+      log(result);
+      flashData = { message: 'Plant created successfully', type: 'success' };
+    })
+    .catch((error) => {
+      log(error);
+      flashData = { message: 'Error occurred whilst creating new plant', type: 'error' };
+    });
+  res.redirect('/');
+});
 
-  const result = plants.create(plant);
-  log(result);
+router.post('/edit-plant', upload.single('image'), async (req, res) => {
+  // check what type of image input is being used
+  let filepath;
+  if (req.body.imageInput === 'url' && req.body.url !== '') {
+    filepath = req.body.url;
+  } else if (req.file) {
+    filepath = `/${req.file.path.replace(/\\/g, '/')}`;
+  } else { // no new image then use current image
+    filepath = req.body.currentImage;
+  }
 
+  // Update the plant in the database
+  plants.update(req.body, filepath)
+    .then((result) => {
+      log(result);
+      flashData = { message: 'Plant updated successfully', type: 'success' };
+    })
+    .catch((error) => {
+      log(error);
+      flashData = { message: 'Error occurred whilst updating plant', type: 'error' };
+    });
+  res.redirect('/');
+});
+
+router.post('/delete-plant', upload.single('image'), async (req, res) => {
+  // Delete the plant from the database
+  plants.delete(req.body.id)
+    .then((result) => {
+      log(result);
+      flashData = { message: 'Plant deleted successfully', type: 'success' };
+    })
+    .catch((error) => {
+      log(error);
+      flashData = { message: 'Error occurred whilst deleting plant', type: 'error' };
+    });
   res.redirect('/');
 });
 
