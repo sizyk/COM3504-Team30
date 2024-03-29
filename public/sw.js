@@ -1,3 +1,5 @@
+import DBController from './scripts/utils/DBController.mjs';
+
 const CACHE_NAME = 'Plants App';
 
 
@@ -12,9 +14,29 @@ self.addEventListener('install', event => {
             cache.addAll([
                 '/',
                 '/public/styles/dist/global.css',
-                '/public/styles/global.css',
-                '/public/styles/inputs.css',
-                '/public/styles/utils.css',
+
+                '/public/scripts/global-scripts/modals.mjs',
+                '/public/scripts/global-scripts/syncing.mjs',
+                '/public/scripts/global-scripts/themeToggle.mjs',
+                '/public/scripts/global-scripts/touchHover.mjs',
+
+                '/public/scripts/utils/DBController.mjs',
+                '/public/scripts/utils/flash-messages.mjs',
+                '/public/scripts/utils/IDB.mjs',
+
+                '/public/scripts/filters.js',
+                '/public/scripts/global.js',
+                '/public/scripts/plantForm.js',
+
+                '/public/img/icons/flowers-false.svg',
+                '/public/img/icons/flowers-true.svg',
+                '/public/img/icons/fruits-or-nuts-false.svg',
+                '/public/img/icons/fruits-or-nuts-true.svg',
+                '/public/img/icons/has-leaf-false.svg',
+                '/public/img/icons/has-leaf-true.svg',
+                '/public/img/icons/sun-full.svg',
+                '/public/img/icons/sun-none.svg',
+                '/public/img/icons/sun-partial.svg',
             ]).catch((error) => {
                 console.log('Service Worker: Failed to cache: ' + error)
             });
@@ -50,3 +72,9 @@ self.addEventListener('fetch', function(event) {
         })
     );
 });
+
+self.addEventListener('sync', (event) => {
+    if (event.tag === 'sync-idb') {
+        event.waitUntil(DBController.synchronise());
+    }
+})

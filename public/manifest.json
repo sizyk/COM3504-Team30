@@ -2,10 +2,10 @@
   "lang": "en-uk",
   "name": "Plants app",
   "short_name": "Plants",
-  "description": "A progressive web application where you can share plant sightings and discuss with a community and identify the plants scientific name",
+  "description": "A progressive web application where you can share plant sightings and discuss with a community and identify the plant's scientific name",
   "start_url": "/",
-  "background_color": "#2f3d58",
-  "theme_color": "#2f3d58",
+  "background_color": "#f1eee7",
+  "theme_color": "#2d5936",
   "orientation": "any",
   "display": "standalone",
   "icons": [

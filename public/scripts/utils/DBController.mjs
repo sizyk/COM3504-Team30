@@ -23,6 +23,17 @@ class DBController {
     this.idb = IDB;
   }
 
+  static async requestSync() {
+    const registration = await navigator.serviceWorker.ready;
+    try {
+      await registration.sync.register('sync-idb');
+      return true;
+    } catch {
+      console.error('Background Sync could not be registered!');
+      return false;
+    }
+  }
+
   /**
    * PUTs data from a form to an API endpoint for a given collection
    * @param collection {string} the database collection to PUT to.
@@ -41,6 +52,7 @@ class DBController {
         () => onSuccess('Successfully saved to local database! Update will be synchronised next time you connect to the internet.', toSend),
         () => onError('Operation failed to queue! Please try again.'),
       );
+      DBController.requestSync().then(() => {});
       return;
     }
 
@@ -84,6 +96,7 @@ class DBController {
         () => onSuccess('Successfully deleted from local database! Deletion will be synchronised next time you connect to the internet.'),
         () => onError('Operation failed to queue! Please try again.'),
       );
+      DBController.requestSync().then(() => {});
       return;
     }
 
@@ -151,23 +164,79 @@ class DBController {
     );
   }
 
+  /**
+   * Attempts to synchronise data from IDB to mongoDB
+   * @returns {Promise<boolean>} resolves to `true` when all queued synchronisations have completed
+   */
+  IDBToMongo() {
+    return new Promise((resolve) => {
+      this.idb.getAll('sync-queue', (transaction) => {
+        // Create array stating whether each queued synchronisation has been resolved
+        const resolver = Array(transaction.target.result.length).fill(false);
+        const i = 0;
+        transaction.target.result.forEach((syncObject) => {
+          switch (syncObject.operation) {
+            case 'put':
+              this.createOrUpdate(syncObject.store, syncObject.queuedObject, () => {
+                this.idb.delete('sync-queue', syncObject._id, () => {
+                  resolver[i] = true;
+                  if (resolver.every((v) => v === true)) {
+                    resolve(true);
+                  }
+                });
+              });
+              break;
+            case 'delete':
+              this.delete(syncObject.store, syncObject.queuedObject, () => {
+                this.idb.delete('sync-queue', syncObject._id, () => {
+                  resolver[i] = true;
+                  if (resolver.every((v) => v === true)) {
+                    resolve(true);
+                  }
+                });
+              });
+              break;
+            default:
+              defaultError('Illegal operation in synchronise!');
+          }
+        });
+      }, console.error);
+    });
+  }
+
+  /**
+   * horrible code to synchronise from IDB to mongoDB, and then the other way round
+   * @returns {Promise<boolean>} resolves to true once complete
+   */
   synchronise() {
-    this.idb.getAll('sync-queue', (transaction) => {
-      transaction.target.result.forEach((syncObject) => {
-        switch (syncObject.operation) {
-          case 'put':
-            this.createOrUpdate(syncObject.store, syncObject.queuedObject, () => {});
-            this.idb.delete('sync-queue', syncObject._id, () => {});
-            break;
-          case 'delete':
-            this.delete(syncObject.store, syncObject.queuedObject, () => {});
-            this.idb.delete('sync-queue', syncObject._id, () => {});
-            break;
-          default:
-            defaultError('Illegal operation in synchronise!');
-        }
+    return new Promise((resolve) => {
+      this.IDBToMongo().then(() => {
+        // Sync all plants to indexedDB
+        fetch('/api/plants/get-all')
+          .then((res) => res.json())
+          .then((plants) => {
+            const resolver = Array(plants.length).fill(false);
+            let i = 0;
+            plants.forEach((p) => {
+              // Attempt to remove current plant from indexedDB, to be replaced with updated one
+              i += 1;
+              IDB.delete(
+                'plants',
+                p._id,
+                () => {
+                  // Removal was successful, attempt to update with new plant
+                  IDB.put('plants', p, () => {
+                    resolver[i] = true;
+                    if (resolver.every((v) => v === true)) {
+                      resolve(true);
+                    }
+                  });
+                },
+              );
+            });
+          });
       });
-    }, console.error);
+    });
   }
 }
 
