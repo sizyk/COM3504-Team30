@@ -13,8 +13,6 @@ function syncChat() {
 
     request.onsuccess = () => {
       const chats = request.result;
-      console.log(chats);
-
       // For each chat message, try to upload it to MongoDB
       chats.forEach((chat) => {
         DBController.addChat(chat);

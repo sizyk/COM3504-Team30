@@ -1,5 +1,6 @@
 import DBController from './utils/DBController.mjs';
 import initSyncing from './global-scripts/syncing.mjs';
+import { showMessage } from './utils/flash-messages.mjs';
 
 const sendButton = document.getElementById('send-button');
 const userInput = document.getElementById('user-input');
@@ -36,7 +37,6 @@ function connectToRoom() {
   } else {
     DBController.getChatsByPlant(roomId, (event) => {
       const chats = event.target.result;
-      console.log(chats);
       chats.forEach((chat) => {
         addUserMessage(chat.message, chat.user);
       });
@@ -50,12 +50,10 @@ function clearChatbox() {
 
 function toggleChatbox() {
   chatContainer.classList.toggle('hidden');
-  console.log('Toggled chatbox');
   isChatboxOpen = !isChatboxOpen;
   if (isChatboxOpen && navigator.onLine) {
     connectToRoom();
   } else if (!isChatboxOpen) {
-    console.log('Clearing chatbox');
     clearChatbox();
   }
 }
@@ -68,7 +66,7 @@ function sendChatMessage() {
   const userMessage = userInput.value;
   if (userMessage.trim() !== '') {
     const newChat = {
-      _id: Date.now().toString(),
+      _id: Date.now().toString(16).padStart(24, '0'),
       user: userId,
       plant: roomId,
       message: userMessage,
@@ -78,7 +76,7 @@ function sendChatMessage() {
       socket.emit('chat', roomId, newChat);
     } else {
       addUserMessage(userMessage, userId);
-      DBController.addChat(newChat);
+      DBController.addChat(newChat, () => {});
     }
     userInput.value = '';
   }
@@ -97,32 +95,27 @@ userInput.addEventListener('keyup', (event) => {
 });
 
 function init() {
-  // socket.on('joined', (roomNo, userId) {
-  // }
-
   socket.on('chat', (params) => {
     try {
       const newChat = {
-        _id: Date.now().toString(), // Auto-generate id
+        _id: Date.now().toString(16).padStart(24, '0'), // Auto-generate id
         user: params.user,
         plant: params.plant,
         message: params.message,
         dateTime: params.dateTime,
       };
-      console.log(newChat);
       DBController.addChat(newChat);
       addUserMessage(params.message, params.user);
     } catch (error) {
-      console.error('Error saving message:', error);
+      showMessage('Failed to send message', 'error');
     }
-    console.log(params);
   });
 
   socket.on('oldMessages', (messages) => {
-    console.log(messages);
+    // Possibly fetch old messages from IDB if messages are empty - need to discuss
     messages.forEach((chat) => {
       addUserMessage(chat.message, chat.user);
-      DBController.addChat(chat, true);
+      DBController.addChat(chat, true, () => {});
     });
   });
 }
