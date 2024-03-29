@@ -304,6 +304,10 @@ function addEventListeners(card) {
   });
 }
 
-addEventListeners(document.getElementById('plant-add-modal'));
+const plantAddModal = document.getElementById('plant-add-modal');
 
-document.querySelectorAll('.plant-card').forEach(addEventListeners);
+if (plantAddModal) {
+  addEventListeners(plantAddModal);
+}
+
+document.querySelectorAll('[data-plant-card]').forEach(addEventListeners);

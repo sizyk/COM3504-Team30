@@ -2,14 +2,14 @@
   <p class="text-xl">Bottom Text</p>
 </footer>
 <script>
-  if('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('../../public/sw.js', {scope: '../../public/'})
-            .then( (registration) => {
-              console.log('SW registered: ', registration);
-            })
-            .catch((registrationError) => {
-              console.log('SW registration failed: ', registrationError);
-            });
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker
+      .register('../../public/sw.js', { scope: '../../public/' })
+      .then((registration) => {
+        console.log('SW registered: ', registration);
+      })
+      .catch((registrationError) => {
+        console.log('SW registration failed: ', registrationError);
+      });
   }
 </script>
-

@@ -8,6 +8,7 @@
   data-hasflowers="<%= plant.hasFlowers %>"
   data-hasfruitsnuts="<%= plant.hasFruit || plant.hasSeeds %>"
   data-sunexposure="<%= plant.sunExposure.toLowerCase() %>"
+  data-plant-card
 >
   <div class="plant-info flex h-full flex-col gap-2 text-background">
     <div class="plant-name relative isolate px-2">
@@ -33,7 +34,7 @@
           alt="An icon showing that the plant has <%= plant.hasLeaves ? '' : 'no ' %>leaves"
         />
         <span class="tooltip-content tooltip-top">
-          <%= plant.hasLeaves ? "Has " : "Has no " %>leaves
+          <%= plant.hasLeaves ? 'Has ' : 'Has no ' %>leaves
         </span>
       </div>
 
@@ -43,16 +44,16 @@
           alt="An icon showing that the plant has <%= plant.hasFlowers ? '' : 'no ' %>flowers"
         />
         <span class="tooltip-content tooltip-top">
-          <%= plant.hasFlowers ? "Has " : "Has no " %>flowers
+          <%= plant.hasFlowers ? 'Has ' : 'Has no ' %>flowers
         </span>
       </div>
       <div class="has-tooltip touchscreen-hover" data-sun>
         <img
           src="/public/img/icons/sun-<%= plant.sunExposure.toLowerCase() %>.svg"
-          alt="An icon showing that the plant has <%= plant.sunExposure.toLowerCase().replace("ne", "") %> sun exposure"
+          alt="An icon showing that the plant has <%= plant.sunExposure.toLowerCase().replace('ne', '') %> sun exposure"
         />
         <span class="tooltip-content tooltip-top">
-          <%= plant.sunExposure.replace("ne", "") %> sun exposure
+          <%= plant.sunExposure.replace('ne', '') %> sun exposure
         </span>
       </div>
       <div class="has-tooltip touchscreen-hover" data-fruit>
@@ -61,7 +62,7 @@
           alt="An icon showing that the plant has <%= plant.hasFruit || plant.hasSeeds ? '' : 'no ' %>fruits or nuts"
         />
         <span class="tooltip-content tooltip-top">
-          <%= plant.hasFruit || plant.hasSeeds ? "Has " : "Has no " %>fruit/nuts
+          <%= plant.hasFruit || plant.hasSeeds ? 'Has ' : 'Has no ' %>fruit/nuts
         </span>
       </div>
       <div

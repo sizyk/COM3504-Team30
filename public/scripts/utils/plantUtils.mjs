@@ -30,7 +30,14 @@ export function buildSpottedString(plant) {
  */
 export default function updateCard(plant) {
   const card = document.getElementById(`card-${plant._id}`);
-  card.style.backgroundImage = `url('${plant.image}')`;
+
+  const cardImage = card.querySelector('[data-plant-image]');
+
+  if (cardImage) {
+    cardImage.src = plant.image;
+  } else {
+    card.style.backgroundImage = `url('${plant.image}')`;
+  }
 
   card.querySelector('[data-name]').innerText = plant.name;
   card.querySelector('[data-spotted]').innerText = buildSpottedString(plant);
