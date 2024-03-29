@@ -3,6 +3,7 @@
   target="fakesubmit"
   data-form="plant"
   enctype="multipart/form-data"
+  method="POST"
   autocomplete="off"
 >
   <input
@@ -10,12 +11,6 @@
     name="_id"
     type="hidden"
     value="<%= plant._id %>"
-  />
-  <input
-    id="currentImage"
-    name="currentImage"
-    type="hidden"
-    value="<%= plant.image %>"
   />
   <input id="_id" name="_id" type="hidden" value="<%= plant._id %>" />
   <div class="form-group mb-4">
@@ -238,11 +233,13 @@
   </div>
   <div id="imagePreviewContainer<%=plant._id%>">
     <label class="block text-text" for="preview">Image Preview</label>
+    <object type="image/svg+xml" data="/public/img/loading.svg" class="aspect-square w-1/2 rounded hidden"></object>
     <img
       id="preview<%=plant._id%>"
       src="<%= plant.image %>"
       alt="your image"
       class="w-1/2"
+      data-img="preview"
     />
   </div>
   <p id="previewError<%=plant._id%>" class="hidden text-error font-bold my-2 px-2"></p>

@@ -1,5 +1,5 @@
-import IDB from '../utils/IDB.mjs';
-import DBController from '../utils/DBController.mjs';
+// import IDB from '../utils/IDB.mjs';
+// import DBController from '../utils/DBController.mjs';
 
 /**
  * Fires when internet connection is detected.

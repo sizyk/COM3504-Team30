@@ -36,6 +36,12 @@ function handleErrorResponse(status, plantID) {
     case 400:
       errorMessage = 'Bad Request error (400)';
       break;
+    case 415:
+      errorMessage = 'Image refused to load! Please ensure it has been linked correctly.';
+      break;
+    case 'not-validated':
+      errorMessage = "Please validate your image URL first! (click 'Preview')";
+      break;
     default:
       errorMessage = `Error: ${status}`;
       break;
@@ -69,22 +75,30 @@ async function previewImage(plantID) {
       return;
     }
     try {
+      document.getElementById(`imagePreviewContainer${plantID}`).classList.remove('hidden');
+      preview.previousElementSibling.classList.remove('hidden');
+      preview.classList.add('hidden');
       // do a fetch request to the url to test for errors
       const response = await fetch(url, {});
       if (response.ok) {
-        document.getElementById(`imagePreviewContainer${plantID}`).classList.remove('hidden');
+        preview.previousElementSibling.classList.add('hidden');
         preview.src = url;
-        document.getElementById(`preview${plantID}`).classList.remove('hidden');
+        preview.classList.remove('hidden');
         document.getElementById(`previewError${plantID}`).classList.add('hidden');
         checkbox.checked = true;
         checkbox.dispatchEvent(new Event('input')); // Trigger input event for form validation
       } else {
+        preview.previousElementSibling.classList.add('hidden');
         handleErrorResponse(response.status, plantID);
         checkbox.checked = false; // Uncheck the checkbox if validation fails
       }
     } catch (error) {
+      preview.previousElementSibling.classList.add('hidden');
       if (error.name === 'TypeError' && error.message === 'Failed to fetch') {
         handleCorsError(plantID);
+      } else {
+        // idk the error so make it a 404
+        handleErrorResponse(404);
       }
       checkbox.checked = false; // Uncheck the checkbox if an error occurs
     }
@@ -133,9 +147,9 @@ function deletePlant(plantID) {
 
 function toggleImageInput(plantID) {
   // get all the relevant elements
+  const shouldShowUrl = document.getElementById(`imageInputCheckbox${plantID}`);
   const imageValidatedCheckbox = document.getElementById(`imageValidated${plantID}`);
   const imagePreviewContainer = document.getElementById(`imagePreviewContainer${plantID}`);
-  const imageInputCheckbox = document.getElementById(`imageInputCheckbox${plantID}`);
   const imageDiv = document.getElementById(`imageDiv${plantID}`);
   const imageInput = document.getElementById(`image${plantID}`);
   const urlDiv = document.getElementById(`urlDiv${plantID}`);
@@ -152,28 +166,71 @@ function toggleImageInput(plantID) {
   urlInput.required = plantID === 'New';
 
   // show the correct image input field
-  if (imageInputCheckbox.checked) {
+  if (shouldShowUrl.checked) {
     imageDiv.classList.add('hidden');
     urlDiv.classList.remove('hidden');
+
+    // If adding a new plant, ensure currently-selected image input is required
+    // (un-require other one to avoid "required input is not focusable")
+    if (plantID === 'New') {
+      imageInput.required = false;
+      urlInput.required = true;
+    }
   } else {
     imageDiv.classList.remove('hidden');
     urlDiv.classList.add('hidden');
-    DBController.delete(
-      'plants',
-      plantID,
-      (message) => {
-        showMessage(message, 'success', 'delete');
 
-        // Remove plant card
-        document.getElementById(plantID.toString()).remove();
-
-        const plantModal = document.getElementById(`${plantID}-edit-plant-modal`);
-        if (plantModal !== null) {
-          plantModal.classList.remove('active');
-        }
-      },
-    );
+    if (plantID === 'New') {
+      imageInput.required = true;
+      urlInput.required = false;
+    }
   }
+}
+
+/**
+ * Submits a plant to the database, for creation (or updating)
+ * @param plant {Object} the plant object to submit
+ */
+function submitPlantToDB(plant) {
+  DBController.createOrUpdate(
+    'plants',
+    plant,
+    (message, plantObject) => {
+      showMessage(message, 'success', 'check_circle');
+
+      const addModal = document.getElementById('plant-add-modal');
+      if (addModal !== null) {
+        addModal.classList.remove('active');
+      }
+
+      const plantModal = document.getElementById(`${plantObject._id}-edit-plant-modal`);
+      if (plantModal !== null) {
+        plantModal.classList.remove('active');
+        updateCard(plantObject);
+      } else {
+        plantObject.spottedString = buildSpottedString(plantObject);
+        // plantModal is null - therefore this is a new plant
+        // query server to generate its card on-the-fly
+        fetch('/plant/card', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(plantObject),
+        }).then((res) => res.text())
+          .then((p) => {
+            // Add new plant view to HTML & initialise relevant event listeners
+            document.getElementById('plant-grid').insertAdjacentHTML('beforeend', p);
+
+            initialiseModal(document.getElementById(`${plantObject._id}-edit-plant-modal`));
+
+            // eslint-disable-next-line no-use-before-define
+            addEventListeners(document.getElementById(`card-${plantObject._id}`));
+            document.getElementById('no-plants-warning').classList.add('hidden');
+          });
+      }
+    },
+  );
 }
 
 /**
@@ -182,9 +239,13 @@ function toggleImageInput(plantID) {
  */
 function submitPlantForm(formElem) {
   const params = new FormData(formElem);
+  const shouldShowUrl = formElem.querySelector('[data-change="toggle-input"]');
 
-  if (formElem.id === 'createPlantForm' && !(params.get('image') instanceof File)) {
-    // TODO add error with James' image error box
+  const plantID = params.has('_id') ? params.get('_id') : 'New';
+  console.log(`imageValidated${plantID}`);
+  // Ensure user has validated their image
+  if (shouldShowUrl.checked && !document.getElementById(`imageValidated${plantID}`).checked) {
+    handleErrorResponse('not-validated', plantID);
     return;
   }
 
@@ -223,56 +284,25 @@ function submitPlantForm(formElem) {
     hasSeeds: params.get('hasSeeds'),
   };
 
-  const reader = new FileReader();
+  // If use is using a URL, simply add it to the plant
+  if (shouldShowUrl.checked) {
+    plant.image = params.get('url').toString();
+    submitPlantToDB(plant);
+  } else {
+    // If not using a URL, read file as base64
+    const reader = new FileReader();
 
-  reader.addEventListener('loadend', () => {
-    // Only update image if one was actually uploaded
-    if (reader.result.substring(reader.result.indexOf(',') + 1).length > 0) {
-      plant.image = reader.result;
-    }
+    reader.addEventListener('loadend', () => {
+      // Only update image if one was actually uploaded
+      if (reader.result.substring(reader.result.indexOf(',') + 1).length > 0) {
+        plant.image = reader.result;
+      }
 
-    DBController.createOrUpdate(
-      'plants',
-      plant,
-      (message, plantObject) => {
-        showMessage(message, 'success', 'check_circle');
+      submitPlantToDB(plant);
+    });
 
-        const addModal = document.getElementById('plant-add-modal');
-        if (addModal !== null) {
-          addModal.classList.remove('active');
-        }
-
-        const plantModal = document.getElementById(`${plantObject._id}-edit-plant-modal`);
-        if (plantModal !== null) {
-          plantModal.classList.remove('active');
-          updateCard(plantObject);
-        } else {
-          plantObject.spottedString = buildSpottedString(plantObject);
-          // plantModal is null - therefore this is a new plant
-          // query server to generate its card on-the-fly
-          fetch('/plant/card', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(plantObject),
-          }).then((res) => res.text())
-            .then((p) => {
-              // Add new plant view to HTML & initialise relevant event listeners
-              document.getElementById('plant-grid').insertAdjacentHTML('beforeend', p);
-
-              initialiseModal(document.getElementById(`${plantObject._id}-edit-plant-modal`));
-
-              // eslint-disable-next-line no-use-before-define
-              addEventListeners(document.getElementById(`card-${plantObject._id}`));
-              document.getElementById('no-plants-warning').classList.add('hidden');
-            });
-        }
-      },
-    );
-  });
-
-  reader.readAsDataURL(params.get('image'));
+    reader.readAsDataURL(params.get('image'));
+  }
 }
 
 /**
@@ -302,6 +332,8 @@ function addEventListeners(card) {
   card.querySelectorAll('[data-change="toggle-input"]').forEach((elem) => {
     elem.addEventListener('change', () => toggleImageInput(elem.dataset.plant));
   });
+
+  card.querySelector('[data-img="preview"]').addEventListener('error', () => handleErrorResponse(415, card.dataset.plant));
 }
 
 const plantAddModal = document.getElementById('plant-add-modal');
