@@ -40,7 +40,7 @@ class DBController {
     await store.add(chat);
     await tx.done;
     if (!local) {
-      DBController.mongoAddChat(collection, chat, this.idb, onSuccess, onError);
+      DBController.mongoAddChat(collection, chat, this.idb, () => {}, onError);
     }
   }
 
@@ -60,7 +60,7 @@ class DBController {
       return;
     }
 
-    const id = chat._id
+    const id = chat._id.toString(16)
     console.log(id)
 
     // Post to mongoDB endpoint
@@ -80,7 +80,6 @@ class DBController {
       // Report success/error with respective callback functions
     }).then((resJson) => {
       onSuccess(resJson.message, resJson.object);
-      this.deleteFromIDB(collection, id, idb)
     }).catch((error) => {
       onError(error);
     });

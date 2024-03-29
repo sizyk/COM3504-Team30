@@ -1,7 +1,6 @@
 const log = require('debug')('app:db');
 // Import the chat model
 const ChatModel = require('../models/chat');
-const e = require('express');
 
 // Function to create new chat
 exports.create = (chatData) => {
@@ -32,6 +31,7 @@ exports.create = (chatData) => {
 
 exports.add = async (chatData) => {
   const chat = { // Get data from the form
+    _id: chatData._id,
     user: chatData.user,
     plant: chatData.plant,
     message: chatData.message,
@@ -78,6 +78,13 @@ exports.findOne = async (filter) => {
   let chat = null;
   try {
     chat = await ChatModel.findOne(filter);
+    if (chat == null) {
+      return {
+        code: 404,
+        message: 'Chat not found!',
+        object: chat,
+      };
+    }
     return {
       code: 200,
       message: 'Chat retrieved successfully!',

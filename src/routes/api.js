@@ -56,9 +56,7 @@ router.post('/:collection', async (req, res) => {
   const controllerRes = await collectionControllers[req.params.collection].findOne(
     { _id: body._id },
   );
-  console.log(controllerRes);
-
-  if (controllerRes.code === 500) {
+  if (controllerRes.code === 500 || controllerRes.code === 404) {
     const insertRes = await collectionControllers[req.params.collection].add(body);
     res.status(insertRes.code)
       .json({
