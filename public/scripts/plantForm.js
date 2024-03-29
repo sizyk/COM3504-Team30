@@ -1,5 +1,3 @@
-const log = require('debug')('app:db');
-
 function showPosition(position, plantID) {
   document.getElementById(`latitude${plantID}`).value = position.coords.latitude;
   document.getElementById(`longitude${plantID}`).value = position.coords.longitude;
@@ -53,6 +51,11 @@ async function previewImage(plantID) {
   // loading image changes on whether you use a file or a URL
   if (document.getElementById(`imageInputCheckbox${plantID}`).checked) {
     const url = document.getElementById(`url${plantID}`).value;
+    // check if the URL is from the same origin or empty and throw error if so
+    if (new URL(document.baseURI).origin === new URL(url, document.baseURI).origin) {
+      handleErrorResponse(404, plantID);
+      return;
+    }
     try {
       // do a fetch request to the url to test for errors
       const response = await fetch(url, {});
@@ -70,8 +73,6 @@ async function previewImage(plantID) {
     } catch (error) {
       if (error.name === 'TypeError' && error.message === 'Failed to fetch') {
         handleCorsError(plantID);
-      } else {
-        log(error);
       }
       checkbox.checked = false; // Uncheck the checkbox if an error occurs
     }
@@ -121,10 +122,9 @@ function toggleImageInput(plantID) {
   imagePreviewContainer.classList.add('hidden');
   previewError.classList.add('hidden');
 
-  if (plantID === 'New') { // images are only required for new plants, not edits
-    imageInput.required = !imageInput.required;
-    urlInput.required = !urlInput.required;
-  }
+  // images are only required for new plants, not edits
+  imageInput.required = plantID === 'New';
+  urlInput.required = plantID === 'New';
 
   // show the correct image input field
   if (imageInputCheckbox.checked) {

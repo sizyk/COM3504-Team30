@@ -155,7 +155,7 @@
         value="true"
         class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
         required
-        onclick="return false;"
+        disabled
         oninvalid="this.setCustomValidity('Upload or enter a valid URL and preview to continue')"
       />
       <label for="imageValidated" class="ms-2 text-sm font-medium text-text">Image validated?</label>
@@ -201,7 +201,6 @@
       src="/public/img/logo.svg"
       alt="your image"
       class="w-1/2 hidden"
-      onerror="checkError('New')"
     />
   </div>
   <p id="previewErrorNew" class="hidden text-error font-bold my-2 px-2"></p>
