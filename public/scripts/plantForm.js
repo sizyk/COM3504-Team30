@@ -211,16 +211,18 @@ function submitPlantToDB(plant) {
         plantObject.spottedString = buildSpottedString(plantObject);
         // plantModal is null - therefore this is a new plant
         // query server to generate its card on-the-fly
-        fetch('/plant/card', {
-          method: 'POST',
+        fetch('/public/cached-views/plant-card.ejs', {
+          method: 'GET',
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'text/html',
           },
-          body: JSON.stringify(plantObject),
         }).then((res) => res.text())
           .then((p) => {
+            plantObject.dateTimeSeen = new Date(plantObject.dateTimeSeen);
+            // eslint-disable-next-line no-undef
+            const renderedTemplate = ejs.render(p, { plant: plantObject });
             // Add new plant view to HTML & initialise relevant event listeners
-            document.getElementById('plant-grid').insertAdjacentHTML('beforeend', p);
+            document.getElementById('plant-grid').insertAdjacentHTML('beforeend', renderedTemplate);
 
             initialiseModal(document.getElementById(`${plantObject._id}-edit-plant-modal`));
 
@@ -271,7 +273,7 @@ function submitPlantForm(formElem) {
     author: 'placeholder', // replace with user when implemented
     name: params.get('name').trim(),
     description: params.get('description').trim(),
-    dateTimeSeen: params.get('dateTimeSeen'),
+    dateTimeSeen: new Date(params.get('dateTimeSeen')),
     emoji: '🇬🇧',
     size: params.get('size'),
     sunExposure: params.get('sunExposure'),
@@ -311,7 +313,7 @@ function submitPlantForm(formElem) {
 /**
  * Add all event listeners that are required for plant form functionality
  */
-function addEventListeners(card) {
+export default function addEventListeners(card) {
   card.querySelectorAll('[data-click="geolocation"]').forEach((elem) => {
     elem.addEventListener('click', () => getLocation(card.dataset.plant));
   });
@@ -348,8 +350,8 @@ function addEventListeners(card) {
 }
 
 const plantAddForm = document.getElementById('createPlantForm');
-
 if (plantAddForm) {
+  plantAddForm.addEventListener('submit', () => submitPlantForm(plantAddForm));
   addEventListeners(plantAddForm);
 }
 

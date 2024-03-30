@@ -24,6 +24,7 @@ app.use(express.urlencoded({ extended: false, limit: '100mb' }));
 app.use(cookieParser());
 
 app.use('/', indexRouter);
+app.use('/', express.static(path.join(__dirname, 'service-worker')));
 app.use('/users', usersRouter);
 app.use('/plant', plantRouter);
 app.use('/api', apiRouter);

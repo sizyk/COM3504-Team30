@@ -9,7 +9,7 @@
     "ignorePatterns": [
         "node_modules",
         "*.config.js",
-        "sw.js"
+        "*.min.js"
     ],
 
     "parserOptions": {

@@ -9,7 +9,9 @@
     "start": "concurrently --raw --kill-others \"npm:watch-*\"",
     "prettify": "prettier -w **/*.ejs",
     "lint": "eslint --color '**/*.js' '**/bin/www' '**/*.mjs'",
-    "lint:fix": "eslint --color '**/*.js' '**/bin/www' '**/*.mjs' --fix"
+    "lint:fix": "eslint --color '**/*.js' '**/bin/www' '**/*.mjs' --fix",
+
+    "cardrender": "ejs -m $ src/partials/plant-card.ejs -o public/cached-views/plant-card.ejs editModalName=\"<%= plant._id + '-edit-plant-modal' %>\""
   },
   "dependencies": {
     "body-parser": "^1.20.2",

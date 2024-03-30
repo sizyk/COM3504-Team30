@@ -36,7 +36,7 @@ class DBController {
    *        takes a message (as a string).
    */
   mongoPut(collection, toSend, onSuccess = defaultSuccess, onError = defaultError) {
-    if (!navigator.onLine) {
+    const offlineCB = () => {
       this.idb.queueSync(
         collection,
         toSend,
@@ -44,6 +44,10 @@ class DBController {
         () => onSuccess('Successfully saved to local database! Update will be synchronised next time you connect to the internet.', toSend),
         () => onError('Operation failed to queue! Please try again.'),
       );
+    };
+
+    if (!navigator.onLine) {
+      offlineCB();
       return;
     }
 
@@ -64,8 +68,8 @@ class DBController {
     // Report success/error with respective callback functions
     }).then((resJson) => {
       onSuccess(resJson.message, resJson.object);
-    }).catch((error) => {
-      onError(error);
+    }).catch(() => {
+      offlineCB();
     });
   }
 
@@ -79,7 +83,7 @@ class DBController {
    *        takes a message (as a string).
    */
   mongoDelete(collection, id, onSuccess = defaultSuccess, onError = defaultError) {
-    if (!navigator.onLine) {
+    const offlineCB = () => {
       this.idb.queueSync(
         collection,
         id,
@@ -87,6 +91,10 @@ class DBController {
         () => onSuccess('Successfully deleted from local database! Deletion will be synchronised next time you connect to the internet.'),
         () => onError('Operation failed to queue! Please try again.'),
       );
+    };
+
+    if (!navigator.onLine) {
+      offlineCB();
       return;
     }
 
@@ -106,8 +114,8 @@ class DBController {
       // Report success/error with respective callback functions
     }).then((resJson) => {
       onSuccess(resJson.message);
-    }).catch((error) => {
-      onError(error);
+    }).catch(() => {
+      offlineCB();
     });
   }
 
@@ -159,18 +167,16 @@ class DBController {
    * @returns {Promise<boolean>} resolves to `true` when all queued synchronisations have completed
    */
   IDBToMongo() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.idb.getAll('sync-queue', (transaction) => {
-        // Only show message if there is anything to sync
-        if (transaction.target.result.length > 0) {
-          showMessage('You are now online, syncing...', 'info', 'sync', true);
-        } else {
-          // Reject promise if nothing to sync
-          reject();
-        }
-
         // Create array stating whether each queued synchronisation has been resolved
         const resolver = Array(transaction.target.result.length).fill(false);
+
+        if (resolver.length === 0) {
+          // Nothing to upload, so resolve
+          resolve(true);
+        }
+
         let i = 0;
         transaction.target.result.forEach((syncObject) => {
           let op;

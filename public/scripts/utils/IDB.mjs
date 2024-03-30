@@ -40,27 +40,36 @@ class IDB {
   /**
    * PUTs an object to a store (creates or updates)
    * @param storeName {string} the store to PUT to
-   * @param object {Object} the object to put into the store
+   * @param toUpload {Object} the object to put into the store
    * @param successCallback {function(Event): void} the function to call on transaction success
    * @param failureCallback {function(Event): void} the function to call on transaction failure
    */
-  put(storeName, object, successCallback = defaultSuccess, failureCallback = defaultError) {
-    if (this.db && object) {
-      // get original before updating with new keys
-      const getRequest = this.db.transaction([storeName], 'readwrite').objectStore(storeName).get(object._id);
-
-      getRequest.onsuccess = () => {
-        const obj = getRequest.result;
-
-        Object.keys(object).forEach((key) => {
-          obj[key] = object[key];
-        });
-
+  put(storeName, toUpload, successCallback = defaultSuccess, failureCallback = defaultError) {
+    if (this.db && toUpload) {
+      const performRequest = (obj) => {
         const request = this.db.transaction([storeName], 'readwrite').objectStore(storeName).put(obj);
 
         request.onsuccess = successCallback;
         request.onerror = failureCallback;
       };
+
+      // If object has an _id key, check if exists before PUTing
+      if (Object.prototype.hasOwnProperty.call(toUpload, '_id')) {
+        // get original before updating with new keys
+        const getRequest = this.db.transaction([storeName], 'readwrite').objectStore(storeName).get(toUpload._id);
+
+        getRequest.onsuccess = () => {
+          const obj = getRequest.result || {};
+          // Add keys of new object, to prevent overwriting all keys of old one
+          Object.keys(toUpload).forEach((key) => {
+            obj[key] = toUpload[key];
+          });
+
+          performRequest(obj);
+        };
+      } else {
+        performRequest(toUpload);
+      }
     }
   }
 

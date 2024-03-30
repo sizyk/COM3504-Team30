@@ -18,7 +18,7 @@ function connectHandler() {
         showMessage('Sync failed. Retrying in 10 seconds...', 'success', 'sync');
         setTimeout(connectHandler, 10000);
       }
-    }).catch(console.error); // Fail silently - rejected promise means nothing to sync
+    }).catch(() => clearMessage()); // Fail silently - rejected promise means nothing to sync
   });
 
   if (IDB.db) {

@@ -33,10 +33,12 @@ export default function updateCard(plant) {
 
   const cardImage = card.querySelector('[data-plant-image]');
 
-  if (cardImage) {
-    cardImage.src = plant.image;
-  } else {
-    card.style.backgroundImage = `url('${plant.image}')`;
+  if (Object.prototype.hasOwnProperty.call(plant, 'image')) {
+    if (cardImage) {
+      cardImage.src = plant.image;
+    } else {
+      card.style.backgroundImage = `url('${plant.image}')`;
+    }
   }
 
   card.querySelector('[data-name]').innerText = plant.name;

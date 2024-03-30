@@ -23,6 +23,7 @@ input {
     appearance: none;
     border: 2px solid var(--background-inverse);
     background-color: var(--error);
+    font-family: 'DM Sans', sans-serif;
 
     &:after {
       position: absolute;
