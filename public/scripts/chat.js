@@ -16,7 +16,6 @@ const userId = document.getElementById('user-id').value;
 const socket = io();
 
 let isChatboxOpen = false;
-let offline = false;
 
 function addUserMessage(message, user) {
   const messageElement = document.createElement('div');
@@ -35,21 +34,18 @@ function connectToRoom() {
   if (navigator.onLine) {
     socket.emit('create or join', roomId, userId);
     fetch(`/api/chat/${roomId}`)
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
+      .then((response) => response.json())
+      .then((data) => {
         if (data) {
-          data.forEach(msg => {
+          data.forEach((msg) => {
             addUserMessage(msg.message, msg.user);
             DBController.addChat(msg, true, () => {}, () => {});
           });
         }
       })
-      .catch(error => console.error('Error:', error));
+      .catch(() => {}); // add later
   } else {
-    console.log('offline');
     DBController.getChatsByPlant(roomId, (chats) => {
-      console.log(chats);
       chats.forEach((chat) => {
         addUserMessage(chat.message, chat.user);
       });
