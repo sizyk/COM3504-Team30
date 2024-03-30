@@ -41,6 +41,7 @@ router.get('/', (req, res) => {
 });
 
 router.post('/create-plant', upload.single('image'), (req, res) => {
+  console.log('create-plant');
   // set up the filepaths as either a file upload or the url
   let filepath;
   if (req.body.imageInput === 'url') {

@@ -20,6 +20,8 @@ exports.create = (plantData, filepath) => {
     hasLeaves: plantData.hasLeaves === 'true',
     hasFruit: plantData.hasFruit === 'true',
     hasSeeds: plantData.hasSeeds === 'true',
+    identificationStatus: 'in-progress', // completed or in-progress
+    identifiedName: '',
   });
 
   // Save the new plant to the database and handle success or failure
@@ -56,6 +58,8 @@ exports.update = async (plantData, filepath) => {
     hasLeaves: plantData.hasLeaves === 'true',
     hasFruit: plantData.hasFruit === 'true',
     hasSeeds: plantData.hasSeeds === 'true',
+    identificationStatus: 'in-progress', // completed or in-progress
+    identifiedName: '',
   };
 
   // Update the plant in the database

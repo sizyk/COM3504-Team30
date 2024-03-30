@@ -123,8 +123,8 @@ function toggleImageInput(plantID) {
   previewError.classList.add('hidden');
 
   // images are only required for new plants, not edits
-  imageInput.required = plantID === 'New';
-  urlInput.required = plantID === 'New';
+  urlInput.required = imageInputCheckbox.checked && plantID === 'New';
+  imageInput.required = !imageInputCheckbox.checked && plantID === 'New';
 
   // show the correct image input field
   if (imageInputCheckbox.checked) {
