@@ -70,3 +70,7 @@ export default function updateCard(plant) {
 
   card.querySelector('[data-colour]').style.backgroundColor = plant.colour;
 }
+
+export function renderCardsOffline() {
+
+}

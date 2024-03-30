@@ -1,5 +1,6 @@
-// import IDB from '../utils/IDB.mjs';
-// import DBController from '../utils/DBController.mjs';
+import IDB from '../utils/IDB.mjs';
+import DBController from '../utils/DBController.mjs';
+import { clearMessage, showMessage } from '../utils/flash-messages.mjs';
 
 /**
  * Fires when internet connection is detected.
@@ -7,16 +8,22 @@
  * Also pushes all plants from sync-queue to mongoDB
  */
 function connectHandler() {
-  // // Use event listener to prevent sync attempts occurring before IDB is open
-  // window.addEventListener('idb-open', () => {
-  //   console.log('You are now online, syncing...');
-  //   // Synchronise all events that were performed offline
-  //   DBController.synchronise();
-  // });
-  //
-  // if (IDB.db) {
-  //   window.dispatchEvent(new Event('idb-open'));
-  // }
+  // Use event listener to prevent sync attempts occurring before IDB is open
+  window.addEventListener('idb-open', () => {
+    // Synchronise all events that were performed offline
+    DBController.synchronise().then((success) => {
+      if (success) {
+        showMessage('Sync complete!', 'success', 'sync');
+      } else {
+        showMessage('Sync failed. Retrying in 10 seconds...', 'success', 'sync');
+        setTimeout(connectHandler, 10000);
+      }
+    }).catch(console.error); // Fail silently - rejected promise means nothing to sync
+  });
+
+  if (IDB.db) {
+    window.dispatchEvent(new Event('idb-open'));
+  }
 }
 
 /**

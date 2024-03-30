@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
     const data = {
       title: 'All Plants',
       plants: allPlants || [],
-      scripts: ['filters', 'plantForm'],
+      scripts: ['filters', 'plantForm', 'ejs.min'],
     };
 
     renderLayout(res, 'index', data);

@@ -46,10 +46,21 @@ class IDB {
    */
   put(storeName, object, successCallback = defaultSuccess, failureCallback = defaultError) {
     if (this.db && object) {
-      const request = this.db.transaction([storeName], 'readwrite').objectStore(storeName).put(object);
+      // get original before updating with new keys
+      const getRequest = this.db.transaction([storeName], 'readwrite').objectStore(storeName).get(object._id);
 
-      request.onsuccess = successCallback;
-      request.onerror = failureCallback;
+      getRequest.onsuccess = () => {
+        const obj = getRequest.result;
+
+        Object.keys(object).forEach((key) => {
+          obj[key] = object[key];
+        });
+
+        const request = this.db.transaction([storeName], 'readwrite').objectStore(storeName).put(obj);
+
+        request.onsuccess = successCallback;
+        request.onerror = failureCallback;
+      };
     }
   }
 

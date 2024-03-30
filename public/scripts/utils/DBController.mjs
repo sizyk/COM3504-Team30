@@ -9,6 +9,9 @@ function defaultError(message) {
   showMessage(message, 'error', 'error');
 }
 
+// List of stores that should be synchronised
+const SYNC_STORES = ['plants'];
+
 /**
  * @class DBController
  * Controls all client-side database operations
@@ -21,17 +24,6 @@ class DBController {
    */
   constructor() {
     this.idb = IDB;
-  }
-
-  static async requestSync() {
-    const registration = await navigator.serviceWorker.ready;
-    try {
-      await registration.sync.register('sync-idb');
-      return true;
-    } catch {
-      console.error('Background Sync could not be registered!');
-      return false;
-    }
   }
 
   /**
@@ -52,7 +44,6 @@ class DBController {
         () => onSuccess('Successfully saved to local database! Update will be synchronised next time you connect to the internet.', toSend),
         () => onError('Operation failed to queue! Please try again.'),
       );
-      DBController.requestSync().then(() => {});
       return;
     }
 
@@ -96,7 +87,6 @@ class DBController {
         () => onSuccess('Successfully deleted from local database! Deletion will be synchronised next time you connect to the internet.'),
         () => onError('Operation failed to queue! Please try again.'),
       );
-      DBController.requestSync().then(() => {});
       return;
     }
 
@@ -169,73 +159,112 @@ class DBController {
    * @returns {Promise<boolean>} resolves to `true` when all queued synchronisations have completed
    */
   IDBToMongo() {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       this.idb.getAll('sync-queue', (transaction) => {
+        // Only show message if there is anything to sync
+        if (transaction.target.result.length > 0) {
+          showMessage('You are now online, syncing...', 'info', 'sync', true);
+        } else {
+          // Reject promise if nothing to sync
+          reject();
+        }
+
         // Create array stating whether each queued synchronisation has been resolved
         const resolver = Array(transaction.target.result.length).fill(false);
-        const i = 0;
+        let i = 0;
         transaction.target.result.forEach((syncObject) => {
+          let op;
           switch (syncObject.operation) {
             case 'put':
-              this.createOrUpdate(syncObject.store, syncObject.queuedObject, () => {
-                this.idb.delete('sync-queue', syncObject._id, () => {
-                  resolver[i] = true;
-                  if (resolver.every((v) => v === true)) {
-                    resolve(true);
-                  }
-                });
-              });
+              op = (store, obj, success, fail) => this.createOrUpdate(store, obj, success, fail);
               break;
             case 'delete':
-              this.delete(syncObject.store, syncObject.queuedObject, () => {
-                this.idb.delete('sync-queue', syncObject._id, () => {
-                  resolver[i] = true;
-                  if (resolver.every((v) => v === true)) {
-                    resolve(true);
-                  }
-                });
-              });
+              op = (store, obj, success, fail) => this.delete(store, obj, success, fail);
               break;
             default:
+              resolve(false);
               defaultError('Illegal operation in synchronise!');
+              return;
           }
+
+          // Perform selected operation
+          op(syncObject.store, syncObject.queuedObject, () => {
+            this.idb.delete('sync-queue', syncObject._id, () => {
+              resolver[i] = true;
+              i += 1;
+              // Check if all operations have finished, if so then resolve as true
+              if (resolver.every((v) => v === true)) {
+                resolve(true);
+              }
+            }, () => resolve(false));
+          }, () => resolve(false));
         });
-      }, console.error);
+      }, () => resolve(false));
     });
   }
 
   /**
-   * horrible code to synchronise from IDB to mongoDB, and then the other way round
-   * @returns {Promise<boolean>} resolves to true once complete
+   * Synchronises data from mongoDB to IndexedDB
+   * @returns {Promise<boolean>} resolves to true if all sync successfully, false if any fail
    */
-  synchronise() {
+  mongoToIDB() {
+    /**
+     * Wrapper for deleting a local object from IDB, and adding a remote one
+     * Refactored to here as having it in the promise is far too messy
+     * @param store {string} the store to update
+     * @param obj {object} the object to update
+     * @param resolver {boolean[]} list of booleans, representing sync completeness
+     * @param i {number} the index in 'resolver' of this operation
+     * @param resolve {function} the promise's resolve function
+     */
+    const deleteObject = (store, obj, resolver, i, resolve) => {
+      this.idb.delete(store, obj._id, () => {
+        // Removal was successful, attempt to update with new plant
+        this.idb.put(store, obj, () => {
+          resolver[i] = true;
+          if (resolver.every((v) => v === true)) {
+            resolve(true);
+          }
+        }, () => {
+          resolve(false);
+        });
+      }, () => {
+        resolve(false);
+      });
+    };
+
     return new Promise((resolve) => {
-      this.IDBToMongo().then(() => {
-        // Sync all plants to indexedDB
-        fetch('/api/plants/get-all')
+      // Sync each store from mongoDB to indexedDB
+      SYNC_STORES.forEach((store) => {
+        // Sync all objects to indexedDB
+        fetch(`/api/${store}/get-all`)
           .then((res) => res.json())
-          .then((plants) => {
-            const resolver = Array(plants.length).fill(false);
+          .then((objects) => {
+            const resolver = Array(objects.length).fill(false);
             let i = 0;
-            plants.forEach((p) => {
+            objects.forEach((o) => {
               // Attempt to remove current plant from indexedDB, to be replaced with updated one
+              deleteObject(store, o, resolver, i, resolve);
               i += 1;
-              IDB.delete(
-                'plants',
-                p._id,
-                () => {
-                  // Removal was successful, attempt to update with new plant
-                  IDB.put('plants', p, () => {
-                    resolver[i] = true;
-                    if (resolver.every((v) => v === true)) {
-                      resolve(true);
-                    }
-                  });
-                },
-              );
             });
           });
       });
+    });
+  }
+
+  /**
+   * Synchronise from IDB to mongoDB, and then the other way round
+   * @returns {Promise<boolean>} resolves to true once complete
+   */
+  synchronise() {
+    return new Promise((resolve, reject) => {
+      this.IDBToMongo().then((success) => {
+        if (!success) {
+          resolve(false);
+        } else {
+          this.mongoToIDB().then(resolve);
+        }
+      }).catch(reject);
     });
   }
 }
