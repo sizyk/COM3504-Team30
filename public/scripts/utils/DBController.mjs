@@ -41,7 +41,7 @@ class DBController {
         collection,
         toSend,
         'put',
-        () => onSuccess('Successfully saved to local database! Update will be synchronised when server connection is regained.', toSend),
+        () => onSuccess('Successfully saved to local database! Update will be synchronised next time you connect to the internet.', toSend),
         () => onError('Operation failed to queue! Please try again.'),
       );
     };
@@ -65,7 +65,7 @@ class DBController {
 
       // Throw error if status code not 200 (OK)
       throw new Error(`code ${res.status}`);
-    // Report success/error with respective callback functions
+      // Report success/error with respective callback functions
     }).then((resJson) => {
       onSuccess(resJson.message, resJson.object);
     }).catch(() => {
@@ -88,7 +88,7 @@ class DBController {
         collection,
         id,
         'delete',
-        () => onSuccess('Successfully deleted from local database! Deletion will be synchronised when server connection is regained.'),
+        () => onSuccess('Successfully deleted from local database! Deletion will be synchronised next time you connect to the internet.'),
         () => onError('Operation failed to queue! Please try again.'),
       );
     };

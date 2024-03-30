@@ -34,6 +34,14 @@ router.get('/:collection/get-all', (req, res) => {
     .then((object) => res.status(200).json(object));
 });
 
+router.get('/chat/:roomId', (req, res) => {
+  chatController.getChat({ plant: req.params.roomId })
+    .then((object) => {
+      res.status(200).json(object);
+      console.log(object);
+    });
+});
+
 /**
  * Wrapper for controller upsert method
  */

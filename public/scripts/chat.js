@@ -16,6 +16,7 @@ const userId = document.getElementById('user-id').value;
 const socket = io();
 
 let isChatboxOpen = false;
+let offline = false;
 
 function addUserMessage(message, user) {
   const messageElement = document.createElement('div');
@@ -33,10 +34,22 @@ function addUserMessage(message, user) {
 function connectToRoom() {
   if (navigator.onLine) {
     socket.emit('create or join', roomId, userId);
-    socket.emit('oldMessages', roomId);
+    fetch(`/api/chat/${roomId}`)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        if (data) {
+          data.forEach(msg => {
+            addUserMessage(msg.message, msg.user);
+            DBController.addChat(msg, true, () => {}, () => {});
+          });
+        }
+      })
+      .catch(error => console.error('Error:', error));
   } else {
-    DBController.getChatsByPlant(roomId, (event) => {
-      const chats = event.target.result;
+    console.log('offline');
+    DBController.getChatsByPlant(roomId, (chats) => {
+      console.log(chats);
       chats.forEach((chat) => {
         addUserMessage(chat.message, chat.user);
       });
@@ -51,7 +64,7 @@ function clearChatbox() {
 function toggleChatbox() {
   chatContainer.classList.toggle('hidden');
   isChatboxOpen = !isChatboxOpen;
-  if (isChatboxOpen && navigator.onLine) {
+  if (isChatboxOpen) {
     connectToRoom();
   } else if (!isChatboxOpen) {
     clearChatbox();
