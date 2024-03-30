@@ -3,23 +3,23 @@ const log = require('debug')('app:db');
 const PlantModel = require('../models/plants');
 
 // Function to create new plants
-exports.create = (plantData) => {
+exports.create = (plantData, filepath) => {
   // Create a new plant model
   const plant = new PlantModel({
-    author: plantData.author,
+    author: 'placeholder', // replace with user when implemented
     name: plantData.name,
     description: plantData.description,
-    dateTimeSeen: plantData.dateTimeSeen,
-    size: plantData.size,
+    dateTimeSeen: new Date(plantData.dateTimeSeen),
+    size: parseFloat(plantData.size),
     sunExposure: plantData.sunExposure,
     colour: plantData.colour,
     longitude: plantData.longitude,
     latitude: plantData.latitude,
-    image: plantData.image,
-    hasFlowers: plantData.hasFlowers,
-    hasLeaves: plantData.hasLeaves,
-    hasFruit: plantData.hasFruit,
-    hasSeeds: plantData.hasSeeds,
+    image: filepath,
+    hasFlowers: plantData.hasFlowers === 'true', // Checkboxes have no value if not checked, so manually check whether they are true
+    hasLeaves: plantData.hasLeaves === 'true',
+    hasFruit: plantData.hasFruit === 'true',
+    hasSeeds: plantData.hasSeeds === 'true',
   });
 
   // Save the new plant to the database and handle success or failure
@@ -37,6 +37,46 @@ exports.create = (plantData) => {
       // return null in case of an error
       return null;
     });
+};
+
+// Function to update plant
+exports.update = async (plantData, filepath) => {
+  const plant = { // Get data from the form
+    author: 'placeholder', // replace with user when implemented
+    name: plantData.name,
+    description: plantData.description,
+    dateTimeSeen: new Date(plantData.dateTimeSeen),
+    size: parseFloat(plantData.size),
+    sunExposure: plantData.sunExposure,
+    colour: plantData.colour,
+    image: filepath,
+    longitude: plantData.longitude,
+    latitude: plantData.latitude,
+    hasFlowers: plantData.hasFlowers === 'true', // Checkboxes have no value if not checked, so manually check whether they are true
+    hasLeaves: plantData.hasLeaves === 'true',
+    hasFruit: plantData.hasFruit === 'true',
+    hasSeeds: plantData.hasSeeds === 'true',
+  };
+
+  // Update the plant in the database
+  try {
+    const updatedModel = await PlantModel.findByIdAndUpdate(plantData.id, plant, { new: true });
+    log(updatedModel);
+  } catch (error) {
+    log(error);
+  }
+};
+
+// Function to delete plant
+exports.delete = async (id) => {
+  // Delete the plant from the database
+  try {
+    const updatedModel = await PlantModel.findByIdAndDelete(id);
+    log(updatedModel);
+    // Redirect to some page or send a response indicating success
+  } catch (error) {
+    log(error);
+  }
 };
 
 // Function to get all plants
