@@ -9,9 +9,6 @@ require('../databases/plants'); // Configure database
 const serverLog = require('debug')('app:server');
 const errorLog = require('debug')('app:error');
 const http = require('http');
-const io = require('socket.io')(server, {
-  pingTimeout: 60000,
-});
 const socketModule = require('../controllers/socket-io');
 const app = require('../app');
 
@@ -47,6 +44,10 @@ app.set('port', port);
  */
 
 const server = http.createServer(app);
+
+const io = require('socket.io')(server, {
+  pingTimeout: 60000,
+});
 
 /**
  * Event listener for HTTP server "error" event.
