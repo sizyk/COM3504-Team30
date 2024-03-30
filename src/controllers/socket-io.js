@@ -19,12 +19,10 @@ exports.init = function (io) {
       });
 
       socket.on('chat', (room, params) => {
-        console.log(params);
         io.to(room).emit('chat', params);
       });
 
       socket.on('disconnect', () => {
-        console.log('someone disconnected');
       });
     } catch (e) { /* empty */ }
   });

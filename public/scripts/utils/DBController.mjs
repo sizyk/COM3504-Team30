@@ -25,9 +25,8 @@ class DBController {
 
   /**
    * Adds Chat to the database and tries to upload to mongoDB
-   * @param collection {string} the collection to perform the 'upsert' operation on.
-   * @param toUpload {{obj: Object, formData: FormData}} the object to upload to
-   *        IndexedDB, and the FormData to upload to mongoDB (allows files)
+   * @param chat the chat object to upload to IndexedDB and mongoDB
+   * @param local {boolean} whether to only save to local database (default: false)
    * @param onSuccess {function(string, Object): void} callback function to run on success -
    *        takes a message (as a string) and, optionally, the updated/created object.
    * @param onError {function(string): void} callback function to run on error -
@@ -44,24 +43,11 @@ class DBController {
     }
   }
 
-  /**
-   * POSTs data from a form to an API endpoint for a given collection
-   * @param collection {string} the database collection to PUT to.
-   * @param chat {Chat} the object to send to the API endpoint
-   *        (must be FormData if sending files).
-   * @param onSuccess {function(string, Object): void} callback function to run on success -
-   *        takes a message (as a string) and, optionally, the updated/created object.
-   * @param onError {function(string): void} callback function to run on error -
-   *        takes a message (as a string).
-   */
   static mongoAddChat(collection, chat , idb, onSuccess = defaultSuccess, onError = defaultError) {
     if (!navigator.onLine) {
       onSuccess('Successfully saved to local database!');
       return;
     }
-
-    const id = chat._id.toString(16)
-    console.log(id)
 
     // Post to mongoDB endpoint
     fetch(`/api/${collection}`, {
@@ -158,8 +144,9 @@ class DBController {
     const collection = 'chat';
     const tx = this.idb.db.transaction([collection], 'readonly');
     const store = tx.objectStore(collection);
-    const index = store.index('plant')
+    const index = store.index('plant');
     const request = index.getAll(IDBKeyRange.only(plantId));
+    console.log(request)
 
     request.onsuccess = () => {
       onSuccess(request.result);
