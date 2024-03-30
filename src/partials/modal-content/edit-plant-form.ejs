@@ -2,6 +2,7 @@
   id="editPlantForm-<%= plant._id %>"
   target="fakesubmit"
   data-form="plant"
+  data-plant="<%= plant._id %>"
   enctype="multipart/form-data"
   method="POST"
   autocomplete="off"
@@ -179,7 +180,6 @@
         value="url"
         class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
         data-change="toggle-input"
-        data-plant="<%= plant._id %>"
       />
       <label for="imageInputCheckbox" class="ms-2 text-sm font-medium text-text">Use URL for image?</label>
     </div>
@@ -208,7 +208,6 @@
       aria-describedby="file_input_help"
       accept="image/png, image/jpeg, image/gif"
       data-change="preview"
-      data-plant="<%= plant._id %>"
       data-default="<%= plant.image %>"
     />
   </div>
@@ -226,7 +225,6 @@
       class="form-input hover-button w-1/4 grow-0 rounded px-4 py-2 font-bold"
       type="button"
       data-click="preview"
-      data-plant="<%= plant._id %>"
     >
       Preview
     </button>
@@ -277,7 +275,6 @@
       class="form-input hover-button w-1/4 grow-0 rounded px-4 py-2 font-bold"
       type="button"
       data-click="geolocation"
-      data-plant="<%=plant._id%>"
     >
       Get
     </button>
@@ -295,7 +292,6 @@
       type="button"
       class="form-input hover-button-error rounded px-4 py-2 font-bold"
       data-click="delete"
-      data-plant="<%=plant._id%>"
     >
       Delete
     </button>

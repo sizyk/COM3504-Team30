@@ -313,19 +313,19 @@ function submitPlantForm(formElem) {
  */
 function addEventListeners(card) {
   card.querySelectorAll('[data-click="geolocation"]').forEach((elem) => {
-    elem.addEventListener('click', () => getLocation(elem.dataset.plant));
+    elem.addEventListener('click', () => getLocation(card.dataset.plant));
   });
 
   card.querySelectorAll('[data-click="delete"]').forEach((elem) => {
-    elem.addEventListener('click', () => deletePlant(elem.dataset.plant));
+    elem.addEventListener('click', () => deletePlant(card.dataset.plant));
   });
 
   card.querySelectorAll('[data-change="preview"]').forEach((elem) => {
-    elem.addEventListener('change', () => previewImage(elem.dataset.plant));
+    elem.addEventListener('change', () => previewImage(card.dataset.plant));
   });
 
   card.querySelectorAll('[data-click="preview"]').forEach((elem) => {
-    elem.addEventListener('click', () => previewImage(elem.dataset.plant));
+    elem.addEventListener('click', () => previewImage(card.dataset.plant));
   });
 
   card.querySelectorAll('[data-form="plant"]').forEach((formElem) => {
@@ -333,16 +333,24 @@ function addEventListeners(card) {
   });
 
   card.querySelectorAll('[data-change="toggle-input"]').forEach((elem) => {
-    elem.addEventListener('change', () => toggleImageInput(elem.dataset.plant));
+    elem.addEventListener('change', () => toggleImageInput(card.dataset.plant));
   });
 
+  // If image cannot be loaded for whatever reason, throw a 415 error (Unsupported Media Type)
   card.querySelector('[data-img="preview"]').addEventListener('error', () => handleErrorResponse(415, card.dataset.plant));
+
+  card.querySelector('input[name="url"]').addEventListener('keydown', (e) => {
+    if (e.code === 'Enter') {
+      e.preventDefault();
+      previewImage(card.dataset.plant).then(() => {});
+    }
+  });
 }
 
-const plantAddModal = document.getElementById('plant-add-modal');
+const plantAddForm = document.getElementById('createPlantForm');
 
-if (plantAddModal) {
-  addEventListeners(plantAddModal);
+if (plantAddForm) {
+  addEventListeners(plantAddForm);
 }
 
 document.querySelectorAll('[data-plant-card]').forEach(addEventListeners);
