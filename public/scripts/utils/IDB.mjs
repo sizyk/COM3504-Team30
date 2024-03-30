@@ -33,24 +33,9 @@ class IDB {
 
       this.db.createObjectStore('plants', { keyPath: '_id' });
       this.db.createObjectStore('sync-queue', { keyPath: '_id' });
-      this.db.createObjectStore('chat', { keyPath: '_id' });
+      const chatStore = this.db.createObjectStore('chat', { keyPath: '_id' });
+      chatStore.createIndex('plant', 'plant', { unique: false });
     };
-  }
-
-  /**
-   * PUTs an object to a store (creates or updates)
-   * @param storeName {string} the store to PUT to
-   * @param object {Object} the object to put into the store
-   * @param successCallback {function(Event): void} the function to call on transaction success
-   * @param failureCallback {function(Event): void} the function to call on transaction failure
-   */
-  put(storeName, object, successCallback = defaultSuccess, failureCallback = defaultError) {
-    if (this.db && object) {
-      const request = this.db.transaction([storeName], 'readwrite').objectStore(storeName).put(object);
-
-      request.onsuccess = successCallback;
-      request.onerror = failureCallback;
-    }
   }
 
   /**
@@ -64,21 +49,6 @@ class IDB {
     if (this.db) {
       const request = this.db.transaction([storeName], 'readwrite').objectStore(storeName).delete(id);
       console.log('hey')
-
-      request.onsuccess = successCallback;
-      request.onerror = failureCallback;
-    }
-  }
-
-  /**
- * Retrieves all objects from a store
- * @param storeName {string} the store to retrieve from
- * @param successCallback {function(Event): void} the function to call on transaction success
- * @param failureCallback {function(Event): void} the function to call on transaction failure
- */
-  getAll(storeName, successCallback = defaultSuccess, failureCallback = defaultError) {
-    if (this.db) {
-      const request = this.db.transaction([storeName], 'readonly').objectStore(storeName).getAll();
 
       request.onsuccess = successCallback;
       request.onerror = failureCallback;
