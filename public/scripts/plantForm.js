@@ -242,9 +242,9 @@ function submitPlantForm(formElem) {
   const shouldShowUrl = formElem.querySelector('[data-change="toggle-input"]');
 
   const plantID = params.has('_id') ? params.get('_id') : 'New';
-  console.log(`imageValidated${plantID}`);
+
   // Ensure user has validated their image
-  if (shouldShowUrl.checked && !document.getElementById(`imageValidated${plantID}`).checked) {
+  if (shouldShowUrl.checked && params.get('url').trim() !== '' && !document.getElementById(`imageValidated${plantID}`).checked) {
     handleErrorResponse('not-validated', plantID);
     return;
   }
@@ -284,9 +284,12 @@ function submitPlantForm(formElem) {
     hasSeeds: params.get('hasSeeds'),
   };
 
-  // If use is using a URL, simply add it to the plant
+  // If user is using a URL, simply add it to the plant
   if (shouldShowUrl.checked) {
-    plant.image = params.get('url').toString();
+    // Only update URL if one was passed
+    if (params.get('url').trim().length > 0) {
+      plant.image = params.get('url').trim();
+    }
     submitPlantToDB(plant);
   } else {
     // If not using a URL, read file as base64
