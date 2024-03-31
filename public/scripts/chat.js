@@ -85,7 +85,7 @@ function sendChatMessage() {
       socket.emit('chat', roomId, newChat);
     } else {
       addUserMessage(userMessage, userId);
-      DBController.addChat(newChat, () => {});
+      DBController.addChat(newChat, false, () => {});
     }
     userInput.value = '';
   }
@@ -113,7 +113,7 @@ function init() {
         message: params.message,
         dateTime: params.dateTime,
       };
-      DBController.addChat(newChat);
+      DBController.addChat(newChat, false, () => {});
       addUserMessage(params.message, params.user);
     } catch (error) {
       showMessage('Failed to send message', 'error');
