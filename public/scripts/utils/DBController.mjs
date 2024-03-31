@@ -32,18 +32,18 @@ class DBController {
    * @param onError {function(string): void} callback function to run on error -
    *        takes a message (as a string).
    */
-  async addChat(chat, local = false, onSuccess = defaultSuccess, onError = defaultError ) {
+  async addChat(chat, local = false, onSuccess = defaultSuccess, onError = defaultError) {
     const collection = 'chat';
     const tx = this.idb.db.transaction([collection], 'readwrite');
     const store = tx.objectStore(collection);
     await store.add(chat);
     await tx.done;
     if (!local) {
-      DBController.mongoAddChat(collection, chat, this.idb, () => {}, onError);
+      DBController.mongoAddChat(collection, chat, this.idb, onSuccess, onError);
     }
   }
 
-  static mongoAddChat(collection, chat , idb, onSuccess = defaultSuccess, onError = defaultError) {
+  static mongoAddChat(collection, chat, idb, onSuccess = defaultSuccess, onError = defaultError) {
     if (!navigator.onLine) {
       onSuccess('Successfully saved to local database!');
       return;
@@ -69,31 +69,6 @@ class DBController {
     }).catch((error) => {
       onError(error);
     });
-  }
-
-  static deleteFromIDB(collection, id, idb, onSuccess = defaultSuccess, onError = defaultError) {
-    // Check if the IndexedDB instance exists
-    if (!idb) {
-      onError('IndexedDB instance not found');
-      return;
-    }
-
-    // Open a transaction to the specified collection in readwrite mode
-    const transaction = idb.db.transaction([collection], 'readwrite');
-
-    // Get the store from the transaction
-    const store = transaction.objectStore(collection);
-
-    // Call the delete method on the store with the specified id
-    const request = store.delete(id);
-
-    // Handle the success and error events of the request
-    request.onsuccess = (event) => {
-      onSuccess(`Successfully deleted object with ID ${id} from IndexedDB`);
-    };
-    request.onerror = (event) => {
-      onError(`Failed to delete object with ID ${id} from IndexedDB`);
-    };
   }
 
   /**
@@ -132,10 +107,10 @@ class DBController {
     const request = store.getAll();
 
     // Handle the success and error events of the request
-    request.onsuccess = (event) => {
+    request.onsuccess = () => {
       onSuccess(request.result);
     };
-    request.onerror = (event) => {
+    request.onerror = () => {
       onError(`Failed to get all objects from ${collection} in IndexedDB`);
     };
   }
@@ -146,11 +121,11 @@ class DBController {
     const store = tx.objectStore(collection);
     const index = store.index('plant');
     const request = index.getAll(IDBKeyRange.only(plantId));
-    console.log(request)
+    console.log(request);
 
     request.onsuccess = () => {
       onSuccess(request.result);
-    }
+    };
     request.onerror = onError;
   }
 }

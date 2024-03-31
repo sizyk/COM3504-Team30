@@ -1,7 +1,6 @@
 import IDB from '../utils/IDB.mjs';
 import DBController from '../utils/DBController.mjs';
 
-
 function syncChat() {
   // Sync all chat messages to mongoDB
 
@@ -15,13 +14,11 @@ function syncChat() {
       const chats = request.result;
       // For each chat message, try to upload it to MongoDB
       chats.forEach((chat) => {
-        DBController.addChat(chat);
+        DBController.addChat(chat, false, () => {});
       });
     };
-  })
-
+  });
 }
-
 
 /**
  * Initialises syncing functionality
@@ -29,7 +26,6 @@ function syncChat() {
 export default function initSyncing() {
   if (window.navigator.onLine) {
     syncChat();
-  } else {
   }
 
   window.addEventListener('online', syncChat);

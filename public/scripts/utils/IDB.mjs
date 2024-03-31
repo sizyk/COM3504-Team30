@@ -48,7 +48,6 @@ class IDB {
   delete(storeName, id, successCallback = defaultSuccess, failureCallback = defaultError) {
     if (this.db) {
       const request = this.db.transaction([storeName], 'readwrite').objectStore(storeName).delete(id);
-      console.log('hey')
 
       request.onsuccess = successCallback;
       request.onerror = failureCallback;

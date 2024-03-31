@@ -8,8 +8,8 @@
     "watch-js": "nodemon ./src/bin/www",
     "start": "concurrently --raw --kill-others \"npm:watch-*\"",
     "prettify": "prettier -w **/*.ejs",
-    "lint": "eslint --color '**/*.js' '**/bin/www'",
-    "lint:fix": "eslint --color '**/*.js' '**/bin/www' --fix"
+    "lint": "eslint --color '**/*.js' '**/bin/www' '**/*.mjs'",
+    "lint:fix": "eslint --color '**/*.js' '**/bin/www' '**/*.mjs' --fix"
   },
   "dependencies": {
     "body-parser": "^1.20.2",
