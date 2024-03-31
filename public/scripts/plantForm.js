@@ -338,15 +338,22 @@ export default function addEventListeners(card) {
     elem.addEventListener('change', () => toggleImageInput(card.dataset.plant));
   });
 
+  // Wrap these last two in try/catch as single querySelector means event listener will throw error
+  // if nothing is found
   // If image cannot be loaded for whatever reason, throw a 415 error (Unsupported Media Type)
-  card.querySelector('[data-img="preview"]').addEventListener('error', () => handleErrorResponse(415, card.dataset.plant));
+  try {
+    card.querySelector('[data-img="preview"]').addEventListener('error', () => handleErrorResponse(415, card.dataset.plant));
+  } catch (e) { /* empty */ }
 
-  card.querySelector('input[name="url"]').addEventListener('keydown', (e) => {
-    if (e.code === 'Enter') {
-      e.preventDefault();
-      previewImage(card.dataset.plant).then(() => {});
-    }
-  });
+  try {
+    card.querySelector('input[name="url"]').addEventListener('keydown', (e) => {
+      if (e.code === 'Enter') {
+        e.preventDefault();
+        previewImage(card.dataset.plant).then(() => {
+        });
+      }
+    });
+  } catch (e) { /* empty */ }
 }
 
 const plantAddForm = document.getElementById('createPlantForm');

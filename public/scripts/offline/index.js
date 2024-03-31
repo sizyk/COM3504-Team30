@@ -1,8 +1,8 @@
 import { showMessage } from '../utils/flash-messages.mjs';
-import IDB from '../utils/IDB.mjs';
 import { buildSpottedString } from '../utils/plantUtils.mjs';
 import { initialiseModal } from '../global-scripts/modals.mjs';
 import addEventListeners from '../plantForm.js';
+import DBController from '../utils/DBController.mjs';
 
 showMessage('Connection to server lost! Showing locally stored plants.', 'info', 'wifi_off');
 
@@ -10,8 +10,8 @@ const plantGrid = document.getElementById('plant-grid');
 
 const ejsTemplate = await fetch('/public/cached-views/plant-card.ejs').then((res) => res.text());
 
-IDB.getAll('plants', (e) => {
-  e.target.result.forEach((plant) => {
+DBController.get('plants', {}, (plants) => {
+  plants.forEach((plant) => {
     plant.spottedString = buildSpottedString(plant);
     plant.dateTimeSeen = new Date(plant.dateTimeSeen);
     // eslint-disable-next-line no-undef

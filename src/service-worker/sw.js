@@ -10,8 +10,10 @@ self.addEventListener('install', (event) => {
 
     const cache = await caches.open(CACHE_NAME);
     await cache.addAll([
-      '/public/cached-views/plant-card.ejs',
       '/public/cached-views/empty-index.html',
+      '/public/cached-views/empty-plant.html',
+      '/public/cached-views/plant.ejs',
+      '/public/cached-views/plant-card.ejs',
 
       '/public/fonts/dm-sans.ttf',
       '/public/fonts/dm-sans-italic.ttf',
@@ -38,12 +40,14 @@ self.addEventListener('install', (event) => {
       '/public/scripts/global-scripts/touchHover.mjs',
 
       '/public/scripts/offline/index.js',
+      '/public/scripts/offline/plant.js',
 
       '/public/scripts/utils/DBController.mjs',
       '/public/scripts/utils/flash-messages.mjs',
       '/public/scripts/utils/IDB.mjs',
       '/public/scripts/utils/plantUtils.mjs',
 
+      '/public/scripts/chat.js',
       '/public/scripts/ejs.min.js',
       '/public/scripts/filters.js',
       '/public/scripts/global.js',
@@ -80,8 +84,25 @@ self.addEventListener('fetch', (event) => {
   let offlineResponse = caches.match(url);
 
   if (url.pathname === '/') {
-    // User is requesting index, return empty one if offline
-    offlineResponse = caches.match('/public/cached-views/empty-index.html');
+    // User is requesting index, return empty one if offline (will be populated by script)
+    offlineResponse = caches.match('/public/cached-views/empty-index.html').then((res) => {
+      if (res) {
+        return res;
+      }
+
+      return '404';
+    });
+  }
+
+  if (url.pathname.startsWith('/plant/')) {
+    // User is requesting a single plant, return empty one if offline (will be populated by script)
+    offlineResponse = caches.match('/public/cached-views/empty-plant.html').then((res) => {
+      if (res) {
+        return res;
+      }
+
+      return '404';
+    });
   }
 
   // Attempt to fetch, if error occurs then fetch from cache

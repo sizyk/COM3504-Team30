@@ -10,7 +10,7 @@ function defaultError(message) {
 }
 
 // List of stores that should be synchronised
-const SYNC_STORES = ['plants'];
+const SYNC_STORES = ['plants', 'chats'];
 
 /**
  * @class DBController
@@ -24,6 +24,38 @@ class DBController {
    */
   constructor() {
     this.idb = IDB;
+  }
+
+  /**
+   * GETs data from an API endpoint for a given collection
+   * @param collection {string} the database collection to GET from.
+   * @param filters {Object} any filters to apply to the request.
+   * @param onSuccess {function(Object[]): void} callback function to run on success -
+   *        takes the retrieved object(s)
+   * @param onError {function(string): void} callback function to run on error -
+   *        takes a message (as a string).
+   */
+  static mongoGet(collection, filters, onSuccess = defaultSuccess, onError = defaultError) {
+    if (!navigator.onLine) {
+      onError(`Failed to GET from ${collection}: No internet connection detected`);
+      return;
+    }
+
+    // Get from mongoDB endpoint
+    fetch(`/api/${collection}?${new URLSearchParams(filters)}`)
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+
+        // Throw error if status code not 200 (OK)
+        throw new Error(`code ${res.status}`);
+      // Report success/error with respective callback functions
+      }).then((resJson) => {
+        onSuccess(resJson);
+      }).catch((error) => {
+        onError(`Failed to GET from ${collection}: ${error}`);
+      });
   }
 
   /**
@@ -116,6 +148,27 @@ class DBController {
       onSuccess(resJson.message);
     }).catch(() => {
       offlineCB();
+    });
+  }
+
+  /**
+   * Retrieves objects from a collection
+   * @param collection {string} the collection to retrieve from.
+   * @param filters {Object} the filters to apply.
+   * @param onSuccess {function(Object[]): void} callback function to run on success -
+   *        takes the retrieved object(s).
+   * @param onError {function(string): void} callback function to run on error -
+   *        takes a message (as a string).
+   */
+  get(collection, filters, onSuccess = defaultSuccess, onError = defaultError) {
+    // First, attempt to GET from mongoDB - if that fails then retrieve from indexedDB
+    DBController.mongoGet(collection, filters, onSuccess, () => {
+      this.idb.get(
+        collection,
+        filters,
+        onSuccess,
+        () => onError(`Failed to fetch from ${collection}`),
+      );
     });
   }
 
@@ -243,7 +296,7 @@ class DBController {
       // Sync each store from mongoDB to indexedDB
       SYNC_STORES.forEach((store) => {
         // Sync all objects to indexedDB
-        fetch(`/api/${store}/get-all`)
+        fetch(`/api/${store}`)
           .then((res) => res.json())
           .then((objects) => {
             const resolver = Array(objects.length).fill(false);
@@ -253,7 +306,8 @@ class DBController {
               deleteObject(store, o, resolver, i, resolve);
               i += 1;
             });
-          });
+          })
+          .catch(() => resolve(false));
       });
     });
   }

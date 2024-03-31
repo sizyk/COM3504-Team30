@@ -16,29 +16,31 @@
 const Express = require('express');
 
 const plantsController = require('../controllers/plants');
-const chatController = require('../controllers/chat');
+const chatController = require('../controllers/chats');
 
 const collectionControllers = {
   plants: plantsController,
-  chat: chatController,
+  chats: chatController,
 };
 
 const router = Express.Router();
 
 /**
- * Wrapper for controller 'get' method
+ * Wrapper for controller 'get' method.
+ * Pass filters as URL-encoded query, or pass nothing to get all objects in collection
+ *
+ * @example
+ * // URL to retrieve all plants in the database
+ * /api/plants
+ *
+ * @example
+ * // URL to retrieve all plants that have fruit & were authored by 'John Smith'
+ * /api/plants?hasFruit=true&author=John%20Smith
  */
-router.get('/:collection/get-all', (req, res) => {
-  // Call the get method of the controller that corresponds to the requested collection
-  collectionControllers[req.params.collection].get({})
+router.get('/:collection', (req, res) => {
+  // Call the get method of the controller that for the requested collection, using query as filter
+  collectionControllers[req.params.collection].get(req.query)
     .then((object) => res.status(200).json(object));
-});
-
-router.get('/chat/:roomId', (req, res) => {
-  chatController.getChat({ plant: req.params.roomId })
-    .then((object) => {
-      res.status(200).json(object);
-    });
 });
 
 /**

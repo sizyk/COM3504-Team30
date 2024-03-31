@@ -15,8 +15,7 @@ function connectHandler() {
       if (success) {
         showMessage('Sync complete!', 'success', 'sync');
       } else {
-        showMessage('Sync failed. Retrying in 10 seconds...', 'success', 'sync');
-        setTimeout(connectHandler, 10000);
+        showMessage('Sync failed. Refresh to try again.', 'error', 'sync');
       }
     }).catch(() => clearMessage()); // Fail silently - rejected promise means nothing to sync
   });

@@ -1,19 +1,24 @@
 import DBController from './utils/DBController.mjs';
-import initSyncing from './global-scripts/syncing.mjs';
 import { showMessage } from './utils/flash-messages.mjs';
+import IDB from './utils/IDB.mjs';
 
-const sendButton = document.getElementById('send-button');
-const userInput = document.getElementById('user-input');
-const chatbox = document.getElementById('chatbox');
-const chatContainer = document.getElementById('chat-interface');
-const openChatButton = document.getElementById('open-chat');
-const closeChatButton = document.getElementById('close-chat');
-const roomId = document.getElementById('plant-id').value;
-const userId = document.getElementById('user-id').value;
+let sendButton = document.getElementById('send-button');
+let userInput = document.getElementById('user-input');
+let chatbox = document.getElementById('chatbox');
+let chatContainer = document.getElementById('chat-interface');
+let openChatButton = document.getElementById('open-chat');
+let closeChatButton = document.getElementById('close-chat');
+
+// Remove trailing forward slash (if any) and parse to get plant ID
+const [roomId] = window.location.href.replace(/\/$/, '').split('/').slice(-1);
+const userId = 'user-placeholder'; // repace with local storage or something i guess
 // const formElem = document.getElementById('chat-form');
 
-// eslint-disable-next-line no-undef
-const socket = io();
+let socket = null;
+if (typeof io !== 'undefined') {
+  // eslint-disable-next-line no-undef
+  socket = io();
+}
 
 let isChatboxOpen = false;
 
@@ -31,26 +36,17 @@ function addUserMessage(message, user) {
 }
 
 function connectToRoom() {
-  if (navigator.onLine) {
+  if (socket && navigator.onLine) {
     socket.emit('create or join', roomId, userId);
-    fetch(`/api/chat/${roomId}`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data) {
-          data.forEach((msg) => {
-            addUserMessage(msg.message, msg.user);
-            DBController.addChat(msg, true, () => {}, () => {});
-          });
-        }
-      })
-      .catch((error) => console.error('Error:', error));
-  } else {
-    DBController.getChatsByPlant(roomId, (chats) => {
-      chats.forEach((chat) => {
-        addUserMessage(chat.message, chat.user);
-      });
-    });
   }
+
+  DBController.get('chats', { plant: roomId }, (chats) => {
+    chats.forEach((chat) => {
+      // PUT all chats to IDB, to ensure that the latest version of all are saved locally
+      IDB.put('chats', chat, () => {}, console.error);
+      addUserMessage(chat.message, chat.user);
+    });
+  });
 }
 
 function clearChatbox() {
@@ -67,9 +63,21 @@ function toggleChatbox() {
   }
 }
 
-openChatButton.addEventListener('click', toggleChatbox);
-
-closeChatButton.addEventListener('click', toggleChatbox);
+function receiveChat(params) {
+  try {
+    const newChat = {
+      _id: Date.now().toString(16).padStart(24, '0'), // Auto-generate id
+      user: params.user,
+      plant: params.plant,
+      message: params.message,
+      dateTime: params.dateTime,
+    };
+    DBController.createOrUpdate('chats', newChat, () => {}, () => showMessage('Failed to add chat. Please try again.', 'error', 'error'));
+    addUserMessage(params.message, params.user);
+  } catch (error) {
+    showMessage('Failed to send message', 'error');
+  }
+}
 
 function sendChatMessage() {
   const userMessage = userInput.value;
@@ -81,55 +89,44 @@ function sendChatMessage() {
       message: userMessage,
       dateTime: Date.now(),
     };
-    if (navigator.onLine) {
+    if (socket && navigator.onLine) {
       socket.emit('chat', roomId, newChat);
     } else {
-      addUserMessage(userMessage, userId);
-      DBController.addChat(newChat, false, () => {});
+      receiveChat(newChat);
     }
     userInput.value = '';
   }
 }
 
-sendButton.addEventListener('click', (event) => {
-  event.preventDefault();
-  sendChatMessage();
-});
+export default function addChatEventListeners() {
+  sendButton = document.getElementById('send-button');
+  userInput = document.getElementById('user-input');
+  chatbox = document.getElementById('chatbox');
+  chatContainer = document.getElementById('chat-interface');
+  openChatButton = document.getElementById('open-chat');
+  closeChatButton = document.getElementById('close-chat');
 
-userInput.addEventListener('keyup', (event) => {
-  if (event.key === 'Enter') {
+  openChatButton.addEventListener('click', toggleChatbox);
+
+  closeChatButton.addEventListener('click', toggleChatbox);
+
+  sendButton.addEventListener('click', (event) => {
     event.preventDefault();
     sendChatMessage();
-  }
-});
-
-function init() {
-  socket.on('chat', (params) => {
-    try {
-      const newChat = {
-        _id: Date.now().toString(16).padStart(24, '0'), // Auto-generate id
-        user: params.user,
-        plant: params.plant,
-        message: params.message,
-        dateTime: params.dateTime,
-      };
-      DBController.addChat(newChat, false, () => {});
-      addUserMessage(params.message, params.user);
-    } catch (error) {
-      showMessage('Failed to send message', 'error');
-    }
   });
 
-  socket.on('oldMessages', (messages) => {
-    // Possibly fetch old messages from IDB if messages are empty - need to discuss
-    messages.forEach((chat) => {
-      addUserMessage(chat.message, chat.user);
-      DBController.addChat(chat, true, () => {});
-    });
+  userInput.addEventListener('keyup', (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      sendChatMessage();
+    }
   });
 }
 
-window.onload = () => {
-  init();
-  initSyncing();
-};
+if (socket) {
+  socket.on('chat', receiveChat);
+}
+
+try {
+  addChatEventListeners();
+} catch (e) { /* empty */ }

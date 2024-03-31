@@ -33,8 +33,43 @@ class IDB {
       this.db = e.target.result;
 
       this.db.createObjectStore('plants', { keyPath: '_id' });
+      this.db.createObjectStore('chats', { keyPath: '_id' });
       this.db.createObjectStore('sync-queue', { keyPath: '_id', autoIncrement: true });
     };
+  }
+
+  /**
+   * Gets objects from a given store in the IndexedDB
+   * @param storeName {string} the store to get all objects from
+   * @param filters {Object} the filters to apply when getting objects
+   * @param successCallback {function(Object[]): void} the function to call on transaction success.
+   *                                                      (takes an array of returned objects)
+   * @param failureCallback {function(Event): void} the function to call on transaction failure
+   */
+  get(storeName, filters, successCallback, failureCallback) {
+    const keys = Object.keys(filters);
+    if (this.db) {
+      const request = this.db.transaction([storeName], 'readonly').objectStore(storeName).getAll();
+      request.onsuccess = () => {
+        if (keys.length === 0) {
+          // Return all if no keys
+          successCallback(request.result);
+          return;
+        }
+
+        const returnArray = [];
+        request.result.forEach((obj) => {
+          keys.forEach((key) => {
+            if (obj[key] === filters[key]) {
+              returnArray.push(obj);
+            }
+          });
+        });
+
+        successCallback(returnArray);
+      };
+      request.onerror = failureCallback;
+    }
   }
 
   /**
