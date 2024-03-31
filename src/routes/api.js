@@ -38,7 +38,6 @@ router.get('/chat/:roomId', (req, res) => {
   chatController.getChat({ plant: req.params.roomId })
     .then((object) => {
       res.status(200).json(object);
-      console.log(object);
     });
 });
 
