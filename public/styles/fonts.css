@@ -69,7 +69,8 @@
     }
 
     html {
-        font-family: "DM Sans", "Noto Color Emoji", sans-serif;
+        /* Utilise emoji font as fallback to catch emojis */
+        font-family: "DM Sans", sans-serif, "Noto Color Emoji";
         font-optical-sizing: auto;
     }
 }
