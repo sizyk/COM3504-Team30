@@ -1,6 +1,6 @@
 const ChatModel = require('../models/chat');
 
-exports.init = function (io) {
+exports.init = (io) => {
   io.sockets.on('connection', (socket) => {
     try {
       /**
