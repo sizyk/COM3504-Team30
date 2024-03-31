@@ -2,6 +2,14 @@
 
 const CACHE_NAME = 'Plants App';
 
+const handleNotFound = (res) => {
+  if (res) {
+    return res;
+  }
+
+  return new Response('Not Found!', { status: 404, statusText: 'Not Found' });
+};
+
 // Use the "install" event to pre-cache all initial resources.
 self.addEventListener('install', (event) => {
   console.log('[Service Worker]: Installing....');
@@ -81,28 +89,16 @@ self.addEventListener('fetch', (event) => {
   console.log('[Service Worker]: Fetch', event.request.url);
 
   const url = new URL(event.request.url);
-  let offlineResponse = caches.match(url);
+  let offlineResponse = caches.match(url).then(handleNotFound);
 
   if (url.pathname === '/') {
     // User is requesting index, return empty one if offline (will be populated by script)
-    offlineResponse = caches.match('/public/cached-views/empty-index.html').then((res) => {
-      if (res) {
-        return res;
-      }
-
-      return '404';
-    });
+    offlineResponse = caches.match('/public/cached-views/empty-index.html').then(handleNotFound);
   }
 
   if (url.pathname.startsWith('/plant/')) {
     // User is requesting a single plant, return empty one if offline (will be populated by script)
-    offlineResponse = caches.match('/public/cached-views/empty-plant.html').then((res) => {
-      if (res) {
-        return res;
-      }
-
-      return '404';
-    });
+    offlineResponse = caches.match('/public/cached-views/empty-plant.html').then(handleNotFound);
   }
 
   // Attempt to fetch, if error occurs then fetch from cache
