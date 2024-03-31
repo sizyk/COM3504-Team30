@@ -41,7 +41,7 @@ class DBController {
         collection,
         toSend,
         'put',
-        () => onSuccess('Successfully saved to local database! Update will be synchronised next time you connect to the internet.', toSend),
+        () => onSuccess('Successfully saved to local database! Update will be synchronised when server connection is regained.', toSend),
         () => onError('Operation failed to queue! Please try again.'),
       );
     };
@@ -88,7 +88,7 @@ class DBController {
         collection,
         id,
         'delete',
-        () => onSuccess('Successfully deleted from local database! Deletion will be synchronised next time you connect to the internet.'),
+        () => onSuccess('Successfully deleted from local database! Deletion will be synchronised when server connection is regained.'),
         () => onError('Operation failed to queue! Please try again.'),
       );
     };
