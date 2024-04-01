@@ -22,6 +22,11 @@ if (typeof io !== 'undefined') {
 
 let isChatboxOpen = false;
 
+/**
+ * Add a message to the chatbox
+ * @param {string} message - The message to add
+ * @param {string} user - The user who sent the message
+ */
 function addUserMessage(message, user) {
   const messageElement = document.createElement('div');
   if (user === userId) {
@@ -50,10 +55,16 @@ function connectToRoom() {
   });
 }
 
+/**
+ * Clears the chatbox of all messages
+ */
 function clearChatbox() {
   chatbox.innerHTML = '';
 }
 
+/**
+ * Toggles the chatbox to be open or closed
+ */
 function toggleChatbox() {
   chatContainer.classList.toggle('hidden');
   isChatboxOpen = !isChatboxOpen;
@@ -64,6 +75,10 @@ function toggleChatbox() {
   }
 }
 
+/**
+ * Receives a chat message from the server and updates the chatbox
+ * @param params - The chat message
+ */
 function receiveChat(params) {
   try {
     const newChat = {
@@ -80,6 +95,9 @@ function receiveChat(params) {
   }
 }
 
+/**
+ * Sends a chat message to the socketIO chatroom
+ */
 function sendChatMessage() {
   const userMessage = userInput.value;
   if (userMessage.trim() !== '') {
