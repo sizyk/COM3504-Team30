@@ -24,6 +24,11 @@ function getLocation(plantID) {
   }
 }
 
+/**
+ * takes in an error code and adds the appropriate error message to the preview via the DOM
+ * @param status {number} the status code of the error
+ * @param plantID {string} the plantID of the modal to update
+ */
 function handleErrorResponse(status, plantID) {
   let errorMessage;
   switch (status) {
@@ -52,6 +57,11 @@ function handleErrorResponse(status, plantID) {
   document.getElementById(`imageValidated${plantID}`).checked = false;
 }
 
+/**
+ * Handles a CORS error by updating the preview with an error message
+ * CORS: Cross-Origin Resource Sharing, means that the resource is not allowed to be fetched
+ * @param plantID {string} the plantID of the modal to update
+ */
 function handleCorsError(plantID) {
   document.getElementById(`imagePreviewContainer${plantID}`).classList.add('hidden');
   document.getElementById(`previewError${plantID}`).classList.remove('hidden');
@@ -145,6 +155,10 @@ function deletePlant(plantID) {
   }
 }
 
+/**
+ * Toggles between image input and URL input, and changes the required attribute accordingly
+ * @param plantID {string} the ID of the plant modal to update the input for
+ */
 function toggleImageInput(plantID) {
   // get all the relevant elements
   const shouldShowUrl = document.getElementById(`imageInputCheckbox${plantID}`);
