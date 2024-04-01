@@ -1,10 +1,10 @@
 <div
   id="flash-message"
-  class="flash z-[1000]"
+  class="flash z-[1000] pointer-events-none"
   style="transform: translateY(-100%)"
 >
   <div
-    class="flash-<%= (typeof flash !== 'undefined' && flash.type) || 'info' %> flex items-center justify-center gap-2 rounded border-2 border-text px-4 py-2 text-center text-2xl"
+    class="flash-<%= (typeof flash !== 'undefined' && flash.type) || 'info' %> flex items-center justify-center gap-2 rounded border-2 border-text px-4 py-2 text-center text-2xl pointer-events-auto"
   >
     <i class="material-symbols-outlined !leading-8">
       <%= (typeof flash !== 'undefined' && flash.icon) || '' %>
