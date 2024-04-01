@@ -107,9 +107,13 @@
     <div class="bg-white shadow-md rounded-lg max-w-lg w-full">
         <div class="p-4 border-b bg-primary rounded-t-lg flex justify-between items-center">
             <p class="dark:text-on-secondary text-white font-semibold">Comments</p>
-            <button id="close-chat" class="text-lg hover:text-gray-400 focus:outline-none focus:text-gray-400">
-                <img src="/public/img/icons/close.svg" alt="close chat">
-            </button>
+          <button
+            id="close-chat"
+            class="close-modal flex justify-center rounded bg-background hover:bg-error hover:text-background"
+            aria-label="close chatt"
+          >
+            <span class="material-symbols-outlined">close</span>
+          </button>
         </div>
         <div id="chatbox" class="p-4 h-80 overflow-y-auto">
             <!-- Chat messages will be displayed here -->

@@ -12,8 +12,10 @@ const handleNotFound = (res) => {
 
 // Use the "install" event to pre-cache all initial resources.
 self.addEventListener('install', (event) => {
+  // eslint-disable-next-line no-console
   console.log('[Service Worker]: Installing....');
   event.waitUntil((async () => {
+    // eslint-disable-next-line no-console
     console.log('[Service Worker]: Caching App Shell at the moment......');
 
     const cache = await caches.open(CACHE_NAME);
@@ -76,6 +78,7 @@ self.addEventListener('activate', (event) => {
       const keys = await caches.keys();
       return keys.map(async (cache) => {
         if (cache !== CACHE_NAME) {
+          // eslint-disable-next-line no-console
           console.log(`Service Worker: Removing old cache: ${cache}`);
           return caches.delete(cache);
         }
@@ -86,6 +89,7 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+  // eslint-disable-next-line no-console
   console.log('[Service Worker]: Fetch', event.request.url);
 
   const url = new URL(event.request.url);
