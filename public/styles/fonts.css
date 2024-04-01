@@ -28,6 +28,8 @@
 
 @layer utilities {
     .material-symbols-outlined {
+        --font-fill: 1;
+
         font-family: 'Material Symbols Outlined';
         font-weight: normal;
         font-style: normal;
@@ -40,36 +42,15 @@
         white-space: nowrap;
         direction: ltr;
 
-        font-variation-settings: 'FILL' 1;
+        font-variation-settings: 'FILL' var(--font-fill);
 
-        &.opsz-20 {
-            font-size: 20px;
-            font-variation-settings:
-                    'FILL' 1,
-                    'OPSZ' 20;
-        }
-        &.opsz-24 {
-            font-size: 24px;
-            font-variation-settings:
-                    'FILL' 1,
-                    'OPSZ' 24;
-        }
-        &.opsz-40 {
-            font-size: 40px;
-            font-variation-settings:
-                    'FILL' 1,
-                    'OPSZ' 40;
-        }
-        &.opsz-48 {
-            font-size: 48px;
-            font-variation-settings:
-                    'FILL' 1,
-                    'OPSZ' 48;
+        &.fill-0 {
+            --font-fill: 0;
         }
     }
 
     html {
-        /* Utilise emoji font as fallback to catch emojis */
+        /* Utilise emoji font as fallback to catch emojis (use as final fallback to prevent flash of emoji-styled numbers) */
         font-family: "DM Sans", sans-serif, "Noto Color Emoji";
         font-optical-sizing: auto;
     }

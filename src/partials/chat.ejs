@@ -1,16 +1,14 @@
 <div class="fixed bottom-0 right-0 mb-10 mr-10">
-    <button id="open-chat" class="bg-accent rounded-lg hover-button p-2.5">
-        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" class="fill-white dark:fill-black">
-            <path d="M280-240q-17 0-28.5-11.5T240-280v-80h520v-360h80q17 0 28.5 11.5T880-680v600L720-240H280ZM80-280v-560q0-17 11.5-28.5T120-880h520q17 0 28.5 11.5T680-840v360q0 17-11.5 28.5T640-440H240L80-280Zm520-240v-280H160v280h440Zm-440 0v-280 280Z"/>
-        </svg>
+    <button id="open-chat" class="bg-accent rounded-lg hover-button p-2.5 material-symbols-outlined fill-0">
+        forum
     </button>
 </div>
 <div id="chat-interface" class="hidden fixed bottom-10 right-10 w-96">
     <div class="bg-white shadow-md rounded-lg max-w-lg w-full">
         <div class="p-4 border-b bg-primary rounded-t-lg flex justify-between items-center">
             <p class="dark:text-on-secondary text-white font-semibold">Comments</p>
-            <button id="close-chat" class="text-lg hover:text-gray-400 focus:outline-none focus:text-gray-400">
-                <img src="/public/img/icons/close.svg" alt="close chat">
+            <button id="close-chat" class="text-lg hover-link-inverse material-symbols-outlined">
+                close
             </button>
         </div>
         <div id="chatbox" class="p-4 h-80 overflow-y-auto">
@@ -22,7 +20,7 @@
                 <input id="user-id" type="text" class="hidden" value="user-placeholder">
                 <input id="plant-id" type="text" class="hidden" value="<%= plant.id %>">
                 <input id="user-input" type="text" placeholder="Type a message" class="text-gray-700 w-full px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-accent">
-                <button id="send-button" class="bg-primary px-4 py-2 rounded-r-md hover-button transition duration-300">Send</button>
+                <button id="send-button" class="bg-primary px-4 py-2 rounded-r-md hover-button transition duration-300 material-symbols-outlined">send</button>
             </form>
         </div>
     </div>
