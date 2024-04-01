@@ -162,28 +162,16 @@ function toggleImageInput(plantID) {
   previewError.classList.add('hidden');
 
   // images are only required for new plants, not edits
-  imageInput.required = plantID === 'New';
-  urlInput.required = plantID === 'New';
+  imageInput.required = plantID === 'New' && !shouldShowUrl.checked;
+  urlInput.required = plantID === 'New' && shouldShowUrl.checked;
 
   // show the correct image input field
   if (shouldShowUrl.checked) {
     imageDiv.classList.add('hidden');
     urlDiv.classList.remove('hidden');
-
-    // If adding a new plant, ensure currently-selected image input is required
-    // (un-require other one to avoid "required input is not focusable")
-    if (plantID === 'New') {
-      imageInput.required = false;
-      urlInput.required = true;
-    }
   } else {
     imageDiv.classList.remove('hidden');
     urlDiv.classList.add('hidden');
-
-    if (plantID === 'New') {
-      imageInput.required = true;
-      urlInput.required = false;
-    }
   }
 }
 
