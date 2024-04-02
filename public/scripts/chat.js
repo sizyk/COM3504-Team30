@@ -11,7 +11,7 @@ let closeChatButton = document.getElementById('close-chat');
 
 // Remove trailing forward slash (if any) and parse to get plant ID
 const [roomId] = window.location.href.replace(/\/$/, '').split('/').slice(-1);
-const userId = 'user-placeholder'; // repace with local storage or something i guess
+const userId = localStorage.getItem('username');
 // const formElem = document.getElementById('chat-form');
 
 let socket = null;

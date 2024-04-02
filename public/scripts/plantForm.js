@@ -269,10 +269,10 @@ function submitPlantForm(formElem) {
     const hexID = parseInt(params.get('_id').toString(), 10).toString(16);
     params.set('_id', hexID.padStart(24, '0'));
   }
-
+  const username = localStorage.getItem('username');
   const plant = { // Get data from the form
     _id: params.get('_id'),
-    author: 'placeholder', // replace with user when implemented
+    author: username, // replace with user when implemented
     name: params.get('name').trim(),
     description: params.get('description').trim(),
     dateTimeSeen: new Date(params.get('dateTimeSeen')),

@@ -6,12 +6,13 @@ import initModals from './global-scripts/modals.mjs';
 import initTouchScreen from './global-scripts/touchHover.mjs';
 import initSyncing from './global-scripts/syncing.mjs';
 import initSW from './global-scripts/serviceWorker.mjs';
+import initLogin from './global-scripts/login.mjs';
 
 initSW();
 initThemeToggle();
 initModals();
 initTouchScreen();
-
+initLogin();
 // Only enable syncing if not in offline mode
 if (!(Object.prototype.hasOwnProperty.call(window, 'plantsAppOffline') && window.plantsAppOffline === true)) {
   initSyncing();

@@ -48,6 +48,7 @@ self.addEventListener('install', (event) => {
       '/public/scripts/global-scripts/syncing.mjs',
       '/public/scripts/global-scripts/themeToggle.mjs',
       '/public/scripts/global-scripts/touchHover.mjs',
+      '/public/scripts/global-scripts/login.mjs',
 
       '/public/scripts/offline/index.js',
       '/public/scripts/offline/plant.js',
@@ -66,7 +67,8 @@ self.addEventListener('install', (event) => {
       '/public/styles/dist/global.css',
 
       '/public/manifest.json',
-    ]);
+      // eslint-disable-next-line no-console
+    ]).catch((e) => console.log(`[Service Worker]: ${e}`));
   })());
 });
 
