@@ -1,0 +1,57 @@
+@font-face {
+    font-family: 'Material Symbols Outlined';
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+    src: url("/public/fonts/material-symbols.woff2") format("woff");
+}
+
+@font-face {
+    font-family: 'Noto Color Emoji';
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+    src: url("/public/fonts/NotoColorEmoji-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: 'DM Sans';
+    font-display: block;
+    src: url("/public/fonts/dm-sans.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: 'DM Sans Italic';
+    font-display: block;
+    src: url("/public/fonts/dm-sans-italic.ttf") format("truetype");
+}
+
+@layer utilities {
+    .material-symbols-outlined {
+        --font-fill: 1;
+
+        font-family: 'Material Symbols Outlined';
+        font-weight: normal;
+        font-style: normal;
+        font-size: 24px;  /* Preferred icon size */
+        display: inline-block;
+        line-height: 1;
+        text-transform: none;
+        letter-spacing: normal;
+        word-wrap: normal;
+        white-space: nowrap;
+        direction: ltr;
+
+        font-variation-settings: 'FILL' var(--font-fill);
+
+        &.fill-0 {
+            --font-fill: 0;
+        }
+    }
+
+    html {
+        /* Utilise emoji font as fallback to catch emojis (use as final fallback to prevent flash of emoji-styled numbers) */
+        font-family: "DM Sans", sans-serif, "Noto Color Emoji";
+        font-optical-sizing: auto;
+    }
+}

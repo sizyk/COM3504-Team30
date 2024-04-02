@@ -8,6 +8,7 @@ const logger = require('morgan');
 const indexRouter = require('./routes');
 const plantRouter = require('./routes/plant');
 const usersRouter = require('./routes/users');
+const apiRouter = require('./routes/api');
 
 const app = express();
 app.use(favicon(path.join('public', 'img', 'favicon.ico')));
@@ -17,13 +18,16 @@ app.set('views', path.join(__dirname, 'layouts'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+// Increase upload size limit from 100kb
+app.use(express.json({ limit: '100mb' }));
+app.use(express.urlencoded({ extended: false, limit: '100mb' }));
 app.use(cookieParser());
 
 app.use('/', indexRouter);
+app.use('/', express.static(path.join(__dirname, 'service-worker')));
 app.use('/users', usersRouter);
 app.use('/plant', plantRouter);
+app.use('/api', apiRouter);
 
 app.use('/public', express.static('public'));
 

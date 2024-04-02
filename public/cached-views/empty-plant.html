@@ -1,0 +1,70 @@
+<!doctype html>
+<html class="light" lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Individual Plant</title>
+    <link rel="stylesheet" href="/public/styles/dist/global.css" />
+    <link rel="manifest" href="/public/manifest.json" />
+  </head>
+  <body class="flex min-h-screen flex-col bg-background text-text">
+    <iframe name="fakesubmit" id="fakesubmit" style="display: none"></iframe>
+    <div
+      id="flash-message"
+      class="flash pointer-events-none z-[1000]"
+      style="transform: translateY(-100%)"
+    >
+      <div
+        class="flash-info pointer-events-auto flex items-center justify-center gap-2 rounded border-2 border-text px-4 py-2 text-center text-2xl"
+      >
+        <i class="material-symbols-outlined !leading-8"> </i>
+        <span class="pb-0.5"> </span>
+      </div>
+    </div>
+
+    <div
+      id="online-status"
+      class="material-symbols-outlined pointer-events-none fixed left-4 top-4 text-text"
+    >
+      wifi_off
+    </div>
+
+    <div
+      role="button"
+      id="theme-toggle"
+      class="pointer-events-auto fixed right-4 top-4 isolate bg-background-inverse"
+      data-theme="light"
+      aria-label="Theme Toggle Switch"
+    >
+      <div
+        class="absolute left-0 z-10 flex w-full items-center justify-between pe-[5px] ps-[7px] text-background"
+      >
+        <i class="material-symbols-outlined !text-xl">light_mode</i>
+        <i class="material-symbols-outlined !text-xl">dark_mode</i>
+      </div>
+      <div id="moving-switch" class="z-20 bg-background"></div>
+    </div>
+
+    <main
+      id="card"
+      class="mx-auto mt-24 w-10/12"
+      data-plant-card
+      data-plant=""
+    ></main>
+
+    <footer class="flex items-center justify-center p-6">
+      <p class="text-xl">Bottom Text</p>
+    </footer>
+
+    <div id="js-variables" class="hidden"></div>
+  </body>
+
+  <script>
+    window.plantsAppOffline = true;
+  </script>
+
+  <script src="/public/scripts/ejs.min.js" type="module"></script>
+
+  <script src="/public/scripts/offline/plant.js" type="module"></script>
+
+  <script src="/public/scripts/global.js" type="module"></script>
+</html>

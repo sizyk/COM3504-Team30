@@ -1,22 +1,14 @@
 <form
-  action="/edit-plant"
-  method="POST"
+  id="editPlantForm-<%= plant._id %>"
+  target="fakesubmit"
+  data-form="plant"
+  data-plant="<%= plant._id %>"
   enctype="multipart/form-data"
-  id="editPlantForm"
+  method="POST"
   autocomplete="off"
 >
-  <input
-    id="id"
-    name="id"
-    type="hidden"
-    value="<%= plant._id %>"
-  />
-  <input
-    id="currentImage"
-    name="currentImage"
-    type="hidden"
-    value="<%= plant.image %>"
-  />
+  <input id="_id" name="_id" type="hidden" value="<%= plant._id %>" />
+  <input id="_id" name="_id" type="hidden" value="<%= plant._id %>" />
   <div class="form-group mb-4">
     <label for="name" class="block text-text">Name</label>
     <input
@@ -39,11 +31,17 @@
       rows="3"
       maxlength="256"
       required
-    ><%= plant.description %></textarea>
+    >
+      <%= plant.description %>
+    </textarea>
   </div>
   <% const d = plant.dateTimeSeen %>
-  <% const formattedDate = d.getFullYear() + "-" + ('0' + (d.getMonth()+1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2)  +  "T" +
-          ('0' + d.getHours()).slice(-2) + ":" + ('0' + d.getMinutes()).slice(-2); %>
+  <!-- prettier-ignore -->
+  <% const formattedDate =
+          ('000' + d.getFullYear()).slice(-4) + "-" + ('0' + (d.getMonth()+1)).slice(-2) + '-' +
+          ('0' + d.getDate()).slice(-2) + "T" + ('0' + d.getHours()).slice(-2) + ":" +
+          ('0' + d.getMinutes()).slice(-2);
+  %>
   <div class="form-group mb-4">
     <label for="dateTimeSeen" class="block text-text">Time seen</label>
     <input
@@ -66,7 +64,6 @@
       value="<%= plant.size %>"
       step=".01"
       required
-
     />
   </div>
   <!-- Select -->
@@ -77,9 +74,18 @@
       name="sunExposure"
       class="form-input block w-full rounded-lg border border-gray-300 bg-background-light p-2.5 text-sm text-text focus:border-background-hover focus:ring-background"
     >
-      <option <%= (plant.sunExposure === "None") ? 'selected' : '' %>>None</option>
-      <option <%= (plant.sunExposure === "Partial") ? 'selected' : '' %>>Partial</option>
-      <option <%= (plant.sunExposure === "Full") ? 'selected' : '' %>>Full</option>
+      <!-- prettier-ignore -->
+      <option selected="<%= (plant.sunExposure === 'None') ? 'selected' : '' %>">
+        None
+      </option>
+      <!-- prettier-ignore -->
+      <option selected="<%= (plant.sunExposure === 'Partial') ? 'selected' : '' %>">
+        Partial
+      </option>
+      <!-- prettier-ignore -->
+      <option selected="<%= (plant.sunExposure === 'Full') ? 'selected' : '' %>">
+        Full
+      </option>
     </select>
   </div>
 
@@ -110,11 +116,11 @@
         type="checkbox"
         value="true"
         class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
-        <%= plant.hasFlowers ? 'checked' : '' %>
+        checked="<%= plant.hasFlowers ? 'checked' : '' %>"
       />
-      <label for="hasFlowers" class="ms-2 text-sm font-medium text-text"
-        >Flowers</label
-      >
+      <label for="hasFlowers" class="ms-2 text-sm font-medium text-text">
+        Flowers
+      </label>
     </div>
     <div class="mb-2 flex items-center">
       <input
@@ -123,11 +129,11 @@
         type="checkbox"
         value="true"
         class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
-        <%= plant.hasLeaves ? 'checked' : '' %>
+        checked="<%= plant.hasLeaves ? 'checked' : '' %>"
       />
-      <label for="hasLeaves" class="ms-2 text-sm font-medium text-text"
-        >Leaves</label
-      >
+      <label for="hasLeaves" class="ms-2 text-sm font-medium text-text">
+        Leaves
+      </label>
     </div>
     <div class="mb-2 flex items-center">
       <input
@@ -136,11 +142,11 @@
         type="checkbox"
         value="true"
         class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
-        <%= plant.hasFruit ? 'checked' : '' %>
+        checked="<%= plant.hasFruit ? 'checked' : '' %>"
       />
-      <label for="hasFruit" class="ms-2 text-sm font-medium text-text"
-        >Fruit</label
-      >
+      <label for="hasFruit" class="ms-2 text-sm font-medium text-text">
+        Fruit
+      </label>
     </div>
     <div class="mb-2 flex items-center">
       <input
@@ -149,18 +155,22 @@
         type="checkbox"
         value="true"
         class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
-        <%= plant.hasSeeds ? 'checked' : '' %>
+        checked="<%= plant.hasSeeds ? 'checked' : '' %>"
       />
-      <label for="hasSeeds" class="ms-2 text-sm font-medium text-text"
-        >Seeds</label
-      >
+      <label for="hasSeeds" class="ms-2 text-sm font-medium text-text">
+        Seeds
+      </label>
     </div>
   </div>
 
-
   <!-- checkbox for using a file or a url for image -->
-  <label for="imageSettings<%=plant._id%>" class="block text-text">Image Settings</label>
-  <div id='imageSettings<%=plant._id%>' class="form-group mb-4 flex flex-col justify-between sm:flex-row">
+  <label for="imageSettings<%=plant._id%>" class="block text-text"
+    >Image Settings</label
+  >
+  <div
+    id="imageSettings<%=plant._id%>"
+    class="form-group mb-4 flex flex-col justify-between sm:flex-row"
+  >
     <div class="mb-2 flex items-center">
       <input
         id="imageInputCheckbox<%=plant._id%>"
@@ -168,9 +178,11 @@
         type="checkbox"
         value="url"
         class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
-        onchange="toggleImageInput('<%=plant._id%>')"
+        data-change="toggle-input"
       />
-      <label for="imageInputCheckbox" class="ms-2 text-sm font-medium text-text">Use URL for image?</label>
+      <label for="imageInputCheckbox" class="ms-2 text-sm font-medium text-text"
+        >Use URL for image?</label
+      >
     </div>
     <div class="mb-2 flex items-center">
       <input
@@ -184,11 +196,17 @@
         checked
         oninvalid="this.setCustomValidity('Upload or enter a valid URL and preview to continue')"
       />
-      <label for="imageValidated<%=plant._id%>" class="ms-2 text-sm font-medium text-text">Image validated?</label>
+      <label
+        for="imageValidated<%=plant._id%>"
+        class="ms-2 text-sm font-medium text-text"
+        >Image validated?</label
+      >
     </div>
   </div>
   <div class="form-group mb-4" id="imageDiv<%=plant._id%>">
-    <label class="block text-text" for="image<%=plant._id%>">Upload Image</label>
+    <label class="block text-text" for="image<%=plant._id%>"
+      >Upload Image</label
+    >
     <input
       class="file:form-input file:hover-button w-full cursor-pointer file:rounded file:px-4 file:py-2 file:font-bold"
       id="image<%=plant._id%>"
@@ -196,10 +214,11 @@
       type="file"
       aria-describedby="file_input_help"
       accept="image/png, image/jpeg, image/gif"
-      onchange="previewImage('<%=plant._id%>')"
+      data-change="preview"
+      data-default="<%= plant.image %>"
     />
   </div>
-  <div class="form-group mb-4 flex space-x-2 hidden" id="urlDiv<%=plant._id%>">
+  <div class="form-group mb-4 flex hidden space-x-2" id="urlDiv<%=plant._id%>">
     <div class="w-3/4">
       <label for="url<%=plant._id%>">Enter URL:</label>
       <input
@@ -212,22 +231,30 @@
     <button
       class="form-input hover-button w-1/4 grow-0 rounded px-4 py-2 font-bold"
       type="button"
-      onclick="previewImage('<%=plant._id%>')"
+      data-click="preview"
     >
       Preview
     </button>
   </div>
-  <div
-    id="imagePreviewContainer<%=plant._id%>">
+  <div id="imagePreviewContainer<%=plant._id%>">
     <label class="block text-text" for="preview">Image Preview</label>
+    <object
+      type="image/svg+xml"
+      data="/public/img/loading.svg"
+      class="hidden aspect-square w-1/2 rounded"
+    ></object>
     <img
       id="preview<%=plant._id%>"
       src="<%= plant.image %>"
       alt="your image"
       class="w-1/2"
+      data-img="preview"
     />
   </div>
-  <p id="previewError<%=plant._id%>" class="hidden text-error font-bold my-2 px-2"></p>
+  <p
+    id="previewError<%=plant._id%>"
+    class="my-2 hidden px-2 font-bold text-error"
+  ></p>
   <div class="form-group mb-4 flex space-x-2">
     <input
       type="text"
@@ -261,24 +288,26 @@
     <button
       class="form-input hover-button w-1/4 grow-0 rounded px-4 py-2 font-bold"
       type="button"
-      onclick="getLocation('<%= plant._id%>')"
+      data-click="geolocation"
     >
       Get
     </button>
   </div>
-  <div
-    class="flex mt-4 w-full space-x-4"
-    id="buttonsDiv">
+  <div class="mt-4 flex w-full space-x-4" id="buttonsDiv">
     <button
       id="submitButton"
       type="submit"
       class="form-input hover-button rounded px-4 py-2 font-bold"
-    >Submit
+    >
+      Submit
     </button>
     <button
       id="deleteButton"
       type="button"
       class="form-input hover-button-error rounded px-4 py-2 font-bold"
-      onclick="deletePlant('<%= plant._id %>')">Delete</button>
+      data-click="delete"
+    >
+      Delete
+    </button>
   </div>
 </form>

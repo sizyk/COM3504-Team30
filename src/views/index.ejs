@@ -27,13 +27,19 @@
       %>
     </div>
   </div>
+  <h3
+    id="no-plants-warning"
+    class="<%= plants.length === 0 ? '' : 'hidden' %> m-auto w-max text-2xl font-bold"
+  >
+    No plants yet! Click 'Add Plant' to get started.
+  </h3>
   <div
+    id="plant-grid"
     class="grid grid-cols-1 gap-10 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
   >
     <!-- prettier-ignore -->
-    <% plants.forEach((p) => { %>
+    <% plants?.forEach((p) => { %>
       <%- include('../partials/plant-card.ejs', {plant: p}) %>
     <% }) %>
   </div>
-  <script src="/public/scripts/plantForm.js"></script>
 </main>

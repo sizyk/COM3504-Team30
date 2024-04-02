@@ -1,5 +1,7 @@
 @import "utils.css";
 @import "inputs.css";
+@import "fonts.css";
+@import "spinner.css";
 
 @tailwind base;
 @tailwind components;

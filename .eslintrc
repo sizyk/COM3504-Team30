@@ -8,10 +8,17 @@
 
     "ignorePatterns": [
         "node_modules",
-        "*.config.js"
+        "*.config.js",
+        "*.min.js"
     ],
 
+    "parserOptions": {
+        "ecmaVersion": 13
+    },
+
     "rules": {
-        "no-param-reassign": "off"
+        "no-param-reassign": "off",
+        "import/extensions": "off",
+        "no-underscore-dangle": "off"
     }
 }

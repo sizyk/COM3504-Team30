@@ -5,11 +5,17 @@
   "scripts": {
     "build-css": "postcss public/styles/global.css --dir public/styles/dist",
     "watch-css": "postcss public/styles/global.css --dir public/styles/dist --watch",
-    "watch-js": "nodemon ./src/bin/www",
+    "watch-js": "nodemon ./src/bin/www -e js,mjs,ejs,css",
     "start": "concurrently --raw --kill-others \"npm:watch-*\"",
-    "prettify": "prettier -w **/*.ejs",
-    "lint": "eslint --color '**/*.js' '**/bin/www'",
-    "lint:fix": "eslint --color '**/*.js' '**/bin/www' --fix"
+    "prettify": "prettier -w \"**/*.{html,ejs}\"",
+    "lint": "eslint --color '**/*.js' '**/bin/www' '**/*.mjs'",
+    "lint:fix": "eslint --color '**/*.js' '**/bin/www' '**/*.mjs' --fix",
+
+    "cardrender": "ejs -m $ src/partials/plant-card.ejs -o public/cached-views/plant-card.ejs editModalName=\"<%= plant._id + '-edit-plant-modal' %>\"; echo 'FIX EDIT MODAL ID!'",
+    "plantrender": "ejs -m $ src/views/plant.ejs -o public/cached-views/plant.ejs editModalName=\"<%= plant._id + '-edit-plant-modal' %>\"; echo 'FIX EDIT MODAL ID!'",
+
+    "cacheindex": "ejs src/layouts/main.ejs title=\"All Plants\" children='../views/index.ejs' plants='[]' dataset=\"\" scripts=\"\" -o public/cached-views/empty-index.html\n",
+    "cacheplant": "ejs title=\"Individual Plant\" children='' dataset=\"\" scripts=\"\" -o public/cached-views/empty-plant.html\n"
   },
   "dependencies": {
     "body-parser": "^1.20.2",
@@ -22,7 +28,8 @@
     "mongoose": "^8.2.1",
     "morgan": "~1.9.1",
     "multer": "^1.4.5-lts.1",
-    "serve-favicon": "^2.5.0"
+    "serve-favicon": "^2.5.0",
+    "socket.io": "^4.7.5"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.17",
