@@ -138,7 +138,10 @@
   </div>
   <!-- checkbox for using a file or a url for image -->
   <label for="imageSettings" class="block text-text">Image Settings</label>
-  <div id='imageSettings' class="form-group mb-4 flex flex-col justify-between sm:flex-row">
+  <div
+    id="imageSettings"
+    class="form-group mb-4 flex flex-col justify-between sm:flex-row"
+  >
     <div class="mb-2 flex items-center">
       <input
         id="imageInputCheckboxNew"
@@ -148,7 +151,9 @@
         class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
         data-change="toggle-input"
       />
-      <label for="imageInputCheckbox" class="ms-2 text-sm font-medium text-text">Use URL for image?</label>
+      <label for="imageInputCheckbox" class="ms-2 text-sm font-medium text-text"
+        >Use URL for image?</label
+      >
     </div>
     <div class="mb-2 flex items-center">
       <input
@@ -161,7 +166,9 @@
         disabled
         oninvalid="this.setCustomValidity('Upload or enter a valid URL and preview to continue')"
       />
-      <label for="imageValidated" class="ms-2 text-sm font-medium text-text">Image validated?</label>
+      <label for="imageValidated" class="ms-2 text-sm font-medium text-text"
+        >Image validated?</label
+      >
     </div>
   </div>
   <div class="form-group mb-4" id="imageDivNew">
@@ -177,7 +184,7 @@
       required
     />
   </div>
-  <div class="form-group mb-4 flex space-x-2 hidden" id="urlDivNew">
+  <div class="form-group mb-4 flex hidden space-x-2" id="urlDivNew">
     <div class="w-3/4">
       <label for="urlNew">Enter URL:</label>
       <input
@@ -195,20 +202,22 @@
       Preview
     </button>
   </div>
-  <div
-    id="imagePreviewContainerNew"
-    class="hidden">
+  <div id="imagePreviewContainerNew" class="hidden">
     <label class="block text-text" for="preview">Image Preview</label>
-    <object type="image/svg+xml" data="/public/img/loading.svg" class="aspect-square w-1/2 rounded hidden"></object>
+    <object
+      type="image/svg+xml"
+      data="/public/img/loading.svg"
+      class="hidden aspect-square w-1/2 rounded"
+    ></object>
     <img
       id="previewNew"
       src="/public/img/logo.svg"
       alt="your image"
-      class="w-1/2 hidden"
+      class="hidden w-1/2"
       data-img="preview"
     />
   </div>
-  <p id="previewErrorNew" class="hidden text-error font-bold my-2 px-2"></p>
+  <p id="previewErrorNew" class="my-2 hidden px-2 font-bold text-error"></p>
   <div class="form-group mb-4 flex space-x-2">
     <input
       type="text"

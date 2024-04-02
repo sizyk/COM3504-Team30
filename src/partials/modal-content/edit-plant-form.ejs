@@ -7,12 +7,7 @@
   method="POST"
   autocomplete="off"
 >
-  <input
-    id="_id"
-    name="_id"
-    type="hidden"
-    value="<%= plant._id %>"
-  />
+  <input id="_id" name="_id" type="hidden" value="<%= plant._id %>" />
   <input id="_id" name="_id" type="hidden" value="<%= plant._id %>" />
   <div class="form-group mb-4">
     <label for="name" class="block text-text">Name</label>
@@ -168,10 +163,14 @@
     </div>
   </div>
 
-
   <!-- checkbox for using a file or a url for image -->
-  <label for="imageSettings<%=plant._id%>" class="block text-text">Image Settings</label>
-  <div id='imageSettings<%=plant._id%>' class="form-group mb-4 flex flex-col justify-between sm:flex-row">
+  <label for="imageSettings<%=plant._id%>" class="block text-text"
+    >Image Settings</label
+  >
+  <div
+    id="imageSettings<%=plant._id%>"
+    class="form-group mb-4 flex flex-col justify-between sm:flex-row"
+  >
     <div class="mb-2 flex items-center">
       <input
         id="imageInputCheckbox<%=plant._id%>"
@@ -181,7 +180,9 @@
         class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
         data-change="toggle-input"
       />
-      <label for="imageInputCheckbox" class="ms-2 text-sm font-medium text-text">Use URL for image?</label>
+      <label for="imageInputCheckbox" class="ms-2 text-sm font-medium text-text"
+        >Use URL for image?</label
+      >
     </div>
     <div class="mb-2 flex items-center">
       <input
@@ -195,11 +196,17 @@
         checked
         oninvalid="this.setCustomValidity('Upload or enter a valid URL and preview to continue')"
       />
-      <label for="imageValidated<%=plant._id%>" class="ms-2 text-sm font-medium text-text">Image validated?</label>
+      <label
+        for="imageValidated<%=plant._id%>"
+        class="ms-2 text-sm font-medium text-text"
+        >Image validated?</label
+      >
     </div>
   </div>
   <div class="form-group mb-4" id="imageDiv<%=plant._id%>">
-    <label class="block text-text" for="image<%=plant._id%>">Upload Image</label>
+    <label class="block text-text" for="image<%=plant._id%>"
+      >Upload Image</label
+    >
     <input
       class="file:form-input file:hover-button w-full cursor-pointer file:rounded file:px-4 file:py-2 file:font-bold"
       id="image<%=plant._id%>"
@@ -211,7 +218,7 @@
       data-default="<%= plant.image %>"
     />
   </div>
-  <div class="form-group mb-4 flex space-x-2 hidden" id="urlDiv<%=plant._id%>">
+  <div class="form-group mb-4 flex hidden space-x-2" id="urlDiv<%=plant._id%>">
     <div class="w-3/4">
       <label for="url<%=plant._id%>">Enter URL:</label>
       <input
@@ -231,7 +238,11 @@
   </div>
   <div id="imagePreviewContainer<%=plant._id%>">
     <label class="block text-text" for="preview">Image Preview</label>
-    <object type="image/svg+xml" data="/public/img/loading.svg" class="aspect-square w-1/2 rounded hidden"></object>
+    <object
+      type="image/svg+xml"
+      data="/public/img/loading.svg"
+      class="hidden aspect-square w-1/2 rounded"
+    ></object>
     <img
       id="preview<%=plant._id%>"
       src="<%= plant.image %>"
@@ -240,7 +251,10 @@
       data-img="preview"
     />
   </div>
-  <p id="previewError<%=plant._id%>" class="hidden text-error font-bold my-2 px-2"></p>
+  <p
+    id="previewError<%=plant._id%>"
+    class="my-2 hidden px-2 font-bold text-error"
+  ></p>
   <div class="form-group mb-4 flex space-x-2">
     <input
       type="text"
