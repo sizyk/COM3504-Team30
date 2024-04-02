@@ -9,7 +9,9 @@ showMessage('Connection to server lost! Showing locally stored info & chats.', '
 
 const mainElem = document.getElementById('card');
 
-const ejsTemplate = await fetch('/public/cached-views/plant.ejs').then((res) => res.text());
+const ejsTemplate = await fetch('/public/cached-views/plant.ejs').then((res) => res.text()).catch(() => {
+  mainElem.insertAdjacentHTML('afterbegin', '<h2 class="text-3xl font-bold text-center">Failed to load view! Try clearing your cache & reloading when connected.</h2>');
+});
 
 // Remove trailing forward slash (if any) and parse to get plant ID
 const [plantID] = window.location.href.replace(/\/$/, '').split('/').slice(-1);
@@ -18,6 +20,11 @@ const [plantID] = window.location.href.replace(/\/$/, '').split('/').slice(-1);
 DBController.get('plants', { _id: plantID }, (plants) => {
   if (plants.length === 0) {
     mainElem.insertAdjacentHTML('afterbegin', '<h2 class="text-3xl font-bold text-center">Unknown plant ID!</h2>');
+    return;
+  }
+
+  // If template failed to load, its type will not be string as it will be void
+  if (typeof ejsTemplate !== 'string') {
     return;
   }
 
