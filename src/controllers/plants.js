@@ -20,7 +20,7 @@ exports.upsert = async (plant) => {
     log(error);
     return {
       code: 500,
-      message: 'Plant failed to upload to MongoDB!',
+      message: 'Plant failed to upload!',
       object: newPlant,
     };
   }
