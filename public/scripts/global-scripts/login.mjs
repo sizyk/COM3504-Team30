@@ -16,7 +16,7 @@ function showLogoutButton() {
 }
 
 function hideLogoutButton() {
-  document.getElementById('logout-button').classList.remove('invisible');
+  document.getElementById('logout-button').classList.add('invisible');
 }
 
 function handleLogout() {
