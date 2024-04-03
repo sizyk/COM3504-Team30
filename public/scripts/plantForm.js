@@ -231,6 +231,9 @@ function submitPlantToDB(plant) {
             // eslint-disable-next-line no-use-before-define
             addEventListeners(document.getElementById(`card-${plantObject._id}`));
             document.getElementById('no-plants-warning').classList.add('hidden');
+          })
+          .catch(() => {
+            document.getElementById('no-plants-warning').innerText = 'Failed to load view! Try clearing your cache & reloading when connected.';
           });
       }
     },

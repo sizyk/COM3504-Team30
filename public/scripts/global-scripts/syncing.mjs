@@ -2,6 +2,8 @@ import IDB from '../utils/IDB.mjs';
 import DBController from '../utils/DBController.mjs';
 import { clearMessage, showMessage } from '../utils/flash-messages.mjs';
 
+const onlineStatus = document.getElementById('online-status');
+
 /**
  * Fires when internet connection is detected.
  * Retrieves all plants from API endpoint, and updates the user's indexedDB to match.
@@ -23,12 +25,15 @@ function connectHandler() {
   if (IDB.db) {
     window.dispatchEvent(new Event('idb-open'));
   }
+
+  onlineStatus.innerText = 'wifi';
 }
 
 /**
  * Fires when internet connection is lost, informing the user that their changes will not be saved
  */
 function disconnectHandler() {
+  onlineStatus.innerText = 'wifi_off';
 }
 
 /**
@@ -42,4 +47,5 @@ export default function initSyncing() {
   }
 
   window.addEventListener('online', connectHandler);
+  window.addEventListener('offline', disconnectHandler);
 }

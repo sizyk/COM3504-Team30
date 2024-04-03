@@ -1,5 +1,4 @@
 const FILTER_ELEMS = document.querySelectorAll('#filters input, #filters select');
-const ALL_PLANTS = Array.from(document.getElementsByClassName('plant-card'));
 const CURRENT_FILTERS = {};
 
 /**
@@ -56,7 +55,7 @@ function shouldHide(plant, filterFeature) {
  * Performs filtering on all plants currently rendered on the page
  */
 function filterPlants() {
-  ALL_PLANTS.forEach((plant) => {
+  Array.from(document.getElementsByClassName('plant-card')).forEach((plant) => {
     if (!Object.keys(CURRENT_FILTERS).some((feature) => shouldHide(plant, feature))) {
       plant.classList.remove('hidden');
     }

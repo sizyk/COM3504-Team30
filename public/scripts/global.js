@@ -14,6 +14,6 @@ initModals();
 initTouchScreen();
 initLogin();
 // Only enable syncing if not in offline mode
-if (!(Object.prototype.hasOwnProperty.call(window, 'plantsAppOffline') && window.plantsAppOffline === true)) {
+if (!(Object.prototype.hasOwnProperty.call(window, 'plantsAppOffline') || window.plantsAppOffline === false)) {
   initSyncing();
 }
