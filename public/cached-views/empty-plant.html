@@ -44,48 +44,46 @@
       <div id="moving-switch" class="z-20 bg-background"></div>
     </div>
 
-  <!--  Login Modal    -->
-  <div class="modal invisible" id="login-modal" tabindex="-1" role="dialog">
-    <div class="modal-overlay" data-close="modal"></div>
-    <div class="modal-container">
-      <div class="mb-4 flex items-center justify-between">
-        <h5 class="modal-title text-xl font-semibold">Pleas Login</h5>
-      </div>
-      <div class="modal-body">
-        <!-- Login Modal -->
-        <form
-          id="loginForm"
-          autocomplete="off"
-          target="fakesubmit"
-          data-form="plant"
-          data-plant="New"
-          enctype="multipart/form-data"
-          method="POST"
-        >
-          <div class="form-group mb-4">
-            <label for="username" class="block text-text">Username:</label>
-            <input
-              type="text"
-              class="form-input mt-1 block w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
-              id="username"
-              name="username"
-              maxlength="40"
-              required
-            />
-
-          </div>
-          <button
-            id="loginButton"
-            type="submit"
-            class="form-input hover-button rounded px-4 py-2 font-bold"
+    <!--  Login Modal    -->
+    <div class="modal invisible" id="login-modal" tabindex="-1" role="dialog">
+      <div class="modal-overlay" data-close="modal"></div>
+      <div class="modal-container">
+        <div class="mb-4 flex items-center justify-between">
+          <h5 class="modal-title text-xl font-semibold">Pleas Login</h5>
+        </div>
+        <div class="modal-body">
+          <!-- Login Modal -->
+          <form
+            id="loginForm"
+            autocomplete="off"
+            target="fakesubmit"
+            data-form="plant"
+            data-plant="New"
+            enctype="multipart/form-data"
+            method="POST"
           >
-            Submit
-          </button>
-        </form>
-
+            <div class="form-group mb-4">
+              <label for="username" class="block text-text">Username:</label>
+              <input
+                type="text"
+                class="form-input mt-1 block w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
+                id="username"
+                name="username"
+                maxlength="40"
+                required
+              />
+            </div>
+            <button
+              id="loginButton"
+              type="submit"
+              class="form-input hover-button rounded px-4 py-2 font-bold"
+            >
+              Submit
+            </button>
+          </form>
+        </div>
       </div>
     </div>
-  </div>
     <main
       id="card"
       class="mx-auto mt-24 w-10/12"
@@ -93,12 +91,15 @@
       data-plant=""
     ></main>
 
-     <footer class="flex items-center justify-center p-6">
-  <p class="text-xl">Bottom Text</p>
-    <button id="logout-button" class="hover-button-secondary rounded px-3 py-2 text-center font-bold invisible">
-      Logout
-    </button>
-</footer>
+    <footer class="flex items-center justify-center p-6">
+      <p class="text-xl">Bottom Text</p>
+      <button
+        id="logout-button"
+        class="hover-button-secondary invisible rounded px-3 py-2 text-center font-bold"
+      >
+        Logout
+      </button>
+    </footer>
 
     <div id="js-variables" class="hidden"></div>
   </body>
@@ -108,7 +109,6 @@
   </script>
 
   <script src="/public/scripts/ejs.min.js" type="module"></script>
-
 
   <script src="/public/scripts/offline/plant.js" type="module"></script>
 
