@@ -20,8 +20,8 @@ function setModalVisibility(modal) {
  * @param modal {HTMLDivElement} the modal to initialise
  */
 export function initialiseModal(modal) {
-  if (modal.id === 'login-modal'){
-    return
+  if (modal.id === 'login-modal') {
+    return;
   }
   const toggleBtn = document.querySelector(`[data-toggle="modal"][data-target="${modal.id}"]`);
   toggleBtn.addEventListener('click', () => {
