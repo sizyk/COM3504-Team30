@@ -2,6 +2,7 @@ import DBController from './utils/DBController.mjs';
 import { showMessage } from './utils/flash-messages.mjs';
 import updateCard, { buildSpottedString } from './utils/plantUtils.mjs';
 import { initialiseModal } from './global-scripts/modals.mjs';
+import { getUsername } from './utils/localStore.mjs';
 
 function showPosition(position, plantID) {
   document.getElementById(`latitude${plantID}`).value = position.coords.latitude;
@@ -272,10 +273,15 @@ function submitPlantForm(formElem) {
     const hexID = parseInt(params.get('_id').toString(), 10).toString(16);
     params.set('_id', hexID.padStart(24, '0'));
   }
-
+  // Get username from localStore
+  const username = getUsername();
+  // If username is not set do nothing
+  if (username == null) {
+    return;
+  }
   const plant = { // Get data from the form
     _id: params.get('_id'),
-    author: 'placeholder', // replace with user when implemented
+    author: username, // replace with user when implemented
     name: params.get('name').trim(),
     description: params.get('description').trim(),
     dateTimeSeen: new Date(params.get('dateTimeSeen')),
