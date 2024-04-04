@@ -1,7 +1,6 @@
-import { initialiseModal } from './modals.mjs';
 import { showMessage } from '../utils/flash-messages.mjs';
 
-function showLoginModal() {
+export function showLoginModal() {
   document.getElementById('login-modal').classList.add('active');
   document.getElementById('login-modal').classList.remove('invisible');
 }
@@ -26,8 +25,8 @@ function handleLogout() {
 }
 
 function handleLogin() {
-  const user = localStorage.getItem('username');
-  if (!user) {
+  const username = localStorage.getItem('username');
+  if (!username) {
     // If no user is "logged in", show the login modal
     showLoginModal();
   } else {
@@ -50,7 +49,6 @@ function handleLogin() {
 }
 
 export default function initLogin() {
-  initialiseModal(document.getElementById('login-modal'));
   const logoutButton = document.getElementById('logout-button');
   document.addEventListener('DOMContentLoaded', handleLogin);
   logoutButton.addEventListener('click', handleLogout);

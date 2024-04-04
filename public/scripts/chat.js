@@ -1,6 +1,7 @@
 import DBController from './utils/DBController.mjs';
 import { showMessage } from './utils/flash-messages.mjs';
 import IDB from './utils/IDB.mjs';
+import { getUsername } from './utils/localStore.mjs';
 
 let sendButton = document.getElementById('send-button');
 let userInput = document.getElementById('user-input');
@@ -11,8 +12,6 @@ let closeChatButton = document.getElementById('close-chat');
 
 // Remove trailing forward slash (if any) and parse to get plant ID
 const [roomId] = window.location.href.replace(/\/$/, '').split('/').slice(-1);
-const userId = localStorage.getItem('username');
-// const formElem = document.getElementById('chat-form');
 
 let socket = null;
 if (typeof io !== 'undefined') {
@@ -29,7 +28,13 @@ let isChatboxOpen = false;
  */
 function addUserMessage(message, user) {
   const messageElement = document.createElement('div');
-  if (user === userId) {
+  // Get username from localStore
+  const username = getUsername();
+  // If username is not set do nothing
+  if (username == null) {
+    return;
+  }
+  if (user === username) {
     messageElement.classList.add('mb-2', 'text-right');
     messageElement.innerHTML = `<p class="bg-primary text-white dark:text-on-secondary rounded-lg py-2 px-4 inline-block">You: ${message}</p>`;
   } else {
@@ -42,7 +47,13 @@ function addUserMessage(message, user) {
 
 function connectToRoom() {
   if (socket && navigator.onLine) {
-    socket.emit('create or join', roomId, userId);
+    // Get username from localStore
+    const username = getUsername();
+    // If username is not set do nothing
+    if (username == null) {
+      return;
+    }
+    socket.emit('create or join', roomId, username);
   }
 
   DBController.get('chats', { plant: roomId }, (chats) => {
@@ -100,10 +111,16 @@ function receiveChat(params) {
  */
 function sendChatMessage() {
   const userMessage = userInput.value;
+  // Get username from localStore
+  const username = getUsername();
+  // If username is not set do nothing
+  if (username == null) {
+    return;
+  }
   if (userMessage.trim() !== '') {
     const newChat = {
       _id: Date.now().toString(16).padStart(24, '0'),
-      user: userId,
+      user: username,
       plant: roomId,
       message: userMessage,
       dateTime: Date.now(),
