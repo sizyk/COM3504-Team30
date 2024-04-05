@@ -13,9 +13,14 @@
   <%- include('../partials/flash-message.ejs') %>
   <%- include('../partials/onlineIndicator.ejs') %>
   <%- include('../partials/themeToggle.ejs') %>
+
+  <%- include('../partials/login-modal.ejs') %>
   <% /* Render child elements of the layout here */%>
   <%- include(children) %>
   <%- include('../partials/footer.ejs') %>
+  <button id="logout-button" class="fixed hover-button-secondary rounded px-3 py-2 text-center font-bold invisible">
+    Logout
+  </button>
   <%- include('../partials/js-variables.ejs') %>
 </body>
 <% for(let i=0; i<scripts.length; i++) { %>
