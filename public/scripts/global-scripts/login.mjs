@@ -35,7 +35,6 @@ function handleLogin() {
 
   document.getElementById('login-modal').addEventListener('submit', (e) => {
     e.preventDefault();
-    const username = document.getElementById('username').value;
     if (username) {
       localStorage.setItem('username', username);
       // Hide the modal after login
