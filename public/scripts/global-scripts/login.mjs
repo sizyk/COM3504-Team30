@@ -25,30 +25,33 @@ function handleLogout() {
 }
 
 function handleLogin() {
-  const username = localStorage.getItem('username');
+  let username = localStorage.getItem('username');
   if (!username) {
     // If no user is "logged in", show the login modal
     showLoginModal();
   } else {
     showLogoutButton();
   }
+}
 
-  document.getElementById('login-modal').addEventListener('submit', (e) => {
-    e.preventDefault();
-    if (username) {
-      localStorage.setItem('username', username);
-      // Hide the modal after login
-      hideLoginModal();
-      showMessage(`Welcome ${username}!`, 'info');
-      showLogoutButton();
-    } else {
-      showMessage('Please Login', 'info');
-    }
-  });
+function onLoginSubmit(e) {
+  const username = document.getElementById('username').value;
+  e.preventDefault();
+  if (username) {
+    localStorage.setItem('username', username);
+    // Hide the modal after login
+    hideLoginModal();
+    showMessage(`Welcome ${username}!`, 'info');
+    showLogoutButton();
+  } else {
+    showMessage('Please Login', 'info');
+  }
 }
 
 export default function initLogin() {
+  const loginModal =   document.getElementById('login-modal')
   const logoutButton = document.getElementById('logout-button');
   document.addEventListener('DOMContentLoaded', handleLogin);
+  loginModal.addEventListener('submit', onLoginSubmit);
   logoutButton.addEventListener('click', handleLogout);
 }
