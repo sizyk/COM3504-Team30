@@ -25,7 +25,7 @@ function handleLogout() {
 }
 
 function handleLogin() {
-  let username = localStorage.getItem('username');
+  const username = localStorage.getItem('username');
   if (!username) {
     // If no user is "logged in", show the login modal
     showLoginModal();
@@ -49,7 +49,7 @@ function onLoginSubmit(e) {
 }
 
 export default function initLogin() {
-  const loginModal =   document.getElementById('login-modal')
+  const loginModal = document.getElementById('login-modal');
   const logoutButton = document.getElementById('logout-button');
   document.addEventListener('DOMContentLoaded', handleLogin);
   loginModal.addEventListener('submit', onLoginSubmit);
