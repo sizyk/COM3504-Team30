@@ -1,7 +1,7 @@
 import DBController from './utils/DBController.mjs';
 import { showMessage } from './utils/flash-messages.mjs';
 import IDB from './utils/IDB.mjs';
-import { getUsername } from './utils/localStore.mjs';
+import getUsername from './utils/localStore.mjs';
 
 let sendButton = document.getElementById('send-button');
 let userInput = document.getElementById('user-input');

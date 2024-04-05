@@ -2,7 +2,7 @@ import DBController from './utils/DBController.mjs';
 import { showMessage } from './utils/flash-messages.mjs';
 import updateCard, { buildSpottedString } from './utils/plantUtils.mjs';
 import { initialiseModal } from './global-scripts/modals.mjs';
-import { getUsername } from './utils/localStore.mjs';
+import getUsername from './utils/localStore.mjs';
 
 function showPosition(position, plantID) {
   document.getElementById(`latitude${plantID}`).value = position.coords.latitude;
