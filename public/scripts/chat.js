@@ -22,10 +22,9 @@ if (typeof io !== 'undefined') {
 let isChatboxOpen = false;
 
 function createMongoId(timestamp, username) {
-  const timestampString = Date.now().toString(16);
+  const timestampString = timestamp.toString(16);
   const truncatedUsername = username.slice(0, 24 - timestampString.length);
-  const id = (timestampString + truncatedUsername).padEnd(24, '0');
-  return id;
+  return (timestampString + truncatedUsername).padEnd(24, '0');
 }
 
 /**
