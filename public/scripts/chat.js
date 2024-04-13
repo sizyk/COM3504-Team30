@@ -21,6 +21,13 @@ if (typeof io !== 'undefined') {
 
 let isChatboxOpen = false;
 
+function createMongoId(timestamp, username) {
+  const timestampString = Date.now().toString(16);
+  const truncatedUsername = username.slice(0, 24 - timestampString.length);
+  const id = (timestampString + truncatedUsername).padEnd(24, '0');
+  return id;
+}
+
 /**
  * Add a message to the chatbox
  * @param {string} message - The message to add
@@ -93,7 +100,7 @@ function toggleChatbox() {
 function receiveChat(params) {
   try {
     const newChat = {
-      _id: Date.now().toString(16).padStart(24, '0'), // Auto-generate id
+      _id: createMongoId(params.dateTime, params.user),
       user: params.user,
       plant: params.plant,
       message: params.message,
@@ -118,12 +125,13 @@ function sendChatMessage() {
     return;
   }
   if (userMessage.trim() !== '') {
+    const timestamp = Date.now();
     const newChat = {
-      _id: Date.now().toString(16).padStart(24, '0'),
+      _id: createMongoId(timestamp, username),
       user: username,
       plant: roomId,
       message: userMessage,
-      dateTime: Date.now(),
+      dateTime: timestamp,
     };
     if (socket && navigator.onLine) {
       socket.emit('chat', roomId, newChat);
