@@ -13,4 +13,4 @@ function getUsername() {
   return username;
 }
 
-export default getUsername();
+export default getUsername;
