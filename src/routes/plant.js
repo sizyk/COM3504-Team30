@@ -11,12 +11,9 @@ router.get('/:id', (req, res) => {
   result.then((plants) => {
     const plant = plants[0];
     renderLayout(res, 'plant', {
-<<<<<<< HEAD
-      title: 'Individual Plant', plant, scripts: ['plantForm', 'chat'],
-=======
       title: 'Individual Plant',
       plant,
-      scripts: ['map-test'],
+      scripts: ['map-test', 'plantForm', 'chat'],
       useLeaflet: true,
       dataset: {
         centre: [plant.latitude, plant.longitude],
@@ -24,7 +21,6 @@ router.get('/:id', (req, res) => {
           coordinates: [plant.latitude, plant.longitude],
         }],
       },
->>>>>>> 05a5084 (Added leaflet)
     });
   });
 });
