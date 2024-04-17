@@ -33,13 +33,22 @@
   >
     No plants yet! Click 'Add Plant' to get started.
   </h3>
-  <div id="tab" class="w-full flex-fill-remaining-space flex flex-col">
-    <div id="tabs-buttons">
+  <div id="tabs" class="w-full flex-fill-remaining-space flex flex-col">
+    <div id="tabs-buttons" class="flex flex-row gap-2">
+      <button class="tab-button" data-target="grid-view">
+        Grid View
+      </button>
+      <button class="tab-button" data-target="map-view">
+        Map View
+      </button>
     </div>
     <!-- need defined height here otherwise it'll keep expanding to min height of plant cards -->
-    <div id="tab-container" class="rounded-xl bg-background-hover h-1 flex-fill-remaining-space p-4 overflow-scroll">
+    <div id="tab-container" class="rounded-xl rounded-tl-none bg-background-hover h-1 flex-fill-remaining-space p-4 overflow-scroll border-2 border-text">
       <div class="tab-content" data-tab="grid-view">
         <%- include('../partials/plant-view-grid') %>
+      </div>
+      <div class="tab-content" data-tab="map-view">
+        <h1>test</h1>
       </div>
     </div>
   </div>
