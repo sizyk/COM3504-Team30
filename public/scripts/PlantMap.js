@@ -49,6 +49,10 @@ export default class PlantMap {
 
     // zoomControl: false to prevent controls from being placed in the upper left of the map
     this._map = L.map(id, { zoomControl: false, zoomSnap: 1 });
+    this._mapDiv = document.getElementById(id);
+    this._mapDiv.addEventListener('leaflet-invalidate', () => {
+      this._map.invalidateSize();
+    });
 
     L.tileLayer(this._tiles, {
       maxZoom: PlantMap.MAX_ZOOM,

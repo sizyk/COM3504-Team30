@@ -8,10 +8,21 @@ const plants = require('../controllers/plants');
 router.get('/', (req, res) => {
   const result = plants.get({});
   result.then((allPlants) => {
+    const plantCoords = [];
+
+    allPlants.forEach((plant) => {
+      plantCoords.push({ coordinates: [plant.latitude, plant.longitude] });
+    });
+
     const data = {
       title: 'All Plants',
       plants: allPlants || [],
-      scripts: ['filters', 'plantForm', 'ejs.min'],
+      scripts: ['filters', 'plantForm', 'ejs.min', 'map-test'],
+      useLeaflet: true,
+      dataset: {
+        centre: [0, 0],
+        plants: plantCoords,
+      },
     };
 
     renderLayout(res, 'index', data);
