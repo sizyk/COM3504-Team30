@@ -1,4 +1,4 @@
-<main class="mx-auto mt-24 w-10/12">
+<main class="flex flex-col mx-auto mt-2 w-10/12">
   <div
     class="mb-8 flex flex-col items-center justify-between border-b-4 border-text pb-2 lg:flex-row lg:items-end"
   >
@@ -33,13 +33,14 @@
   >
     No plants yet! Click 'Add Plant' to get started.
   </h3>
-  <div
-    id="plant-grid"
-    class="grid grid-cols-1 gap-10 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
-  >
-    <!-- prettier-ignore -->
-    <% plants?.forEach((p) => { %>
-      <%- include('../partials/plant-card.ejs', {plant: p}) %>
-    <% }) %>
+  <div id="tab" class="w-full flex-fill-remaining-space flex flex-col">
+    <div id="tabs-buttons">
+    </div>
+    <!-- need defined height here otherwise it'll keep expanding to min height of plant cards -->
+    <div id="tab-container" class="rounded-xl bg-background-hover h-1 flex-fill-remaining-space p-4 overflow-scroll">
+      <div class="tab-content" data-tab="grid-view">
+        <%- include('../partials/plant-view-grid') %>
+      </div>
+    </div>
   </div>
 </main>
