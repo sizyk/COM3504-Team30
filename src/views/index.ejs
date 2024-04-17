@@ -33,22 +33,23 @@
   >
     No plants yet! Click 'Add Plant' to get started.
   </h3>
-  <div id="tabs" class="w-full flex-fill-remaining-space flex flex-col">
-    <div id="tabs-buttons" class="flex flex-row gap-2">
-      <button class="tab-button" data-target="grid-view">
-        Grid View
+  <div class="tabs w-full flex-fill-remaining-space flex flex-col">
+    <div class="tab-buttons flex flex-row gap-2">
+      <button class="tab-button flex items-center gap-1" data-target="grid-view">
+        <span class="material-symbols-outlined">grid_view</span> Grid View
       </button>
-      <button class="tab-button" data-target="map-view">
-        Map View
+      <button class="tab-button flex items-center gap-1" data-target="map-view">
+        <span class="material-symbols-outlined">map</span> Map View
       </button>
     </div>
     <!-- need defined height here otherwise it'll keep expanding to min height of plant cards -->
-    <div id="tab-container" class="rounded-xl rounded-tl-none bg-background-hover h-1 flex-fill-remaining-space p-4 overflow-scroll border-2 border-text">
-      <div class="tab-content" data-tab="grid-view">
+    <div class="tab-container rounded-xl rounded-tl-none bg-background-hover h-1 flex-fill-remaining-space p-4 overflow-scroll border-2 border-text">
+      <div id="grid-view" class="tab-content">
         <%- include('../partials/plant-view-grid') %>
       </div>
-      <div class="tab-content" data-tab="map-view">
-        <h1>test</h1>
+      <div id="map-view" class="tab-content h-full w-full relative" data-has-leaflet-map>
+        <div id="map" class="h-full w-full" data-is-leaflet>
+        </div>
       </div>
     </div>
   </div>
