@@ -3,7 +3,7 @@ import { showMessage } from './utils/flash-messages.mjs';
 import updateCard, { buildSpottedString } from './utils/plantUtils.mjs';
 import { initialiseModal } from './global-scripts/modals.mjs';
 import getUsername from './utils/localStore.mjs';
-import PLANT_MAP from './map-test.js';
+import PLANT_MAP from './mapDriver.js';
 
 function showPosition(position, plantID) {
   document.getElementById(`latitude${plantID}`).value = position.coords.latitude;

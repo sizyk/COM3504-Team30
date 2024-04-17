@@ -12,15 +12,16 @@ router.get('/', (req, res) => {
 
     allPlants.forEach((plant) => {
       plantCoords.push({
-        id: plant._id,
+        _id: plant._id,
         coordinates: [plant.latitude, plant.longitude],
+        image: plant.image,
       });
     });
 
     const data = {
       title: 'All Plants',
       plants: allPlants || [],
-      scripts: ['filters', 'plantForm', 'ejs.min', 'map-test'],
+      scripts: ['filters', 'plantForm', 'ejs.min', 'mapDriver'],
       useLeaflet: true,
       dataset: {
         centre: [0, 0],
