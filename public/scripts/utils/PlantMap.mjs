@@ -21,6 +21,20 @@ L.GridLayer.include({
 });
 
 /**
+ * Constructs a custom leaflet DivIcon for a given plant. The plant's image will be
+ * in a circle, with an arrow below pointing the the plant's location
+ * @param plant {{_id: string, image: string}} the plant to create an icon for
+ * @returns {L.DivIcon} the DivIcon for the plant
+ */
+function getPlantIcon(plant) {
+  return new L.DivIcon({
+    className: '',
+    html: `<a href="/plant/${plant._id}" style="background-image: url('${plant.image}');" class="plant-icon"></a>`,
+    iconAnchor: [32, 77], // half of width + border size, height + overflow of arrow
+  });
+}
+
+/**
  * A class used as a wrapper for leaflet mapping functionalities
  * @class PlantMap
  * @constructor
@@ -101,8 +115,8 @@ export default class PlantMap {
    */
   pinPlants(plants) {
     plants.forEach((plant) => {
-      this._plantMarkers[plant.id] = L.marker(plant.coordinates, { icon: PlantMap.PLANT_ICON });
-      this._plantMarkers[plant.id].addTo(this._map);
+      this._plantMarkers[plant._id] = L.marker(plant.coordinates, { icon: getPlantIcon(plant) });
+      this._plantMarkers[plant._id].addTo(this._map);
     });
   }
 

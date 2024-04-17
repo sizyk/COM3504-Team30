@@ -4,3 +4,39 @@
  */
 
 @import url("https://unpkg.com/leaflet@1.9.3/dist/leaflet.css");
+
+.plant-icon {
+  display: block;
+  position: relative;
+  width: 64px;
+  aspect-ratio: 1;
+  border-radius: 100%;
+  background-size: cover;
+  background-position: center;
+  overflow-x: clip;
+  border: 2px solid var(--on-secondary);
+  transition: border .25s ease-in-out;
+
+  &:hover {
+    border-color: var(--secondary);
+    &:after {
+      border-top-color: var(--secondary);
+    }
+  }
+
+  &:after {
+    pointer-events: none;
+    transition: border .25s ease-in-out;
+    content: " ";
+    position: absolute;
+    top: 100%; /* At the bottom of the tooltip */
+    left: 50%;
+    z-index: -1;
+    margin-top: -19px;
+    margin-left: -32px;
+    border-width: 32px;
+    border-radius: 32px;
+    border-style: solid;
+    border-color: var(--on-secondary) transparent transparent transparent;
+  }
+}

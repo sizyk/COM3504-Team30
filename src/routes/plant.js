@@ -13,11 +13,13 @@ router.get('/:id', (req, res) => {
     renderLayout(res, 'plant', {
       title: 'Individual Plant',
       plant,
-      scripts: ['map-test', 'plantForm', 'chat'],
+      scripts: ['mapDriver', 'plantForm', 'chat'],
       useLeaflet: true,
       dataset: {
         centre: [plant.latitude, plant.longitude],
         plants: [{
+          _id: plant._id,
+          image: plant.image,
           coordinates: [plant.latitude, plant.longitude],
         }],
       },

@@ -51,7 +51,6 @@ module.exports = function renderLayout(res, view, options, layout) {
   const dataset = [];
 
   // Construct HTML dataset attribute for each entry in dataset object
-  warn(opts.dataset);
   Object.keys(opts.dataset).forEach((key) => {
     dataset.push(`data-${key}='${JSON.stringify(opts.dataset[key])}'`);
   });
