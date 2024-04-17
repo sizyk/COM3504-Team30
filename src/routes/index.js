@@ -11,7 +11,10 @@ router.get('/', (req, res) => {
     const plantCoords = [];
 
     allPlants.forEach((plant) => {
-      plantCoords.push({ coordinates: [plant.latitude, plant.longitude] });
+      plantCoords.push({
+        id: plant._id,
+        coordinates: [plant.latitude, plant.longitude],
+      });
     });
 
     const data = {

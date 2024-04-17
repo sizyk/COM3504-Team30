@@ -3,7 +3,7 @@ import { showMessage } from './flash-messages.mjs';
 /**
  * Safely reads username from LocalStore
  */
-function getUsername() {
+export default function getUsername() {
   const username = localStorage.getItem('username');
   if (!username) {
     showMessage('Logged out unexpectedly', 'error');
@@ -12,5 +12,3 @@ function getUsername() {
 
   return username;
 }
-
-export default getUsername();
