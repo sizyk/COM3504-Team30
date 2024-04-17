@@ -12,16 +12,16 @@ function isTouchDevice() {
  * `touchscreen-hover` class.
  */
 export default function initTouchScreen() {
-  // Guard clause to stop this from running on non-touchscreen devices
-  if (!isTouchDevice()) {
-    return;
-  }
-
   // Code to allow hovering on touchscreen devices
   const touchHoverElems = Array.from(document.getElementsByClassName('touchscreen-hover'));
 
   // Unhover everything when user clicks anywhere that isn't hoverable
   document.addEventListener('click', () => {
+    // Guard clause to stop this from running on non-touchscreen devices
+    if (!isTouchDevice()) {
+      return;
+    }
+
     touchHoverElems.forEach((elem) => {
       elem.classList.remove('hover');
     });
@@ -30,6 +30,11 @@ export default function initTouchScreen() {
   // Add click listener to all elements that require hovering on touchscreen
   touchHoverElems.forEach((elem) => {
     elem.addEventListener('click', (e) => {
+      // Guard clause to stop this from running on non-touchscreen devices
+      if (!isTouchDevice()) {
+        return;
+      }
+
       // Unhover all other elements that are not the current one, and not ancestors of current one
       touchHoverElems.forEach((otherElem) => {
         if (!otherElem.contains(elem)) {
