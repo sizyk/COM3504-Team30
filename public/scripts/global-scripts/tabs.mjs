@@ -1,4 +1,11 @@
+/**
+ * Displays a tab with a given ID, and hides the others
+ * @param buttonList {NodeList} all tab buttons
+ * @param tabList {NodeList} all tab content divs
+ * @param tabID {string} the ID of the tab to show
+ */
 function activateTab(buttonList, tabList, tabID) {
+  // Ensure button for current tab is the only active one
   buttonList.forEach((button) => {
     button.classList.remove('active');
 
@@ -7,6 +14,7 @@ function activateTab(buttonList, tabList, tabID) {
     }
   });
 
+  // Ensure current tab is the only active one
   tabList.forEach((tab) => {
     tab.classList.remove('active');
 

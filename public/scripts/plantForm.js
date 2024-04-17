@@ -3,6 +3,7 @@ import { showMessage } from './utils/flash-messages.mjs';
 import updateCard, { buildSpottedString } from './utils/plantUtils.mjs';
 import { initialiseModal } from './global-scripts/modals.mjs';
 import getUsername from './utils/localStore.mjs';
+import PLANT_MAP from './map-test.js';
 
 function showPosition(position, plantID) {
   document.getElementById(`latitude${plantID}`).value = position.coords.latitude;
@@ -210,6 +211,8 @@ function submitPlantToDB(plant) {
       if (plantModal !== null) {
         plantModal.classList.remove('active');
         updateCard(plantObject);
+        // Update plant's pin on the map
+        PLANT_MAP.updatePlantCoordinates(plantObject);
       } else {
         plantObject.spottedString = buildSpottedString(plantObject);
         // plantModal is null - therefore this is a new plant
@@ -232,6 +235,10 @@ function submitPlantToDB(plant) {
             // eslint-disable-next-line no-use-before-define
             addEventListeners(document.getElementById(`card-${plantObject._id}`));
             document.getElementById('no-plants-warning').classList.add('hidden');
+
+            PLANT_MAP.pinPlants([
+              { id: plantObject._id, coordinates: [plantObject.latitude, plantObject.longitude] },
+            ]);
           })
           .catch(() => {
             document.getElementById('no-plants-warning').innerText = 'Failed to load view! Try clearing your cache & reloading when connected.';

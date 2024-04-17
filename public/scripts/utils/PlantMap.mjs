@@ -50,8 +50,16 @@ export default class PlantMap {
     // zoomControl: false to prevent controls from being placed in the upper left of the map
     this._map = L.map(id, { zoomControl: false, zoomSnap: 1 });
     this._mapDiv = document.getElementById(id);
+    this._viewReset = false;
+
+    // Invalidate size to ensure entire map div is taken up by map
+    // Prevents need for fixed width/height
     this._mapDiv.addEventListener('leaflet-invalidate', () => {
       this._map.invalidateSize();
+      if (!this._viewReset) {
+        this.resetMapView();
+        this._viewReset = true;
+      }
     });
 
     L.tileLayer(this._tiles, {
@@ -67,28 +75,42 @@ export default class PlantMap {
 
     // Get variables from view
     const JSVarDiv = document.getElementById(variablesID);
+    this._plantMarkers = {};
+
     if (JSVarDiv !== null) {
-      this._plants = JSON.parse(JSVarDiv.dataset.plants);
+      this.pinPlants(JSON.parse(JSVarDiv.dataset.plants));
       this._mapCentre = JSON.parse(JSVarDiv.dataset.centre);
     } else {
-      this._plants = [];
       this._mapCentre = [0, 0];
     }
 
     this.resetMapView();
-    this.pinPlants();
   }
 
   /**
    * Resets the map view, ensuring it is centred on the desired plant
    */
   resetMapView() {
-    this._map.setView(this._mapCentre, 15);
+    const pinGroup = L.featureGroup(Object.values(this._plantMarkers));
+    this._map.fitBounds(pinGroup.getBounds());
   }
 
-  pinPlants() {
-    this._plants.forEach((plant) => {
-      new L.Marker(plant.coordinates, { icon: PlantMap.PLANT_ICON }).addTo(this._map);
+  /**
+   * Draws pins for a list of plant coordinates, and stores them in an object
+   * @param plants {{id: string, coordinates: int[]}[]}
+   */
+  pinPlants(plants) {
+    plants.forEach((plant) => {
+      this._plantMarkers[plant.id] = L.marker(plant.coordinates, { icon: PlantMap.PLANT_ICON });
+      this._plantMarkers[plant.id].addTo(this._map);
     });
+  }
+
+  /**
+   * Updates the marker for a given plant
+   * @param plant {{_id: string, latitude: int, longitude: int}} the plant to update
+   */
+  updatePlantCoordinates(plant) {
+    this._plantMarkers[plant._id].setLatLng(new L.LatLng(plant.latitude, plant.longitude));
   }
 }

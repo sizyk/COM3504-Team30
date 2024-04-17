@@ -1,5 +1,7 @@
 /* eslint import/extensions: 0 */
-import PlantMap from './PlantMap.js';
+import PlantMap from './utils/PlantMap.mjs';
 
 // eslint-disable-next-line no-unused-vars
-const MAP = new PlantMap();
+const PLANT_MAP = new PlantMap();
+
+export default PLANT_MAP;
