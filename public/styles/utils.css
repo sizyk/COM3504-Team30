@@ -92,7 +92,7 @@
     }
   }
 
-  /*===MODAL====================================================================*/
+  /*===MODALS===================================================================*/
   .modal {
     pointer-events: none;
     z-index: 1000;
@@ -153,6 +153,7 @@
     padding-right: 5px;
     overflow-y: auto;
   }
+  /*==END-MODALS==============================================================*/
 
   /*===TOOLTIPS=================================================================*/
   .has-tooltip {
@@ -217,6 +218,7 @@
       }
     }
   }
+  /*==END-TOOLTIPS============================================================*/
 
   /*===FLASH MESSAGES=========================================================*/
   .flash {
@@ -244,4 +246,33 @@
       color: var(--on-secondary);
     }
   }
+  /*==END-ALERTS==============================================================*/
+
+  /*==TABS====================================================================*/
+  #tabs {
+    isolation: isolate;
+  }
+
+  .tab-content {
+    &:not(.active) {
+      display: none;
+    }
+  }
+
+  .tab-button {
+    @apply bg-background-hover;
+    height: 3rem;
+    margin-bottom: -2px;
+    padding: 5px 1rem;
+    border-radius: 20px 20px 0 0;
+    border: 2px solid var(--background-hover);
+    border-bottom: none;
+
+    &.active {
+      z-index: 100;
+      border: 2px solid var(--text);
+      border-bottom: none;
+    }
+  }
+  /*==END-TABS================================================================*/
 }
