@@ -9,21 +9,25 @@ const router = express.Router();
 router.get('/:id', (req, res) => {
   const result = get({ _id: req.params.id });
   result.then((plants) => {
-    const plant = plants[0];
-    renderLayout(res, 'plant', {
-      title: 'Individual Plant',
-      plant,
-      scripts: ['mapDriver', 'plantForm', 'chat'],
-      useLeaflet: true,
-      dataset: {
-        centre: [plant.latitude, plant.longitude],
-        plants: [{
-          _id: plant._id,
-          image: plant.image,
-          coordinates: [plant.latitude, plant.longitude],
-        }],
-      },
-    });
+    if (plants && plants.length > 0) {
+      const plant = plants[0];
+      renderLayout(res, 'plant', {
+        title: 'Individual Plant',
+        plant,
+        scripts: ['mapDriver', 'plantForm', 'chat'],
+        useLeaflet: true,
+        dataset: {
+          centre: [plant.latitude, plant.longitude],
+          plants: [{
+            _id: plant._id,
+            image: plant.image,
+            coordinates: [plant.latitude, plant.longitude],
+          }],
+        },
+      });
+    } else {
+      res.sendStatus(404);
+    }
   });
 });
 
