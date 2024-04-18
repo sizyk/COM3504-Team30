@@ -1,5 +1,3 @@
-<% var editModalName = plant._id + "-edit-plant-modal"%>
-
 <div
   id="card-<%= plant._id %>"
   class="plant-card touchscreen-hover h-[28rem] overflow-hidden border-8 border-text bg-cover bg-center"
@@ -77,30 +75,10 @@
     <div class="flex flex-row justify-stretch gap-2 p-2">
       <a
         href="/plant/<%=plant._id%>"
-        class="hover-button w-1/2 rounded-lg px-4 py-2 text-center text-sm font-bold"
+        class="hover-button w-full rounded-lg px-4 py-2 text-center text-sm font-bold"
       >
         Chat/More Details
       </a>
-      <button
-        class="hover-button-secondary w-1/2 rounded-lg px-4 py-2 text-center text-sm font-bold"
-        data-toggle="modal"
-        data-target="<%= editModalName %>"
-      >
-        Suggest Edit
-      </button>
     </div>
   </div>
-
-  <!-- prettier-ignore -->
-  <%-
-    include('../partials/modal.ejs', {
-      modalID: editModalName,
-      modalTitle: 'Edit a plant sighting',
-      modalContent: 'edit-plant-form',
-    });
-  %>
-
-  <!-- To render cached view -->
-  <$- include('client-side-modal.ejs', { modalID: editModalName, modalTitle:
-  'Edit a plant sighting', modalContent: 'edit-plant-form', }); $>
 </div>
