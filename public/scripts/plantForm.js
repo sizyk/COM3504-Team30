@@ -145,20 +145,8 @@ function deletePlant(plantID) {
     DBController.delete(
       'plants',
       plantID,
-      (message) => {
-        showMessage(message, 'success', 'delete');
-
-        // Remove plant card
-        document.getElementById(`card-${plantID.toString()}`).remove();
-
-        const plantModal = document.getElementById(`${plantID}-edit-plant-modal`);
-        if (plantModal !== null) {
-          plantModal.classList.remove('active');
-        }
-
-        if (document.getElementById('plant-grid').childElementCount === 0) {
-          document.getElementById('no-plants-warning').classList.remove('hidden');
-        }
+      () => {
+        window.location.href = '/';
       },
     );
   }
