@@ -1,563 +1,523 @@
 <!doctype html>
 <html class="light h-full w-screen" lang="en">
-
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>All Plants</title>
-  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-  <link rel="stylesheet" href="/public/styles/dist/global.css" />
-  <link rel="manifest" href="/public/manifest.json">
-  
-</head>
-<body class="flex min-h-screen w-screen flex-col bg-background text-text">
-  <iframe name="fakesubmit" id="fakesubmit" style="display: none;"></iframe>
-  <div
-  id="flash-message"
-  class="flash pointer-events-none z-[1000]"
-  style="transform: translateY(-100%)"
->
-  <div
-    class="flash-info pointer-events-auto flex items-center justify-center gap-2 rounded border-2 border-text px-4 py-2 text-center text-2xl"
-  >
-    <i class="material-symbols-outlined !leading-8">
-      
-    </i>
-    <span class="pb-0.5">
-      
-    </span>
-  </div>
-</div>
-
-
-
-  <div
-  id="online-status"
-  class="material-symbols-outlined pointer-events-none fixed left-4 top-4 text-text"
->
-  wifi
-</div>
-
-  <div
-  role="button"
-  id="theme-toggle"
-  class="pointer-events-auto fixed right-4 top-4 isolate bg-background-inverse"
-  data-theme="light"
-  aria-label="Theme Toggle Switch"
->
-  <div
-    class="absolute left-0 z-10 flex w-full items-center justify-between pe-[5px] ps-[7px] text-background"
-  >
-    <i class="material-symbols-outlined !text-xl">light_mode</i>
-    <i class="material-symbols-outlined !text-xl">dark_mode</i>
-  </div>
-  <div id="moving-switch" class="z-20 bg-background"></div>
-</div>
-
-
-  <div class="modal invisible" id="login-modal" tabindex="-1" role="dialog">
-  <div class="modal-overlay"></div>
-  <div class="modal-container">
-    <div class="mb-4 flex items-center justify-between">
-      <h5 class="modal-title text-xl font-semibold">Please Login</h5>
-    </div>
-    <div class="modal-body">
-      <!-- Login Modal -->
-      <form
-        id="loginForm"
-        autocomplete="on"
-        target="fakesubmit"
-        method="POST"
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>All Plants</title>
+    <link rel="stylesheet" href="/public/styles/dist/global.css" />
+    <link rel="manifest" href="/public/manifest.json" />
+  </head>
+  <body class="flex min-h-screen w-screen flex-col bg-background text-text">
+    <iframe name="fakesubmit" id="fakesubmit" style="display: none"></iframe>
+    <div
+      id="flash-message"
+      class="flash pointer-events-none z-[1000]"
+      style="transform: translateY(-100%)"
+    >
+      <div
+        class="flash-info pointer-events-auto flex items-center justify-center gap-2 rounded border-2 border-text px-4 py-2 text-center text-2xl"
       >
-        <div class="form-group mb-4">
-          <label for="username" class="block text-text">Username:</label>
-          <input
-            type="text"
-            class="form-input mt-1 block w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
-            id="username"
-            name="username"
-            maxlength="40"
-            required
-          />
+        <i class="material-symbols-outlined !leading-8"> </i>
+        <span class="pb-0.5"> </span>
+      </div>
+    </div>
+
+    <div
+      id="online-status"
+      class="material-symbols-outlined pointer-events-none fixed left-4 top-4 text-text"
+    >
+      wifi
+    </div>
+
+    <div
+      role="button"
+      id="theme-toggle"
+      class="pointer-events-auto fixed right-4 top-4 isolate bg-background-inverse"
+      data-theme="light"
+      aria-label="Theme Toggle Switch"
+    >
+      <div
+        class="absolute left-0 z-10 flex w-full items-center justify-between pe-[5px] ps-[7px] text-background"
+      >
+        <i class="material-symbols-outlined !text-xl">light_mode</i>
+        <i class="material-symbols-outlined !text-xl">dark_mode</i>
+      </div>
+      <div id="moving-switch" class="z-20 bg-background"></div>
+    </div>
+
+    <div class="modal invisible" id="login-modal" tabindex="-1" role="dialog">
+      <div class="modal-overlay"></div>
+      <div class="modal-container">
+        <div class="mb-4 flex items-center justify-between">
+          <h5 class="modal-title text-xl font-semibold">Please Login</h5>
         </div>
-        <button
-          id="loginButton"
-          type="submit"
-          class="form-input hover-button rounded px-4 py-2 font-bold"
-        >
-          Submit
-        </button>
-      </form>
-    </div>
-  </div>
-</div>
-
-  
-  <main class="flex flex-col mx-auto mt-2 w-10/12">
-  <div
-    class="mb-8 flex flex-col items-center justify-between border-b-4 border-text pb-2 lg:flex-row lg:items-end"
-  >
-    <h1 class="text-4xl font-bold">All Plants</h1>
-    <div
-      class="lg:flex-fill-remaining-space fixed bottom-0 z-50 flex max-h-full w-screen flex-row items-end justify-center gap-4 border-t-2 border-text bg-background p-2 lg:relative lg:w-auto lg:justify-end lg:border-0"
-    >
-      <!-- FILTERS -->
-<!-- In a row at the top of the page on desktop, in a modal on mobile -->
-
-<button
-  type="button"
-  class="hover-button-secondary flex items-center gap-2 rounded px-3 py-2 text-center font-bold lg:hidden"
-  data-toggle="modal"
-  data-target="filters"
->
-  Filters <span class="material-symbols-outlined"> filter_alt </span>
-</button>
-
-<div id="filters" class="max-lg:modal invisible lg:visible" data-modal>
-  <div class="modal-overlay lg:hidden" data-close="modal"></div>
-  <div class="max-lg:modal-container">
-    <div class="mb-4 flex items-center justify-between lg:hidden">
-      <h5 class="modal-title text-xl font-semibold">Filter Plants</h5>
-      <button
-        class="close-modal flex justify-center rounded border border-gray-300 bg-background hover:bg-error hover:text-background"
-        aria-label="Close modal"
-        title="Close modal"
-        data-close="modal"
-      >
-        <span class="material-symbols-outlined">close</span>
-      </button>
-    </div>
-    <div
-      class="max-lg:modal-body flex flex-col items-center gap-4 text-xl lg:h-16 lg:flex-row lg:items-stretch lg:justify-evenly"
-    >
-      <div class="flex items-center gap-2 lg:flex-col lg:gap-0">
-        <label for="has-leaves-filter">Leaves?</label>
-        <input
-          type="checkbox"
-          id="has-leaves-filter"
-          class="lg:flex-fill-remaining-space aspect-square h-8"
-          data-filterfeature="hasleaves"
-          data-filtervalue="any"
-        />
-      </div>
-      <div class="flex items-center gap-2 lg:flex-col lg:gap-0">
-        <label for="has-flowers-filter">Flowers?</label>
-        <input
-          type="checkbox"
-          id="has-flowers-filter"
-          class="lg:flex-fill-remaining-space aspect-square h-8"
-          data-filterfeature="hasflowers"
-          data-filtervalue="any"
-        />
-      </div>
-      <div class="flex items-center gap-2 lg:flex-col lg:gap-0">
-        <label for="has-fruits-nuts-filter">Fruits/Nuts?</label>
-        <input
-          type="checkbox"
-          id="has-fruits-nuts-filter"
-          class="lg:flex-fill-remaining-space aspect-square h-8"
-          data-filterfeature="hasfruitsnuts"
-          data-filtervalue="any"
-        />
-      </div>
-      <div class="flex items-center gap-2 lg:flex-col lg:gap-0">
-        <label for="sun-exposure-filter">Sun Exposure</label>
-        <select
-          id="sun-exposure-filter"
-          class="lg:flex-fill-remaining-space h-8 border-2 border-text border-text bg-background px-2 text-text dark:bg-background-inverse dark:text-background"
-          data-filterfeature="sunexposure"
-          data-filtervalue="any"
-        >
-          <option>None</option>
-          <option>Partial</option>
-          <option>Full</option>
-          <option selected>Any</option>
-        </select>
+        <div class="modal-body">
+          <!-- Login Modal -->
+          <form
+            id="loginForm"
+            autocomplete="on"
+            target="fakesubmit"
+            method="POST"
+          >
+            <div class="form-group mb-4">
+              <label for="username" class="block text-text">Username:</label>
+              <input
+                type="text"
+                class="form-input mt-1 block w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
+                id="username"
+                name="username"
+                maxlength="40"
+                required
+              />
+            </div>
+            <button
+              id="loginButton"
+              type="submit"
+              class="form-input hover-button rounded px-4 py-2 font-bold"
+            >
+              Submit
+            </button>
+          </form>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
-
-      <button
-        type="button"
-        class="hover-button flex items-center gap-2 rounded px-3 py-2 text-center font-bold"
-        data-toggle="modal"
-        data-target="plant-add-modal"
+    <main class="mx-auto mt-2 flex w-10/12 flex-col">
+      <div
+        class="mb-8 flex flex-col items-center justify-between border-b-4 border-text pb-2 lg:flex-row lg:items-end"
       >
-        Add Plant <span class="material-symbols-outlined"> library_add </span>
-      </button>
-
-      <!-- prettier-ignore -->
-      <div class="modal invisible" id="plant-add-modal" tabindex="-1" role="dialog">
-  <div class="modal-overlay" data-close="modal" data-target="plant-add-modal"></div>
-  <div class="modal-container">
-    <div class="mb-4 flex items-center justify-between">
-      <h5 class="modal-title text-xl font-semibold">Create a new plant sighting</h5>
-      <button
-        class="close-modal flex justify-center rounded border border-gray-300 bg-background hover:bg-error hover:text-background"
-        aria-label="Close modal"
-        title="Close modal"
-        data-close="modal"
-        data-target="plant-add-modal"
-      >
-        <span class="material-symbols-outlined">close</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <!-- prettier-ignore -->
-<div class="modal invisible" id="pick-location-modal" tabindex="-1" role="dialog">
-  <div class="modal-overlay" data-close="modal" data-target="pick-location-modal"></div>
-  <div class="modal-container">
-    <div class="mb-4 flex items-center justify-between">
-      <h5 class="modal-title text-xl font-semibold">Click on the Map to Choose a Location</h5>
-      <button
-        class="close-modal flex justify-center rounded border border-gray-300 bg-background hover:bg-error hover:text-background"
-        aria-label="Close modal"
-        title="Close modal"
-        data-close="modal"
-        data-target="pick-location-modal"
-      >
-        <span class="material-symbols-outlined">close</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <div id="pick-location-map" class="aspect-video h-[66vh] max-w-[80vw]"></div>
-
-    </div>
-  </div>
-</div>
-
-
-<form
-  id="createPlantForm"
-  autocomplete="off"
-  target="fakesubmit"
-  data-form="plant"
-  data-plant="New"
-  enctype="multipart/form-data"
-  method="POST"
-  class="w-[32rem] max-w-[70vw]"
->
-  <div class="form-group mb-4">
-    <label for="name" class="block text-text">Name</label>
-    <input
-      type="text"
-      class="form-input mt-1 block w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
-      id="name"
-      name="name"
-      maxlength="40"
-      required
-    />
-  </div>
-  <div class="form-group mb-4">
-    <label for="description" class="block text-text">Description</label>
-    <textarea
-      type="textarea"
-      class="form-input mt-1 block w-full resize-none rounded border border-gray-300 bg-background-light pl-2 text-text"
-      id="description"
-      name="description"
-      rows="3"
-      maxlength="256"
-      required
-    ></textarea>
-  </div>
-  <div class="form-group mb-4">
-    <label for="dateTimeSeen" class="block text-text">Time seen</label>
-    <input
-      type="datetime-local"
-      id="dateTimeSeen"
-      name="dateTimeSeen"
-      class="form-input mt-1 block w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
-      required
-    />
-  </div>
-  <div class="form-group mb-4">
-    <label for="size" class="block text-text">Size (cm)</label>
-    <input
-      type="number"
-      class="form-input mt-1 block w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
-      id="size"
-      name="size"
-      min="0"
-      value="0"
-      step=".01"
-      required
-    />
-  </div>
-  <!-- Select -->
-  <div class="form-group mb-4">
-    <label for="sunExposure" class="block text-text">Sun Exposure</label>
-    <select
-      id="sunExposure"
-      name="sunExposure"
-      class="form-input block w-full rounded-lg border border-gray-300 bg-background-light p-2.5 text-sm text-text focus:border-background-hover focus:ring-background"
-    >
-      <option>None</option>
-      <option>Partial</option>
-      <option>Full</option>
-    </select>
-  </div>
-
-  <div class="form-group mb-4">
-    <label for="colour" class="block text-text">Plant Colour</label>
-    <input
-      type="color"
-      name="colour"
-      class="form-input block h-10 w-14 cursor-pointer rounded border border-gray-300 bg-background-light p-1 text-text"
-      id="hs-color-input"
-      value="#2d5936"
-      title="Select plant colour"
-      required
-    />
-  </div>
-
-  <!-- Checkboxes -->
-  <!-- In checkboxes: hasFlowers, hasLeaves & sunExposure -->
-  <label for="properties" class="block text-text">Properties</label>
-  <div
-    id="properties"
-    class="form-group mb-4 flex flex-col justify-between sm:flex-row"
-  >
-    <div class="mb-2 flex items-center">
-      <input
-        id="hasFlowers"
-        name="hasFlowers"
-        type="checkbox"
-        value="true"
-        class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
-      />
-      <label for="hasFlowers" class="ms-2 text-sm font-medium text-text">
-        Flowers
-      </label>
-    </div>
-    <div class="mb-2 flex items-center">
-      <input
-        id="hasLeaves"
-        name="hasLeaves"
-        type="checkbox"
-        value="true"
-        class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
-      />
-      <label for="hasLeaves" class="ms-2 text-sm font-medium text-text">
-        Leaves
-      </label>
-    </div>
-    <div class="mb-2 flex items-center">
-      <input
-        id="hasFruit"
-        name="hasFruit"
-        type="checkbox"
-        value="true"
-        class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
-      />
-      <label for="hasFruit" class="ms-2 text-sm font-medium text-text">
-        Fruit
-      </label>
-    </div>
-    <div class="mb-2 flex items-center">
-      <input
-        id="hasSeeds"
-        name="hasSeeds"
-        type="checkbox"
-        value="true"
-        class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
-      />
-      <label for="hasSeeds" class="ms-2 text-sm font-medium text-text">
-        Seeds
-      </label>
-    </div>
-  </div>
-  <!-- checkbox for using a file or a url for image -->
-  <label for="imageSettings" class="block text-text">Image Settings</label>
-  <div
-    id="imageSettings"
-    class="form-group mb-4 flex flex-col justify-between sm:flex-row"
-  >
-    <div class="mb-2 flex items-center">
-      <input
-        id="imageInputCheckboxNew"
-        name="imageInput"
-        type="checkbox"
-        value="url"
-        class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
-        data-change="toggle-input"
-      />
-      <label for="imageInputCheckbox" class="ms-2 text-sm font-medium text-text"
-        >Use URL for image?</label
-      >
-    </div>
-    <div class="mb-2 flex items-center">
-      <input
-        id="imageValidatedNew"
-        name="imageValidated"
-        type="checkbox"
-        value="true"
-        class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
-        required
-        disabled
-        oninvalid="this.setCustomValidity('Upload or enter a valid URL and preview to continue')"
-      />
-      <label for="imageValidated" class="ms-2 text-sm font-medium text-text"
-        >Image validated?</label
-      >
-    </div>
-  </div>
-  <div class="form-group mb-4" id="imageDivNew">
-    <label class="block text-text" for="file_input">Upload Image</label>
-    <input
-      class="file:form-input file:hover-button w-full cursor-pointer file:rounded file:px-4 file:py-2 file:font-bold"
-      id="imageNew"
-      name="image"
-      type="file"
-      aria-describedby="file_input_help"
-      accept="image/png, image/jpeg, image/gif"
-      data-change="preview"
-      required
-    />
-  </div>
-  <div class="form-group mb-4 flex hidden space-x-2" id="urlDivNew">
-    <div class="w-3/4">
-      <label for="urlNew">Enter URL:</label>
-      <input
-        type="text"
-        id="urlNew"
-        name="url"
-        class="form-input mt-1 block w-full grow-0 rounded border border-gray-300 bg-background-light pl-2 text-text"
-      />
-    </div>
-    <button
-      class="form-input hover-button w-1/4 grow-0 rounded px-4 py-2 font-bold"
-      type="button"
-      data-click="preview"
-    >
-      Preview
-    </button>
-  </div>
-  <div id="imagePreviewContainerNew" class="hidden">
-    <label class="block text-text" for="preview">Image Preview</label>
-    <object
-      type="image/svg+xml"
-      data="/public/img/loading.svg"
-      class="hidden aspect-square w-1/2 rounded"
-    ></object>
-    <img
-      id="previewNew"
-      src="/public/img/logo.svg"
-      alt="your image"
-      class="hidden w-1/2"
-      data-img="preview"
-    />
-  </div>
-  <p id="previewErrorNew" class="my-2 hidden px-2 font-bold text-error"></p>
-  <div class="form-group mb-4 flex flex-col gap-2 space-x-2">
-    <input
-      type="text"
-      id="latitudeNew"
-      name="latitude"
-      class="form-input mt-1 block hidden w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
-      value="0"
-      required
-      readonly
-    />
-    <input
-      type="text"
-      id="longitudeNew"
-      name="longitude"
-      class="form-input mt-1 block hidden w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
-      value="0"
-      readonly
-    />
-    <div class="flex gap-2 items-center">
-      <label for="coordinates">Coordinates:</label>
-      <input
-        type="text"
-        id="coordinatesNew"
-        name="coordinates"
-        class="form-input mt-1 block rounded border border-gray-300 bg-background-light pl-2 text-text flex-fill-remaining-space"
-        value="(0,0)"
-        required
-        readonly
-      />
-    </div>
-    <div class="flex items-center gap-2">
-      <button
-        class="form-input hover-button rounded px-4 py-2 font-bold flex-1"
-        type="button"
-        data-click="geolocation"
-      >
-        Get Location From GPS
-      </button>
-      or
-      <button
-        type="button"
-        class="hover-button flex items-center gap-2 rounded px-3 py-2 text-center font-bold flex-1"
-        data-toggle="modal"
-        data-target="pick-location-modal"
-      >
-        <span class="material-symbols-outlined"> pin_drop </span> Choose From a Map
-      </button>
-    </div>
-  </div>
-  <button
-    id="submitButton"
-    type="submit"
-    class="form-input hover-button rounded px-4 py-2 font-bold"
-  >
-    Submit
-  </button>
-</form>
-
-    </div>
-  </div>
-</div>
-
-    </div>
-  </div>
-  <h3
-    id="no-plants-warning"
-    class="hidden m-auto w-max text-2xl font-bold"
-  >
-    No plants yet! Click 'Add Plant' to get started.
-  </h3>
-  <div class="tabs w-full flex-fill-remaining-space flex flex-col">
-    <div class="tab-buttons flex flex-row gap-2">
-      <button class="tab-button flex items-center gap-1" data-target="grid-view">
-        <span class="material-symbols-outlined">grid_view</span> Grid View
-      </button>
-    </div>
-    <!-- need defined height here otherwise it'll keep expanding to min height of plant cards -->
-    <div class="tab-container rounded-xl rounded-tl-none bg-background-hover h-1 flex-fill-remaining-space p-4 overflow-scroll border-2 border-text">
-      <div id="grid-view" class="tab-content">
+        <h1 class="text-4xl font-bold">All Plants</h1>
         <div
-          id="plant-grid"
-          class="grid grid-cols-1 gap-10 md:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4"
+          class="lg:flex-fill-remaining-space fixed bottom-0 z-50 flex max-h-full w-screen flex-row items-end justify-center gap-4 border-t-2 border-text bg-background p-2 lg:relative lg:w-auto lg:justify-end lg:border-0"
         >
+          <!-- FILTERS -->
+          <!-- In a row at the top of the page on desktop, in a modal on mobile -->
 
+          <button
+            type="button"
+            class="hover-button-secondary flex items-center gap-2 rounded px-3 py-2 text-center font-bold lg:hidden"
+            data-toggle="modal"
+            data-target="filters"
+          >
+            Filters <span class="material-symbols-outlined"> filter_alt </span>
+          </button>
+
+          <div
+            id="filters"
+            class="max-lg:modal invisible lg:visible"
+            data-modal
+          >
+            <div class="modal-overlay lg:hidden" data-close="modal"></div>
+            <div class="max-lg:modal-container">
+              <div class="mb-4 flex items-center justify-between lg:hidden">
+                <h5 class="modal-title text-xl font-semibold">Filter Plants</h5>
+                <button
+                  class="close-modal flex justify-center rounded border border-gray-300 bg-background hover:bg-error hover:text-background"
+                  aria-label="Close modal"
+                  title="Close modal"
+                  data-close="modal"
+                >
+                  <span class="material-symbols-outlined">close</span>
+                </button>
+              </div>
+              <div
+                class="max-lg:modal-body flex flex-col items-center gap-4 text-xl lg:h-16 lg:flex-row lg:items-stretch lg:justify-evenly"
+              >
+                <div class="flex items-center gap-2 lg:flex-col lg:gap-0">
+                  <label for="has-leaves-filter">Leaves?</label>
+                  <input
+                    type="checkbox"
+                    id="has-leaves-filter"
+                    class="lg:flex-fill-remaining-space aspect-square h-8"
+                    data-filterfeature="hasleaves"
+                    data-filtervalue="any"
+                  />
+                </div>
+                <div class="flex items-center gap-2 lg:flex-col lg:gap-0">
+                  <label for="has-flowers-filter">Flowers?</label>
+                  <input
+                    type="checkbox"
+                    id="has-flowers-filter"
+                    class="lg:flex-fill-remaining-space aspect-square h-8"
+                    data-filterfeature="hasflowers"
+                    data-filtervalue="any"
+                  />
+                </div>
+                <div class="flex items-center gap-2 lg:flex-col lg:gap-0">
+                  <label for="has-fruits-nuts-filter">Fruits/Nuts?</label>
+                  <input
+                    type="checkbox"
+                    id="has-fruits-nuts-filter"
+                    class="lg:flex-fill-remaining-space aspect-square h-8"
+                    data-filterfeature="hasfruitsnuts"
+                    data-filtervalue="any"
+                  />
+                </div>
+                <div class="flex items-center gap-2 lg:flex-col lg:gap-0">
+                  <label for="sun-exposure-filter">Sun Exposure</label>
+                  <select
+                    id="sun-exposure-filter"
+                    class="lg:flex-fill-remaining-space h-8 border-2 border-text border-text bg-background px-2 text-text dark:bg-background-inverse dark:text-background"
+                    data-filterfeature="sunexposure"
+                    data-filtervalue="any"
+                  >
+                    <option>None</option>
+                    <option>Partial</option>
+                    <option>Full</option>
+                    <option selected>Any</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            class="hover-button flex items-center gap-2 rounded px-3 py-2 text-center font-bold"
+            data-toggle="modal"
+            data-target="plant-add-modal"
+          >
+            Add Plant
+            <span class="material-symbols-outlined"> library_add </span>
+          </button>
+
+          <!-- prettier-ignore -->
+          <div class="modal invisible" id="plant-add-modal" tabindex="-1" role="dialog">
+            <div class="modal-overlay" data-close="modal" data-target="plant-add-modal"></div>
+            <div class="modal-container">
+              <div class="mb-4 flex items-center justify-between">
+                <h5 class="modal-title text-xl font-semibold">Create a new plant sighting</h5>
+                <button
+                  class="close-modal flex justify-center rounded border border-gray-300 bg-background hover:bg-error hover:text-background"
+                  aria-label="Close modal"
+                  title="Close modal"
+                  data-close="modal"
+                  data-target="plant-add-modal"
+                >
+                  <span class="material-symbols-outlined">close</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form
+                  id="createPlantForm"
+                  autocomplete="off"
+                  target="fakesubmit"
+                  data-form="plant"
+                  data-plant="New"
+                  enctype="multipart/form-data"
+                  method="POST"
+                  class="w-[32rem] max-w-[70vw]"
+                >
+                  <div class="form-group mb-4">
+                    <label for="name" class="block text-text">Name</label>
+                    <input
+                      type="text"
+                      class="form-input mt-1 block w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
+                      id="name"
+                      name="name"
+                      maxlength="40"
+                      required
+                    />
+                  </div>
+                  <div class="form-group mb-4">
+                    <label for="description" class="block text-text">Description</label>
+                    <textarea
+                      type="textarea"
+                      class="form-input mt-1 block w-full resize-none rounded border border-gray-300 bg-background-light pl-2 text-text"
+                      id="description"
+                      name="description"
+                      rows="3"
+                      maxlength="256"
+                      required
+                    ></textarea>
+                  </div>
+                  <div class="form-group mb-4">
+                    <label for="dateTimeSeen" class="block text-text">Time seen</label>
+                    <input
+                      type="datetime-local"
+                      id="dateTimeSeen"
+                      name="dateTimeSeen"
+                      class="form-input mt-1 block w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
+                      required
+                    />
+                  </div>
+                  <div class="form-group mb-4">
+                    <label for="size" class="block text-text">Size (cm)</label>
+                    <input
+                      type="number"
+                      class="form-input mt-1 block w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
+                      id="size"
+                      name="size"
+                      min="0"
+                      value="0"
+                      step=".01"
+                      required
+                    />
+                  </div>
+                  <!-- Select -->
+                  <div class="form-group mb-4">
+                    <label for="sunExposure" class="block text-text">Sun Exposure</label>
+                    <select
+                      id="sunExposure"
+                      name="sunExposure"
+                      class="form-input block w-full rounded-lg border border-gray-300 bg-background-light p-2.5 text-sm text-text focus:border-background-hover focus:ring-background"
+                    >
+                      <option>None</option>
+                      <option>Partial</option>
+                      <option>Full</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group mb-4">
+                    <label for="colour" class="block text-text">Plant Colour</label>
+                    <input
+                      type="color"
+                      name="colour"
+                      id="colour"
+                      class="form-input block h-10 w-14 cursor-pointer rounded border border-gray-300 bg-background-light p-1 text-text"
+                      id="hs-color-input"
+                      value="#2d5936"
+                      title="Select plant colour"
+                      required
+                    />
+                  </div>
+
+                  <!-- Checkboxes -->
+                  <!-- In checkboxes: hasFlowers, hasLeaves & sunExposure -->
+                  <label for="properties" class="block text-text">Properties</label>
+                  <div
+                    id="properties"
+                    class="form-group mb-4 flex flex-col justify-between sm:flex-row"
+                  >
+                    <div class="mb-2 flex items-center">
+                      <input
+                        id="hasFlowers"
+                        name="hasFlowers"
+                        type="checkbox"
+                        value="true"
+                        class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
+                      />
+                      <label for="hasFlowers" class="ms-2 text-sm font-medium text-text">
+                        Flowers
+                      </label>
+                    </div>
+                    <div class="mb-2 flex items-center">
+                      <input
+                        id="hasLeaves"
+                        name="hasLeaves"
+                        type="checkbox"
+                        value="true"
+                        class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
+                      />
+                      <label for="hasLeaves" class="ms-2 text-sm font-medium text-text">
+                        Leaves
+                      </label>
+                    </div>
+                    <div class="mb-2 flex items-center">
+                      <input
+                        id="hasFruit"
+                        name="hasFruit"
+                        type="checkbox"
+                        value="true"
+                        class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
+                      />
+                      <label for="hasFruit" class="ms-2 text-sm font-medium text-text">
+                        Fruit
+                      </label>
+                    </div>
+                    <div class="mb-2 flex items-center">
+                      <input
+                        id="hasSeeds"
+                        name="hasSeeds"
+                        type="checkbox"
+                        value="true"
+                        class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
+                      />
+                      <label for="hasSeeds" class="ms-2 text-sm font-medium text-text">
+                        Seeds
+                      </label>
+                    </div>
+                  </div>
+                  <!-- checkbox for using a file or a url for image -->
+                  <label for="imageSettings" class="block text-text">Image Settings</label>
+                  <div
+                    id="imageSettings"
+                    class="form-group mb-4 flex flex-col justify-between sm:flex-row"
+                  >
+                    <div class="mb-2 flex items-center">
+                      <input
+                        id="imageInputCheckboxNew"
+                        name="imageInput"
+                        type="checkbox"
+                        value="url"
+                        class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
+                        data-change="toggle-input"
+                      />
+                      <label for="imageInputCheckboxNew" class="ms-2 text-sm font-medium text-text"
+                        >Use URL for image?</label
+                      >
+                    </div>
+                    <div class="mb-2 flex items-center">
+                      <input
+                        id="imageValidatedNew"
+                        name="imageValidated"
+                        type="checkbox"
+                        value="true"
+                        class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
+                        required
+                        disabled
+                        oninvalid="this.setCustomValidity('Upload or enter a valid URL and preview to continue')"
+                      />
+                      <label for="imageValidatedNew" class="ms-2 text-sm font-medium text-text"
+                        >Image validated?</label
+                      >
+                    </div>
+                  </div>
+                  <div class="form-group mb-4" id="imageDivNew">
+                    <label class="block text-text" for="imageNew">Upload Image</label>
+                    <input
+                      class="file:form-input file:hover-button w-full cursor-pointer file:rounded file:px-4 file:py-2 file:font-bold"
+                      id="imageNew"
+                      name="image"
+                      type="file"
+                      aria-describedby="file_input_help"
+                      accept="image/png, image/jpeg, image/gif"
+                      data-change="preview"
+                      required
+                    />
+                  </div>
+                  <div class="form-group mb-4 flex hidden space-x-2" id="urlDivNew">
+                    <div class="w-3/4">
+                      <label for="urlNew">Enter URL:</label>
+                      <input
+                        type="text"
+                        id="urlNew"
+                        name="url"
+                        class="form-input mt-1 block w-full grow-0 rounded border border-gray-300 bg-background-light pl-2 text-text"
+                      />
+                    </div>
+                    <button
+                      class="form-input hover-button w-1/4 grow-0 rounded px-4 py-2 font-bold"
+                      type="button"
+                      data-click="preview"
+                    >
+                      Preview
+                    </button>
+                  </div>
+                  <div id="imagePreviewContainerNew" class="hidden">
+                    <label class="block text-text" for="previewNew">Image Preview</label>
+                    <object
+                      type="image/svg+xml"
+                      data="/public/img/loading.svg"
+                      class="hidden aspect-square w-1/2 rounded"
+                    ></object>
+                    <img
+                      id="previewNew"
+                      src="/public/img/logo.svg"
+                      alt="your image"
+                      class="hidden w-1/2"
+                      data-img="preview"
+                    />
+                  </div>
+                  <p id="previewErrorNew" class="my-2 hidden px-2 font-bold text-error"></p>
+                  <div class="form-group mb-4 flex flex-col gap-2 space-x-2">
+                    <input
+                      type="text"
+                      id="latitudeNew"
+                      name="latitude"
+                      class="form-input mt-1 block hidden w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
+                      value="0"
+                      required
+                      readonly
+                    />
+                    <input
+                      type="text"
+                      id="longitudeNew"
+                      name="longitude"
+                      class="form-input mt-1 block hidden w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
+                      value="0"
+                      readonly
+                    />
+                    <div class="flex gap-2 items-center">
+                      <label for="coordinatesNew">Coordinates:</label>
+                      <input
+                        type="text"
+                        id="coordinatesNew"
+                        name="coordinates"
+                        class="form-input mt-1 block rounded border border-gray-300 bg-background-light pl-2 text-text flex-fill-remaining-space"
+                        value="(0,0)"
+                        required
+                        readonly
+                      />
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <button
+                        class="form-input hover-button rounded px-4 py-2 font-bold flex-1"
+                        type="button"
+                        data-click="geolocation"
+                      >
+                        Get Location From GPS
+                      </button>
+                    </div>
+                  </div>
+                  <button
+                    id="submitButton"
+                    type="submit"
+                    class="form-input hover-button rounded px-4 py-2 font-bold"
+                  >
+                    Submit
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</main>
+      <h3 id="no-plants-warning" class="m-auto hidden w-max text-2xl font-bold">
+        No plants yet! Click 'Add Plant' to get started.
+      </h3>
+      <div class="tabs flex-fill-remaining-space flex w-full flex-col">
+        <div class="tab-buttons flex flex-row gap-2">
+          <button
+            class="tab-button flex items-center gap-1"
+            data-target="grid-view"
+          >
+            <span class="material-symbols-outlined">grid_view</span> Grid View
+          </button>
+        </div>
+        <!-- need defined height here otherwise it'll keep expanding to min height of plant cards -->
+        <div
+          class="tab-container flex-fill-remaining-space h-1 overflow-scroll rounded-xl rounded-tl-none border-2 border-text bg-background-hover p-4"
+        >
+          <div id="grid-view" class="tab-content">
+            <div
+              id="plant-grid"
+              class="grid grid-cols-1 gap-10 md:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </main>
 
-  <footer class="flex items-center justify-center p-6">
-  <p class="text-xl">Bottom Text</p>
-</footer>
+    <footer class="flex items-center justify-center p-6">
+      <p class="text-xl">Bottom Text</p>
+    </footer>
 
-  <button id="logout-button" class="fixed hover-button-secondary rounded px-3 py-2 text-center font-bold invisible">
-    Logout
-  </button>
-  <div id="js-variables" class="hidden" ></div>
-</body>
+    <button
+      id="logout-button"
+      class="hover-button-secondary invisible fixed rounded px-3 py-2 text-center font-bold"
+    >
+      Logout
+    </button>
+    <div id="js-variables" class="hidden"></div>
+  </body>
 
-<script>
-  window.plantsAppOffline = true;
-</script>
+  <script>
+    window.plantsAppOffline = true;
+  </script>
 
-<script src="/public/scripts/ejs.min.js" type="module"></script>
-<script src="/public/scripts/offline/index.js" type="module"></script>
-<script src="/public/scripts/global.js" type="module"></script>
-<script src="/public/scripts/filters.js" type="module"></script>
-<script src="/public/scripts/plantForm.js" type="module"></script>
-
+  <script src="/public/scripts/ejs.min.js" type="module"></script>
+  <script src="/public/scripts/offline/index.js" type="module"></script>
+  <script src="/public/scripts/global.js" type="module"></script>
+  <script src="/public/scripts/filters.js" type="module"></script>
+  <script src="/public/scripts/plantForm.js" type="module"></script>
 </html>
-

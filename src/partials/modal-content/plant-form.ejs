@@ -247,13 +247,13 @@
       value="0"
       readonly
     />
-    <div class="flex gap-2 items-center">
+    <div class="flex items-center gap-2">
       <label for="coordinates">Coordinates:</label>
       <input
         type="text"
         id="coordinatesNew"
         name="coordinates"
-        class="form-input mt-1 block rounded border border-gray-300 bg-background-light pl-2 text-text flex-fill-remaining-space"
+        class="form-input flex-fill-remaining-space mt-1 block rounded border border-gray-300 bg-background-light pl-2 text-text"
         value="(0,0)"
         required
         readonly
@@ -261,7 +261,7 @@
     </div>
     <div class="flex items-center gap-2">
       <button
-        class="form-input hover-button rounded px-4 py-2 font-bold flex-1"
+        class="form-input hover-button flex-1 rounded px-4 py-2 font-bold"
         type="button"
         data-click="geolocation"
       >
@@ -270,11 +270,12 @@
       or
       <button
         type="button"
-        class="hover-button flex items-center gap-2 rounded px-3 py-2 text-center font-bold flex-1"
+        class="hover-button flex flex-1 items-center gap-2 rounded px-3 py-2 text-center font-bold"
         data-toggle="modal"
         data-target="pick-location-modal"
       >
-        <span class="material-symbols-outlined"> pin_drop </span> Choose From a Map
+        <span class="material-symbols-outlined"> pin_drop </span> Choose From a
+        Map
       </button>
     </div>
   </div>
