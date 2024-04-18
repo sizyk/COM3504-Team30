@@ -100,30 +100,37 @@
     left: 0;
     top: 0;
     display: flex;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     align-items: center;
     justify-content: center;
     isolation: isolate;
 
+    &:not(.active) {
+      &>.modal-container, &>.max-lg\:modal-container {
+        transform: translateY(50px);
+      }
+    }
+
     &.active {
       pointer-events: auto;
 
-      .modal-overlay {
+      &>.modal-overlay {
         opacity: 0.5;
       }
 
-      .modal-container, .max-lg\:modal-container {
+      &>.modal-container, &>.max-lg\:modal-container {
         opacity: 1;
-        transform: translateY(0);
       }
     }
   }
 
   .modal-overlay {
-    position: absolute;
-    width: 100%;
-    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
 
     background-color: black;
 
@@ -144,8 +151,9 @@
     background-color: var(--background);
 
     opacity: 0;
-    transform: translateY(50px);
     transition: opacity .5s ease-in-out, transform .5s ease-in-out;
+
+    z-index: 10;
   }
 
   .modal-body {

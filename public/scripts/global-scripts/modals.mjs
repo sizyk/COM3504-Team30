@@ -24,16 +24,20 @@ export function initialiseModal(modal) {
     return;
   }
   const toggleBtn = document.querySelector(`[data-toggle="modal"][data-target="${modal.id}"]`);
-  toggleBtn.addEventListener('click', () => {
+  toggleBtn.addEventListener('click', (e) => {
     modal.classList.toggle('active');
     setModalVisibility(modal);
+    e.stopPropagation();
+    e.preventDefault();
   });
 
-  modal.querySelectorAll('[data-close="modal"]').forEach((closeBtn) => {
-    closeBtn.addEventListener('click', () => {
+  modal.querySelectorAll(`[data-close="modal"][data-target="${modal.id}"]`).forEach((closeBtn) => {
+    closeBtn.addEventListener('click', (e) => {
       modal.classList.remove('active');
 
       setModalVisibility(modal);
+      e.stopPropagation();
+      e.preventDefault();
     });
   });
 }
