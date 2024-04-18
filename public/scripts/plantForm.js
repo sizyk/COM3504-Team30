@@ -5,10 +5,17 @@ import { initialiseModal } from './global-scripts/modals.mjs';
 import getUsername from './utils/localStore.mjs';
 import PLANT_MAP from './mapDriver.js';
 
+/**
+ * Shows coordinates on the form
+ * @param position {{coords: {latitude: number, longitude: number}}} the position to display
+ * @param plantID {string} the ID of the plant whose form to display them on
+ */
 function showPosition(position, plantID) {
   document.getElementById(`latitude${plantID}`).value = position.coords.latitude;
   document.getElementById(`longitude${plantID}`).value = position.coords.longitude;
-  document.getElementById(`coordinates${plantID}`).value = `(${position.coords.latitude}, ${position.coords.longitude})`;
+
+  // Round coordinates to 5 decimal places each
+  document.getElementById(`coordinates${plantID}`).value = `(${position.coords.latitude.toFixed(5)}, ${position.coords.longitude.toFixed(5)})`;
 }
 
 /**
@@ -237,7 +244,11 @@ function submitPlantToDB(plant) {
             document.getElementById('no-plants-warning').classList.add('hidden');
 
             PLANT_MAP.pinPlants([
-              { id: plantObject._id, coordinates: [plantObject.latitude, plantObject.longitude] },
+              {
+                _id: plantObject._id,
+                image: plantObject.image,
+                coordinates: [plantObject.latitude, plantObject.longitude],
+              },
             ]);
           })
           .catch(() => {
@@ -381,3 +392,16 @@ if (plantAddForm) {
 }
 
 document.querySelectorAll('[data-plant-card]').forEach(addEventListeners);
+
+// Handle new location being passed from location picker
+document.addEventListener('pick-location', (e) => {
+  // Convert location to format expected by showPosition
+  const location = {
+    coords: {
+      latitude: e.detail.lat,
+      longitude: e.detail.lng,
+    },
+  };
+
+  showPosition(location, 'New');
+});
