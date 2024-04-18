@@ -43,12 +43,13 @@ self.addEventListener('install', (event) => {
       '/public/img/loading.svg',
       '/public/img/logo.svg',
 
+      '/public/scripts/global-scripts/login.mjs',
       '/public/scripts/global-scripts/modals.mjs',
       '/public/scripts/global-scripts/serviceWorker.mjs',
       '/public/scripts/global-scripts/syncing.mjs',
+      '/public/scripts/global-scripts/tabs.mjs',
       '/public/scripts/global-scripts/themeToggle.mjs',
       '/public/scripts/global-scripts/touchHover.mjs',
-      '/public/scripts/global-scripts/login.mjs',
 
       '/public/scripts/offline/index.js',
       '/public/scripts/offline/plant.js',
@@ -56,12 +57,15 @@ self.addEventListener('install', (event) => {
       '/public/scripts/utils/DBController.mjs',
       '/public/scripts/utils/flash-messages.mjs',
       '/public/scripts/utils/IDB.mjs',
+      '/public/scripts/utils/localStore.mjs',
+      '/public/scripts/utils/PlantMap.mjs',
       '/public/scripts/utils/plantUtils.mjs',
 
       '/public/scripts/chat.js',
       '/public/scripts/ejs.min.js',
       '/public/scripts/filters.js',
       '/public/scripts/global.js',
+      '/public/scripts/mapDriver.js',
       '/public/scripts/plantForm.js',
 
       '/public/styles/dist/global.css',

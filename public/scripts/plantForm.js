@@ -218,8 +218,10 @@ function submitPlantToDB(plant) {
       if (plantModal !== null) {
         plantModal.classList.remove('active');
         updateCard(plantObject);
-        // Update plant's pin on the map
-        PLANT_MAP.updatePlantCoordinates(plantObject);
+        if (!window.plantsAppOffline) {
+          // Update plant's pin on the map
+          PLANT_MAP.updatePlantCoordinates(plantObject);
+        }
       } else {
         plantObject.spottedString = buildSpottedString(plantObject);
         // plantModal is null - therefore this is a new plant
@@ -243,13 +245,15 @@ function submitPlantToDB(plant) {
             addEventListeners(document.getElementById(`card-${plantObject._id}`));
             document.getElementById('no-plants-warning').classList.add('hidden');
 
-            PLANT_MAP.pinPlants([
-              {
-                _id: plantObject._id,
-                image: plantObject.image,
-                coordinates: [plantObject.latitude, plantObject.longitude],
-              },
-            ]);
+            if (!window.plantsAppOffline) {
+              PLANT_MAP.pinPlants([
+                {
+                  _id: plantObject._id,
+                  image: plantObject.image,
+                  coordinates: [plantObject.latitude, plantObject.longitude],
+                },
+              ]);
+            }
           })
           .catch(() => {
             document.getElementById('no-plants-warning').innerText = 'Failed to load view! Try clearing your cache & reloading when connected.';

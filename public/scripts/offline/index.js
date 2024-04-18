@@ -1,7 +1,5 @@
 import { showMessage } from '../utils/flash-messages.mjs';
 import { buildSpottedString } from '../utils/plantUtils.mjs';
-import { initialiseModal } from '../global-scripts/modals.mjs';
-import addEventListeners from '../plantForm.js';
 import DBController from '../utils/DBController.mjs';
 
 showMessage('Connection to server lost! Showing locally stored plants.', 'info', 'wifi_off');
@@ -19,10 +17,6 @@ DBController.get('plants', {}, (plants) => {
     // Add new plant view to HTML & initialise relevant event listeners
     plantGrid.insertAdjacentHTML('beforeend', renderedTemplate);
 
-    initialiseModal(document.getElementById(`${plant._id}-edit-plant-modal`));
-
-    // eslint-disable-next-line no-use-before-define
-    addEventListeners(document.getElementById(`card-${plant._id}`));
     document.getElementById('no-plants-warning').classList.add('hidden');
   });
 });

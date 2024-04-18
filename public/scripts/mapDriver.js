@@ -2,6 +2,6 @@
 import PlantMap from './utils/PlantMap.mjs';
 
 // eslint-disable-next-line no-unused-vars
-const PLANT_MAP = new PlantMap();
+const PLANT_MAP = window.plantsAppOffline ? null : new PlantMap();
 
 export default PLANT_MAP;
