@@ -1,13 +1,13 @@
 <div
-        id="card-<%= plant._id %>"
-        class="plant-card touchscreen-hover h-[28rem] overflow-hidden border-8 border-text bg-cover bg-center"
-        style="background-image: url('<%= plant.image %>')"
-        data-hasleaves="<%= plant.hasLeaves %>"
-        data-hasflowers="<%= plant.hasFlowers %>"
-        data-hasfruitsnuts="<%= plant.hasFruit || plant.hasSeeds %>"
-        data-sunexposure="<%= plant.sunExposure.toLowerCase() %>"
-        data-plant-card
-        data-plant="<%=plant._id%>"
+  id="card-<%= plant._id %>"
+  class="plant-card touchscreen-hover h-[28rem] overflow-hidden border-8 border-text bg-cover bg-center"
+  style="background-image: url('<%= plant.image %>')"
+  data-hasleaves="<%= plant.hasLeaves %>"
+  data-hasflowers="<%= plant.hasFlowers %>"
+  data-hasfruitsnuts="<%= plant.hasFruit || plant.hasSeeds %>"
+  data-sunexposure="<%= plant.sunExposure.toLowerCase() %>"
+  data-plant-card
+  data-plant="<%=plant._id%>"
 >
   <div class="plant-info flex h-full flex-col gap-2 text-background">
     <div class="plant-name relative isolate px-2">
@@ -18,19 +18,19 @@
         <span data-emoji><%= plant.emoji %></span>
       </p>
       <div
-              class="absolute bottom-0 left-0 -z-10 h-[200%] w-full bg-gradient-to-t from-text from-55%"
+        class="absolute bottom-0 left-0 -z-10 h-[200%] w-full bg-gradient-to-t from-text from-55%"
       ></div>
     </div>
     <p class="flex-fill-remaining-space my-2 px-2" data-description>
       <%= plant.description %>
     </p>
     <div
-            class="m-2 flex flex-row justify-evenly gap-2 rounded-lg bg-background p-2 dark:bg-background-inverse"
+      class="m-2 flex flex-row justify-evenly gap-2 rounded-lg bg-background p-2 dark:bg-background-inverse"
     >
       <div class="has-tooltip touchscreen-hover" data-leaves>
         <img
-                src="/public/img/icons/has-leaf-<%= plant.hasLeaves %>.svg"
-                alt="An icon showing that the plant has <%= plant.hasLeaves ? '' : 'no ' %>leaves"
+          src="/public/img/icons/has-leaf-<%= plant.hasLeaves %>.svg"
+          alt="An icon showing that the plant has <%= plant.hasLeaves ? '' : 'no ' %>leaves"
         />
         <span class="tooltip-content tooltip-top">
           <%= plant.hasLeaves ? 'Has ' : 'Has no ' %>leaves
@@ -39,8 +39,8 @@
 
       <div class="has-tooltip touchscreen-hover" data-flowers>
         <img
-                src="/public/img/icons/flowers-<%= plant.hasFlowers %>.svg"
-                alt="An icon showing that the plant has <%= plant.hasFlowers ? '' : 'no ' %>flowers"
+          src="/public/img/icons/flowers-<%= plant.hasFlowers %>.svg"
+          alt="An icon showing that the plant has <%= plant.hasFlowers ? '' : 'no ' %>flowers"
         />
         <span class="tooltip-content tooltip-top">
           <%= plant.hasFlowers ? 'Has ' : 'Has no ' %>flowers
@@ -48,8 +48,8 @@
       </div>
       <div class="has-tooltip touchscreen-hover" data-sun>
         <img
-                src="/public/img/icons/sun-<%= plant.sunExposure.toLowerCase() %>.svg"
-                alt="An icon showing that the plant has <%= plant.sunExposure.toLowerCase().replace('ne', '') %> sun exposure"
+          src="/public/img/icons/sun-<%= plant.sunExposure.toLowerCase() %>.svg"
+          alt="An icon showing that the plant has <%= plant.sunExposure.toLowerCase().replace('ne', '') %> sun exposure"
         />
         <span class="tooltip-content tooltip-top">
           <%= plant.sunExposure.replace('ne', '') %> sun exposure
@@ -57,25 +57,25 @@
       </div>
       <div class="has-tooltip touchscreen-hover" data-fruit>
         <img
-                src="/public/img/icons/fruits-or-nuts-<%= plant.hasFruit || plant.hasSeeds %>.svg"
-                alt="An icon showing that the plant has <%= plant.hasFruit || plant.hasSeeds ? '' : 'no ' %>fruits or nuts"
+          src="/public/img/icons/fruits-or-nuts-<%= plant.hasFruit || plant.hasSeeds %>.svg"
+          alt="An icon showing that the plant has <%= plant.hasFruit || plant.hasSeeds ? '' : 'no ' %>fruits or nuts"
         />
         <span class="tooltip-content tooltip-top">
           <%= plant.hasFruit || plant.hasSeeds ? 'Has ' : 'Has no ' %>fruit/nuts
         </span>
       </div>
       <div
-              class="has-tooltip touchscreen-hover aspect-square h-full rounded-full"
-              style="background-color: <%= plant.colour %>"
-              data-colour
+        class="has-tooltip touchscreen-hover aspect-square h-full rounded-full"
+        style="background-color: <%= plant.colour %>"
+        data-colour
       >
         <span class="tooltip-content tooltip-top"> Colour of plant </span>
       </div>
     </div>
     <div class="flex flex-row justify-stretch gap-2 p-2">
       <a
-              href="/plant/<%=plant._id%>"
-              class="hover-button w-full rounded-lg px-4 py-2 text-center text-sm font-bold"
+        href="/plant/<%=plant._id%>"
+        class="hover-button w-full rounded-lg px-4 py-2 text-center text-sm font-bold"
       >
         Chat/More Details
       </a>
