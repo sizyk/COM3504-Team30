@@ -2,7 +2,8 @@
 module.exports = {
   content: [
     './src/**/*.ejs',
-    './public/**/*.js'
+    './public/**/*.js',
+    './public/**/*.mjs'
   ],
   darkMode: 'selector',
   theme: {

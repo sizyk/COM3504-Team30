@@ -106,6 +106,8 @@
     justify-content: center;
     isolation: isolate;
 
+    /* use :not here so that container has no `transform` property when active */
+    /* `transform` prevents fixed elements from being positioned relative to viewport (thanks css) */
     &:not(.active) {
       &>.modal-container, &>.max-lg\:modal-container {
         transform: translateY(50px);
