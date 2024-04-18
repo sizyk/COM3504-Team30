@@ -132,7 +132,7 @@ export default class PlantMap {
         if (this._chosenLocation === null) {
           event = new CustomEvent('pick-location', { detail: { lat: 0, lng: 0 } });
         } else {
-          const latlng = this._chosenLocation.getLatLng();
+          const latlng = this._chosenLocation.getLatLng().wrap();
           event = new CustomEvent('pick-location', { detail: { lat: latlng.lat, lng: latlng.lng } });
         }
 
