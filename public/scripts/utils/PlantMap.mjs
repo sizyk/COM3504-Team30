@@ -6,19 +6,21 @@ const { L } = window;
  * and resulting anti-aliasing.
  * https://github.com/Leaflet/Leaflet/issues/3575
  */
-// eslint-disable-next-line no-underscore-dangle
-const originalInitTile = L.GridLayer.prototype._initTile;
-L.GridLayer.include({
+if (!window.plantsAppOffline) {
   // eslint-disable-next-line no-underscore-dangle
-  _initTile(tile) {
-    originalInitTile.call(this, tile);
+  const originalInitTile = L.GridLayer.prototype._initTile;
+  L.GridLayer.include({
+    // eslint-disable-next-line no-underscore-dangle
+    _initTile(tile) {
+      originalInitTile.call(this, tile);
 
-    const tileSize = this.getTileSize();
+      const tileSize = this.getTileSize();
 
-    tile.style.width = `${tileSize.x + 1}px`;
-    tile.style.height = `${tileSize.y + 1}px`;
-  },
-});
+      tile.style.width = `${tileSize.x + 1}px`;
+      tile.style.height = `${tileSize.y + 1}px`;
+    },
+  });
+}
 
 /**
  * Constructs a custom leaflet DivIcon for a given plant. The plant's image will be
@@ -68,6 +70,10 @@ export default class PlantMap {
    *                                          display plants, or to pick a location
    */
   constructor(id = 'map', variablesID = 'js-variables', type = 'display') {
+    if (window.plantsAppOffline) {
+      return;
+    }
+
     this._tiles = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
     this._attributionLabel = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>';
 

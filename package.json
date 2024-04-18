@@ -11,7 +11,7 @@
     "lint": "eslint --color '**/*.js' '**/bin/www' '**/*.mjs'",
     "lint:fix": "eslint --color '**/*.js' '**/bin/www' '**/*.mjs' --fix",
 
-    "cardrender": "ejs -m $ src/partials/plant-card.ejs -o public/cached-views/plant-card.ejs editModalName=\"<%= plant._id + '-edit-plant-modal' %>\"; echo 'FIX EDIT MODAL ID!'",
+    "cardrender": "ejs -m $ src/partials/plant-card.ejs -o public/cached-views/plant-card.ejs",
     "plantrender": "ejs -m $ src/views/plant.ejs -o public/cached-views/plant.ejs editModalName=\"<%= plant._id + '-edit-plant-modal' %>\"; echo 'FIX EDIT MODAL ID!'",
 
     "cacheindex": "ejs src/layouts/main.ejs title=\"All Plants\" children='../views/index.ejs' plants='[]' dataset=\"\" scripts=\"\" -o public/cached-views/empty-index.html\n",
