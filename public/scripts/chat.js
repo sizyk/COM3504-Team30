@@ -21,9 +21,19 @@ if (typeof io !== 'undefined') {
 
 let isChatboxOpen = false;
 
+function hexEncode(string) {
+  let result = '';
+
+  for (let i = 0; i < string.length; i += 1) {
+    result += string.charCodeAt(i).toString(16);
+  }
+  return result;
+}
+
 function createMongoId(timestamp, username) {
   const timestampString = timestamp.toString(16);
-  const truncatedUsername = username.toString(16).slice(0, 24 - timestampString.length);
+  const usernameTo16 = hexEncode(username);
+  const truncatedUsername = usernameTo16.slice(0, 24 - timestampString.length);
   return (timestampString + truncatedUsername).padEnd(24, '0');
 }
 
