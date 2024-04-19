@@ -23,7 +23,7 @@ let isChatboxOpen = false;
 
 function createMongoId(timestamp, username) {
   const timestampString = timestamp.toString(16);
-  const truncatedUsername = username.slice(0, 24 - timestampString.length);
+  const truncatedUsername = username.toString(16).slice(0, 24 - timestampString.length);
   return (timestampString + truncatedUsername).padEnd(24, '0');
 }
 
