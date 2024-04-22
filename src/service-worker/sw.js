@@ -64,6 +64,7 @@ self.addEventListener('install', (event) => {
       '/public/scripts/chat.js',
       '/public/scripts/ejs.min.js',
       '/public/scripts/filters.js',
+      '/public/scripts/sortPlants.js',
       '/public/scripts/global.js',
       '/public/scripts/mapDriver.js',
       '/public/scripts/plantForm.js',
