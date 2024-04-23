@@ -47,5 +47,5 @@ export function initialiseModal(modal) {
  */
 export default function initModals() {
   // Add click event listeners to all modal toggle buttons
-  document.querySelectorAll('.modal').forEach(initialiseModal);
+  document.querySelectorAll('[data-modal]').forEach(initialiseModal);
 }
