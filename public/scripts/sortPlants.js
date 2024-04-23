@@ -27,7 +27,9 @@ function sortPlantsByDateTimeSeen() {
   ascendingOrder = !ascendingOrder;
   // Update sort button icon based on sorting order
   const sortIcon = document.getElementById('sort-icon');
-  sortIcon.textContent = ascendingOrder ? '▲' : '▼'; // Up or down arrow symbol
+  const sortIconSmall = document.getElementById('sort-icon-small');
+  sortIcon.innerText = ascendingOrder ? 'arrow_drop_up' : 'arrow_drop_down'; // Up or down arrow symbol
+  sortIconSmall.innerText = ascendingOrder ? 'arrow_drop_up' : 'arrow_drop_down';
 }
 
 // Add event listener to sort button
