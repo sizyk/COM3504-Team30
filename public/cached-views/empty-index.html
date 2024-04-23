@@ -35,7 +35,7 @@
   title="Online"
   class="material-symbols-outlined cursor-help fixed left-4 top-4 text-text"
 >
-  wifi
+    wifi_off
 </div>
 
   <div
@@ -61,12 +61,8 @@
             alt="HomePage Icon"
     />
   </a>
-  <button id="logout-button" class="fixed top-[1.05rem] right-20 size-8 text-text invisible" title="Logout">
-    <img
-            class="aspect-square h-full rounded-xl dark:bg-background-inverse"
-            src="/public/img/logout.svg"
-            alt="Logout Icon"
-    />
+  <button id="logout-button" class="fixed top-5 right-20 text-text invisible" title="Logout">
+    <span class="material-symbols-outlined size-full">logout</span>
   </button>
 
   <div class="modal invisible" id="login-modal" tabindex="-1" role="dialog">
@@ -140,9 +136,9 @@
     <div
       class="max-lg:modal-body flex flex-col items-center gap-4 text-xl lg:h-16 lg:flex-row lg:items-stretch lg:justify-evenly"
     >
-      <button id="sort-button-small" class="items-center mr-2 ml-auto gap-0.5 lg:hidden">
+      <button id="sort-button-small" class="flex items-center mr-2 ml-auto gap-0.5 lg:hidden">
         Sort by time seen
-        <span id="sort-icon">&#9650;</span> <!-- Up arrow symbol -->
+        <span id="sort-icon-small" class="material-symbols-outlined">arrow_drop_up</span> <!-- Up arrow symbol -->
       </button>
       <div class="flex items-center gap-2 lg:flex-col lg:gap-0">
         <label for="has-leaves-filter">Leaves?</label>
@@ -564,12 +560,9 @@
       >
         <span class="material-symbols-outlined">grid_view</span> Grid View
       </button>
-      <button class="tab-button flex items-center gap-1" data-target="map-view">
-        <span class="material-symbols-outlined">map</span> Map View
-      </button>
       <button id="sort-button" class="items-center mr-2 ml-auto gap-0.5 hidden lg:flex">
         Sort by time seen
-        <span id="sort-icon">&#9650;</span> <!-- Up arrow symbol -->
+        <span id="sort-icon" class="material-symbols-outlined">arrow_drop_up</span> <!-- Up arrow symbol -->
       </button>
     </div>
     <!-- need defined height here otherwise it'll keep expanding to min height of plant cards -->
@@ -582,16 +575,8 @@
   class="grid grid-cols-1 gap-10 md:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4"
 >
   <!-- prettier-ignore -->
-
 </div>
 
-      </div>
-      <div
-        id="map-view"
-        class="tab-content relative h-full w-full"
-        data-has-leaflet-map
-      >
-        <div id="map" class="h-full w-full rounded-lg" data-is-leaflet></div>
       </div>
     </div>
   </div>
@@ -614,4 +599,5 @@
 <script src="/public/scripts/global.js" type="module"></script>
 <script src="/public/scripts/filters.js" type="module"></script>
 <script src="/public/scripts/plantForm.js" type="module"></script>
+<script src="/public/scripts/sortPlants.js" type="module"></script>
 </html>

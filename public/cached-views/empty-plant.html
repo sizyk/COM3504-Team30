@@ -28,6 +28,17 @@
       wifi_off
     </div>
 
+    <a href="/" id="home-button" class="material-symbols-outlined fixed top-[1.05rem] left-12 size-7 text-text" title="Home Page">
+      <img
+        class="aspect-square h-full rounded-xl dark:bg-background-inverse"
+        src="/public/img/logo.svg"
+        alt="HomePage Icon"
+      />
+    </a>
+    <button id="logout-button" class="fixed top-5 right-20 text-text invisible" title="Logout">
+      <span class="material-symbols-outlined size-full">logout</span>
+    </button>
+
     <div
       role="button"
       id="theme-toggle"
@@ -90,12 +101,6 @@
 
     <footer class="flex items-center justify-center p-6">
       <p class="text-xl">Bottom Text</p>
-      <button
-        id="logout-button"
-        class="hover-button-secondary invisible fixed rounded px-3 py-2 text-center font-bold"
-      >
-        Logout
-      </button>
     </footer>
 
     <div id="js-variables" class="hidden"></div>

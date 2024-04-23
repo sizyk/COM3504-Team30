@@ -42,7 +42,6 @@ self.addEventListener('install', (event) => {
       '/public/img/favicon.ico',
       '/public/img/loading.svg',
       '/public/img/logo.svg',
-      '/public/img/logout.svg',
 
       '/public/scripts/global-scripts/login.mjs',
       '/public/scripts/global-scripts/modals.mjs',
