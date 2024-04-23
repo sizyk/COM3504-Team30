@@ -32,4 +32,6 @@ function sortPlantsByDateTimeSeen() {
 
 // Add event listener to sort button
 const sortButton = document.getElementById('sort-button');
+const sortButtonSmall = document.getElementById('sort-button-small');
 sortButton.addEventListener('click', sortPlantsByDateTimeSeen);
+sortButtonSmall.addEventListener('click', sortPlantsByDateTimeSeen);
