@@ -21,7 +21,7 @@ export function buildSpottedString(plant) {
   // TODO - why is this 1.25
   // const tz = dt.getTimezoneOffset();
 
-  return `${hour}:${min} on ${day}/${month}/${year}, in Sheffield`;
+  return `${hour}:${min} on ${day}/${month}/${year}, in ${plant.placeName} ${plant.flag}`;
 }
 
 /**

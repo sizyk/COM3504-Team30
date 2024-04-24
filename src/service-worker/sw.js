@@ -56,6 +56,7 @@ self.addEventListener('install', (event) => {
 
       '/public/scripts/utils/DBController.mjs',
       '/public/scripts/utils/flash-messages.mjs',
+      '/public/scripts/utils/geoUtils.mjs',
       '/public/scripts/utils/IDB.mjs',
       '/public/scripts/utils/localStore.mjs',
       '/public/scripts/utils/PlantMap.mjs',
