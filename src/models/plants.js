@@ -7,14 +7,16 @@ const { Schema } = mongoose;
 const PlantSchema = new Schema({
   author: { type: String, required: true, max: 32 },
   name: { type: String, required: true, max: 40 }, // longest name of plant is 39 characters
-  description: { type: String, required: true, max: 256 },
+  description: { type: String, required: true },
   dateTimeSeen: { type: Date, required: true },
   size: { type: Number, required: true }, // size in cm
   sunExposure: { type: String, required: true, max: 10 }, // full, partial or none
   colour: { type: String, required: true, max: 10 }, // in hexadecimal format
   longitude: { type: Number, required: true },
   latitude: { type: Number, required: true },
-  image: { type: String, required: true }, // path to image
+  image: { type: String, required: true }, // base64 image
+  flag: { type: String, required: true }, // flag emoji
+  placeName: { type: String, required: true }, // place display name
   hasFlowers: { type: Boolean, required: true },
   hasLeaves: { type: Boolean, required: true },
   hasFruit: { type: Boolean, required: true },
