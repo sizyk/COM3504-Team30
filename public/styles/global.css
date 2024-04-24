@@ -14,6 +14,7 @@
      */
   :root {
     --text: #f1eee7;
+    --text-light: #262c26;
     --background: #212121;
     --primary: #a7c957;
     --secondary: #9adcc7;
@@ -52,6 +53,7 @@
 
   .light {
     --text: #262c26;
+    --text-light: #262c26;
     --background: #f1eee7;
     --primary: #2d5936;
     --secondary: #9adcc7;
@@ -171,7 +173,7 @@ main {
   .plant-info {
     background-color: color-mix(
       in srgb,
-      var(--text),
+      var(--text-light),
       rgba(255, 255, 255, 0) 20%
     );
     transform: translateY(100%);
@@ -192,7 +194,7 @@ main {
     .plant-name {
       padding-top: 0;
 
-      div {
+      div:last-child {
         opacity: 0;
       }
     }

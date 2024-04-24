@@ -67,7 +67,7 @@ exports.get = (filter) => PlantModel.find(filter)
 
       // const tz = dt.getTimezoneOffset();
 
-      p.spottedString = `${hour}:${min} on ${day}/${month}/${year}, in ${p.placeName} ${p.flag} `;
+      p.displayDate = `${hour}:${min} on ${day}/${month}/${year}`;
     });
 
     return plants;
