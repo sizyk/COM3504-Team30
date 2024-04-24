@@ -1,6 +1,6 @@
 import DBController from './utils/DBController.mjs';
 import { showMessage } from './utils/flash-messages.mjs';
-import updateCard, { buildSpottedString } from './utils/plantUtils.mjs';
+import updateCard, { buildDateString } from './utils/plantUtils.mjs';
 import getUsername from './utils/localStore.mjs';
 import PLANT_MAP from './mapDriver.js';
 import { getFlagEmoji, reverseGeocode } from './utils/geoUtils.mjs';
@@ -205,7 +205,7 @@ function submitPlantToDB(plant) {
           }
           resolve();
         } else {
-          plantObject.spottedString = buildSpottedString(plantObject);
+          plantObject.displayDate = buildDateString(plantObject);
           // plantModal is null - therefore this is a new plant
           // query server to generate its card on-the-fly
           fetch('/public/cached-views/plant-card.ejs', {
