@@ -21,6 +21,11 @@ if (typeof io !== 'undefined') {
 
 let isChatboxOpen = false;
 
+/**
+ * Encodes a string to hexadecimal string
+ * @param string
+ * @returns {string}
+ */
 function hexEncode(string) {
   let result = '';
 
@@ -30,7 +35,14 @@ function hexEncode(string) {
   return result;
 }
 
-function createMongoId(timestamp, username) {
+/**
+ * Creates a unique ID for a chat message using the timestamp and username
+ * encoded in hexadecimal and padded to 24 characters to match MongoDB ObjectID
+ * @param timestamp
+ * @param username
+ * @returns {string}
+ */
+function createUniqueId(timestamp, username) {
   const timestampString = timestamp.toString(16);
   const usernameTo16 = hexEncode(username);
   const truncatedUsername = usernameTo16.slice(0, 24 - timestampString.length);
@@ -61,6 +73,9 @@ function addUserMessage(message, user) {
   chatbox.scrollTop = chatbox.scrollHeight;
 }
 
+/**
+ * Connects to socket io room if online and saves all chats to IDB
+ */
 function connectToRoom() {
   if (socket && navigator.onLine) {
     // Get username from localStore
@@ -109,7 +124,7 @@ function toggleChatbox() {
 function receiveChat(params) {
   try {
     const newChat = {
-      _id: createMongoId(params.dateTime, params.user),
+      _id: createUniqueId(params.dateTime, params.user),
       user: params.user,
       plant: params.plant,
       message: params.message,
@@ -136,7 +151,7 @@ function sendChatMessage() {
   if (userMessage.trim() !== '') {
     const timestamp = Date.now();
     const newChat = {
-      _id: createMongoId(timestamp, username),
+      _id: createUniqueId(timestamp, username),
       user: username,
       plant: roomId,
       message: userMessage,
