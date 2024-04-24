@@ -19,6 +19,7 @@
         <span data-spotted><%= plant.spottedString %></span>
         <span data-emoji><%= plant.emoji %></span>
       </p>
+      <p><span class="<%= plant.identificationStatus === 'completed' ? 'bg-primary' : 'bg-secondary' %> text-xs font-medium me-2 px-2.5 py-0.5 rounded"><%= plant.identificationStatus %></span></p>
       <div
         class="absolute bottom-0 left-0 -z-10 h-[200%] w-full bg-gradient-to-t from-text from-55%"
       ></div>

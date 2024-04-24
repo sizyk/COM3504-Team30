@@ -305,6 +305,8 @@ function submitPlantForm(formElem) {
     hasLeaves: params.get('hasLeaves'),
     hasFruit: params.get('hasFruit'),
     hasSeeds: params.get('hasSeeds'),
+    identificationStatus: 'in-progress', // completed or in-progress
+    identifiedName: '', // URI reference to plant
   };
 
   // If user is using a URL, simply add it to the plant
