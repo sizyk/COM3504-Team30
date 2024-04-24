@@ -78,3 +78,16 @@ exports.get = (filter) => PlantModel.find(filter)
     // return null in case of an error
     return null;
   });
+
+exports.getPlantsUser = (plantId) => PlantModel.findById(plantId)
+  .then((plant) => {
+    if (plant) {
+      return plant.author;
+    }
+    throw new Error('Plant not found');
+  })
+  .catch((error) => {
+    log(error);
+    // return null in case of an error
+    return null;
+  });
