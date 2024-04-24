@@ -26,23 +26,38 @@
             <span data-spotted><%= plant.spottedString %></span>
             <span data-emoji><%= plant.emoji %></span>
           </p>
+          <div class="flex space-x-4">
+            <button
+                    class="hover-button rounded-lg px-4 py-1 text-center text-sm font-bold"
+                    data-toggle="modal"
+                    data-target="identification-modal"
+            >
+              Add Identification
+            </button>
+            <button
+              class="hover-button rounded-lg px-4 py-1 text-center text-sm font-bold"
+              data-toggle="modal"
+              data-target="plant-map-modal"
+            >
+              View on Map
+            </button>
 
-          <button
-            class="hover-button rounded-lg px-4 py-1 text-center text-sm font-bold"
-            data-toggle="modal"
-            data-target="plant-map-modal"
-          >
-            View on Map
-          </button>
-
-          <!-- prettier-ignore -->
-          <%-
-          include('../partials/modal.ejs', {
-            modalID: 'plant-map-modal',
-            modalTitle: 'Plant Location',
-            modalContent: 'map-modal'
-          });
-          %>
+            <!-- prettier-ignore -->
+            <%-
+            include('../partials/modal.ejs', {
+              modalID: 'plant-map-modal',
+              modalTitle: 'Plant Location',
+              modalContent: 'map-modal'
+            });
+            %>
+            <%-
+            include('../partials/modal.ejs', {
+            modalID: 'identification-modal',
+            modalTitle: 'Add Plant Identification',
+            modalContent: 'identification'
+            });
+            %>
+          </div>
         </div>
       </div>
 
