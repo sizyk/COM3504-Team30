@@ -3,23 +3,22 @@
   id="card-<%=plant._id%>"
   data-plant-card
   data-plant="<%=plant._id%>"
-  class="flex-fill-remaining-space overflow-scroll"
+  class="flex-fill-remaining-space h-1 overflow-scroll"
 >
   <!--  Image Div  -->
   <div
-    class="fixed top-12 left-0 w-screen h-[33vh] lg:h-screen lg:w-[33vw] bg-cover bg-center cursor-pointer"
+    class="left-0 top-12 h-[33vh] w-screen cursor-pointer bg-cover bg-center lg:fixed lg:top-0 lg:h-screen lg:w-[40vw]"
     style="background-image: url('<%= plant.image %>')"
     data-toggle="modal"
     data-target="image-full-modal"
-  >
-  </div>
+  ></div>
 
   <div
-    class="mt-[33vh] lg:cursor-pointer transition-opacity duration-500 font-bold lg:mt-0 flex items-center justify-center lg:fixed lg:top-12 lg:h-screen lg:w-[33vw] lg:opacity-0 lg:hover:opacity-75 lg:bg-background-inverse lg:dark:bg-background lg:text-background lg:dark:text-background-inverse"
+    class="flex items-center justify-center font-bold transition-opacity duration-500 lg:fixed lg:top-0 lg:mt-0 lg:h-screen lg:w-[40vw] lg:cursor-pointer lg:bg-background-inverse lg:text-background lg:opacity-0 lg:hover:opacity-75 lg:dark:bg-background lg:dark:text-background-inverse"
     data-toggle="modal"
     data-target="image-full-modal"
   >
-    <span class="lg:mb-24">Click on the image to view at full size</span>
+    Click on the image to view at full size
   </div>
 
   <!-- prettier-ignore -->
@@ -31,10 +30,11 @@
     });
   %>
 
-  <div class="lg:mt-0 lg:ml-[33vw] flex flex-col lg:flex-row p-2 max-w-[40rem]">
-
+  <div
+    class="flex flex-col items-center px-4 py-2 lg:ml-[40vw] lg:mt-0 lg:flex-row lg:items-start"
+  >
     <!--  Content Div  -->
-    <div class="flex h-[100%] flex-col overflow-scroll">
+    <div class="flex h-[100%] max-w-[35rem] flex-col overflow-scroll">
       <div class="border-b-4 border-text">
         <h2 class="text-3xl font-bold" data-name><%= plant.name %></h2>
         <p class="italic" data-scientific>Flower Scientific Name</p>
@@ -62,64 +62,71 @@
           });
           %>
         </div>
-      </div>
 
-      <p class="flex-fill-remaining-space" data-description>
-        <%= plant.description %>
-      </p>
-      <div class="mt-auto">
-        <div
-          class="m-2 flex flex-row justify-evenly gap-2 rounded-lg bg-background p-2 dark:bg-background-inverse"
-        >
-          <div class="has-tooltip touchscreen-hover" data-leaves>
-            <img
-              src="/public/img/icons/has-leaf-<%= plant.hasLeaves %>.svg"
-              alt="An icon showing that the plant has <%= plant.hasLeaves ? '' : 'no ' %>leaves"
-            />
-            <span class="tooltip-content tooltip-top">
-              <%= plant.hasLeaves ? 'Has ' : 'Has no ' %>leaves
-            </span>
-          </div>
-
-          <div class="has-tooltip touchscreen-hover" data-flowers>
-            <img
-              src="/public/img/icons/flowers-<%= plant.hasFlowers %>.svg"
-              alt="An icon showing that the plant has <%= plant.hasFlowers ? '' : 'no ' %>flowers"
-            />
-            <span class="tooltip-content tooltip-top">
-              <%= plant.hasFlowers ? 'Has ' : 'Has no ' %>flowers
-            </span>
-          </div>
-          <div class="has-tooltip touchscreen-hover" data-sun>
-            <img
-              src="/public/img/icons/sun-<%= plant.sunExposure.toLowerCase() %>.svg"
-              alt="An icon showing that the plant has <%= plant.sunExposure.toLowerCase().replace('ne', '') %> sun exposure"
-            />
-            <span class="tooltip-content tooltip-top">
-              <%= plant.sunExposure.replace('ne', '') %> sun exposure
-            </span>
-          </div>
-          <div class="has-tooltip touchscreen-hover" data-fruit>
-            <img
-              src="/public/img/icons/fruits-or-nuts-<%= plant.hasFruit || plant.hasSeeds %>.svg"
-              alt="An icon showing that the plant has <%= plant.hasFruit || plant.hasSeeds ? '' : 'no ' %>fruits or nuts"
-            />
-            <span class="tooltip-content tooltip-top">
-              <%= plant.hasFruit || plant.hasSeeds ? 'Has ' : 'Has no ' %>
-              fruit/nuts
-            </span>
-          </div>
+        <div class="flex items-center justify-between">
           <div
-            class="has-tooltip touchscreen-hover aspect-square h-[3rem] rounded-full"
-            style="background-color: <%= plant.colour %>"
-            data-colour
+            class="flex justify-evenly gap-1 rounded-lg bg-background p-0.5 dark:bg-background-inverse"
           >
-            <span class="tooltip-content tooltip-top"> Colour of plant </span>
+            <div
+              class="has-tooltip touchscreen-hover aspect-square h-10"
+              data-leaves
+            >
+              <img
+                src="/public/img/icons/has-leaf-<%= plant.hasLeaves %>.svg"
+                alt="An icon showing that the plant has <%= plant.hasLeaves ? '' : 'no ' %>leaves"
+              />
+              <span class="tooltip-content tooltip-top">
+                <%= plant.hasLeaves ? 'Has ' : 'Has no ' %>leaves
+              </span>
+            </div>
+
+            <div
+              class="has-tooltip touchscreen-hover aspect-square h-10"
+              data-flowers
+            >
+              <img
+                src="/public/img/icons/flowers-<%= plant.hasFlowers %>.svg"
+                alt="An icon showing that the plant has <%= plant.hasFlowers ? '' : 'no ' %>flowers"
+              />
+              <span class="tooltip-content tooltip-top">
+                <%= plant.hasFlowers ? 'Has ' : 'Has no ' %>flowers
+              </span>
+            </div>
+            <div
+              class="has-tooltip touchscreen-hover aspect-square h-10"
+              data-sun
+            >
+              <img
+                src="/public/img/icons/sun-<%= plant.sunExposure.toLowerCase() %>.svg"
+                alt="An icon showing that the plant has <%= plant.sunExposure.toLowerCase().replace('ne', '') %> sun exposure"
+              />
+              <span class="tooltip-content tooltip-top">
+                <%= plant.sunExposure.replace('ne', '') %> sun exposure
+              </span>
+            </div>
+            <div
+              class="has-tooltip touchscreen-hover aspect-square h-10"
+              data-fruit
+            >
+              <img
+                src="/public/img/icons/fruits-or-nuts-<%= plant.hasFruit || plant.hasSeeds %>.svg"
+                alt="An icon showing that the plant has <%= plant.hasFruit || plant.hasSeeds ? '' : 'no ' %>fruits or nuts"
+              />
+              <span class="tooltip-content tooltip-top">
+                <%= plant.hasFruit || plant.hasSeeds ? 'Has ' : 'Has no ' %>
+                fruit/nuts
+              </span>
+            </div>
+            <div
+              class="has-tooltip touchscreen-hover aspect-square h-10 rounded-full border border-text"
+              style="background-color: <%= plant.colour %>"
+              data-colour
+            >
+              <span class="tooltip-content tooltip-top"> Colour of plant </span>
+            </div>
           </div>
-        </div>
-        <div class="flex flex-row justify-around gap-2 p-2">
           <button
-            class="hover-button-secondary text-center21 w-1/2 rounded-lg px-4 py-2 text-sm font-bold"
+            class="hover-button-secondary text-center21 w-max rounded-lg px-4 py-1 text-sm font-bold"
             data-toggle="modal"
             data-target="<%= editModalName %>"
           >
@@ -127,6 +134,10 @@
           </button>
         </div>
       </div>
+
+      <p class="flex-fill-remaining-space" data-description>
+        <%= plant.description %>
+      </p>
     </div>
     <!-- chat Div -->
     <%- include('../partials/chat.ejs') %>
