@@ -1,17 +1,49 @@
 <% var editModalName = plant._id + "-edit-plant-modal"%>
+<!--  Image Div  -->
+<div
+  class="left-0 top-12 h-[33vh] w-screen cursor-pointer bg-cover bg-center lg:fixed lg:top-0 lg:h-screen lg:w-[40vw]"
+  style="background-image: url('<%= plant.image %>')"
+  data-toggle="modal"
+  data-target="image-full-modal"
+></div>
 
-<div class="grid grid-cols-1 gap-4 2xl:grid-cols-2">
-  <!--  Image Div  -->
-  <div class="m-auto">
-    <img
-      src="<%= plant.image %>"
-      alt=""
-      class="max-h-[65vh] overflow-hidden border-8 border-text"
-      data-plant-image
-    />
+<div
+  class="flex items-center justify-center font-bold transition-opacity duration-500 lg:fixed lg:top-0 lg:mt-0 lg:h-screen lg:w-[40vw] lg:cursor-pointer lg:bg-background-inverse lg:text-background lg:opacity-0 lg:hover:opacity-75 lg:dark:bg-background lg:dark:text-background-inverse"
+  data-toggle="modal"
+  data-target="image-full-modal"
+>
+  Click on the image to view at full size
+</div>
+
+<div class="modal invisible" id="image-full-modal" tabindex="-1" role="dialog">
+  <div class="modal-overlay" data-close="modal"></div>
+  <div class="modal-container">
+    <div class="mb-4 flex items-center justify-between">
+      <h5 class="modal-title text-xl font-semibold">Full Plant Image</h5>
+      <button
+        class="close-modal flex justify-center rounded border border-gray-300 bg-background hover:bg-error hover:text-background"
+        aria-label="Close modal"
+        title="Close modal"
+        data-close="modal"
+      >
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <img
+        src="<%=plant.image%>"
+        alt="An image of a plant"
+        class="modal-body max-w-[80vw]"
+      />
+    </div>
   </div>
+</div>
+
+<div
+  class="flex flex-col items-center px-4 py-2 lg:ml-[40vw] lg:mt-0 lg:flex-row lg:items-start"
+>
   <!--  Content Div  -->
-  <div class="flex h-[100%] flex-col overflow-hidden">
+  <div class="flex h-[100%] max-w-[35rem] flex-col overflow-scroll">
     <div class="border-b-4 border-text">
       <h2 class="text-3xl font-bold" data-name><%= plant.name %></h2>
       <p class="italic" data-scientific>Flower Scientific Name</p>
@@ -22,64 +54,71 @@
           <span data-emoji><%= plant.emoji %></span>
         </p>
       </div>
-    </div>
 
-    <p class="flex-fill-remaining-space" data-description>
-      <%= plant.description %>
-    </p>
-    <div class="mt-auto">
-      <div
-        class="m-2 flex flex-row justify-evenly gap-2 rounded-lg bg-background p-2 dark:bg-background-inverse"
-      >
-        <div class="has-tooltip touchscreen-hover" data-leaves>
-          <img
-            src="/public/img/icons/has-leaf-<%= plant.hasLeaves %>.svg"
-            alt="An icon showing that the plant has <%= plant.hasLeaves ? '' : 'no ' %>leaves"
-          />
-          <span class="tooltip-content tooltip-top">
-            <%= plant.hasLeaves ? 'Has ' : 'Has no ' %>leaves
-          </span>
-        </div>
-
-        <div class="has-tooltip touchscreen-hover" data-flowers>
-          <img
-            src="/public/img/icons/flowers-<%= plant.hasFlowers %>.svg"
-            alt="An icon showing that the plant has <%= plant.hasFlowers ? '' : 'no ' %>flowers"
-          />
-          <span class="tooltip-content tooltip-top">
-            <%= plant.hasFlowers ? 'Has ' : 'Has no ' %>flowers
-          </span>
-        </div>
-        <div class="has-tooltip touchscreen-hover" data-sun>
-          <img
-            src="/public/img/icons/sun-<%= plant.sunExposure.toLowerCase() %>.svg"
-            alt="An icon showing that the plant has <%= plant.sunExposure.toLowerCase().replace('ne', '') %> sun exposure"
-          />
-          <span class="tooltip-content tooltip-top">
-            <%= plant.sunExposure.replace('ne', '') %> sun exposure
-          </span>
-        </div>
-        <div class="has-tooltip touchscreen-hover" data-fruit>
-          <img
-            src="/public/img/icons/fruits-or-nuts-<%= plant.hasFruit || plant.hasSeeds %>.svg"
-            alt="An icon showing that the plant has <%= plant.hasFruit || plant.hasSeeds ? '' : 'no ' %>fruits or nuts"
-          />
-          <span class="tooltip-content tooltip-top">
-            <%= plant.hasFruit || plant.hasSeeds ? 'Has ' : 'Has no ' %>
-            fruit/nuts
-          </span>
-        </div>
+      <div class="flex items-center justify-between">
         <div
-          class="has-tooltip touchscreen-hover aspect-square h-[3rem] rounded-full"
-          style="background-color: <%= plant.colour %>"
-          data-colour
+          class="flex justify-evenly gap-1 rounded-lg bg-background p-0.5 dark:bg-background-inverse"
         >
-          <span class="tooltip-content tooltip-top"> Colour of plant </span>
+          <div
+            class="has-tooltip touchscreen-hover aspect-square h-10"
+            data-leaves
+          >
+            <img
+              src="/public/img/icons/has-leaf-<%= plant.hasLeaves %>.svg"
+              alt="An icon showing that the plant has <%= plant.hasLeaves ? '' : 'no ' %>leaves"
+            />
+            <span class="tooltip-content tooltip-top">
+              <%= plant.hasLeaves ? 'Has ' : 'Has no ' %>leaves
+            </span>
+          </div>
+
+          <div
+            class="has-tooltip touchscreen-hover aspect-square h-10"
+            data-flowers
+          >
+            <img
+              src="/public/img/icons/flowers-<%= plant.hasFlowers %>.svg"
+              alt="An icon showing that the plant has <%= plant.hasFlowers ? '' : 'no ' %>flowers"
+            />
+            <span class="tooltip-content tooltip-top">
+              <%= plant.hasFlowers ? 'Has ' : 'Has no ' %>flowers
+            </span>
+          </div>
+          <div
+            class="has-tooltip touchscreen-hover aspect-square h-10"
+            data-sun
+          >
+            <img
+              src="/public/img/icons/sun-<%= plant.sunExposure.toLowerCase() %>.svg"
+              alt="An icon showing that the plant has <%= plant.sunExposure.toLowerCase().replace('ne', '') %> sun exposure"
+            />
+            <span class="tooltip-content tooltip-top">
+              <%= plant.sunExposure.replace('ne', '') %> sun exposure
+            </span>
+          </div>
+          <div
+            class="has-tooltip touchscreen-hover aspect-square h-10"
+            data-fruit
+          >
+            <img
+              src="/public/img/icons/fruits-or-nuts-<%= plant.hasFruit || plant.hasSeeds %>.svg"
+              alt="An icon showing that the plant has <%= plant.hasFruit || plant.hasSeeds ? '' : 'no ' %>fruits or nuts"
+            />
+            <span class="tooltip-content tooltip-top">
+              <%= plant.hasFruit || plant.hasSeeds ? 'Has ' : 'Has no ' %>
+              fruit/nuts
+            </span>
+          </div>
+          <div
+            class="has-tooltip touchscreen-hover aspect-square h-10 rounded-full border border-text"
+            style="background-color: <%= plant.colour %>"
+            data-colour
+          >
+            <span class="tooltip-content tooltip-top"> Colour of plant </span>
+          </div>
         </div>
-      </div>
-      <div class="flex flex-row justify-around gap-2 p-2">
         <button
-          class="hover-button-secondary text-center21 w-1/2 rounded-lg px-4 py-2 text-sm font-bold"
+          class="hover-button-secondary text-center21 w-max rounded-lg px-4 py-1 text-sm font-bold"
           data-toggle="modal"
           data-target="<%= editModalName %>"
         >
@@ -87,38 +126,49 @@
         </button>
       </div>
     </div>
+
+    <p class="flex-fill-remaining-space" data-description>
+      <%= plant.description %>
+    </p>
   </div>
-  <!-- chat Div -->
-  <div class="fixed bottom-0 right-0 mb-10 mr-10">
+
+  <div class="fixed bottom-14 right-14">
     <button
       id="open-chat"
-      class="hover-button material-symbols-outlined fill-0 rounded-lg bg-accent p-2.5"
+      class="hover-button material-symbols-outlined fill-0 rounded-lg bg-accent p-2.5 3xl:hidden"
     >
       forum
     </button>
   </div>
   <div
     id="chat-interface"
-    class="fixed bottom-10 right-1/2 hidden w-96 max-w-[83.33333vw] translate-x-1/2 sm:right-10 sm:translate-x-0"
+    class="fixed bottom-10 hidden w-96 max-w-[83.33333vw] sm:right-10 3xl:block"
   >
-    <div class="w-full max-w-lg rounded-lg bg-white shadow-md">
+    <div
+      class="w-full max-w-lg rounded-lg bg-white shadow-md 3xl:fixed 3xl:right-0 3xl:top-0 3xl:flex 3xl:h-screen 3xl:w-[calc(100vw-40vw-40rem)] 3xl:flex-col 3xl:rounded-none 3xl:bg-background 3xl:py-12 3xl:shadow-none"
+    >
       <div
-        class="flex items-center justify-between rounded-t-lg border-b bg-primary p-4"
+        class="flex items-center justify-between rounded-t-lg border-b bg-primary p-4 3xl:justify-end 3xl:rounded-none 3xl:border-b-2 3xl:border-text 3xl:bg-background 3xl:pt-2"
       >
-        <p class="font-semibold text-white dark:text-on-secondary">Comments</p>
+        <p class="font-semibold text-background 3xl:text-2xl 3xl:text-text">
+          Comments
+        </p>
         <button
           id="close-chat"
-          class="close-modal flex justify-center rounded bg-background hover:bg-error hover:text-background"
+          class="close-modal flex justify-center rounded bg-background hover:bg-error hover:text-background 3xl:hidden"
           aria-label="close chat"
         >
           <span class="material-symbols-outlined">close</span>
         </button>
       </div>
-      <div id="chatbox" class="h-80 overflow-y-auto p-4">
+      <div id="chatbox" class="h-80 overflow-y-auto p-4 3xl:h-full">
         <!-- Chat messages will be displayed here -->
       </div>
       <div class="flex border-t p-4">
-        <form id="chat-form" class="flex w-full">
+        <form
+          id="chat-form"
+          class="flex w-full 3xl:fixed 3xl:bottom-12 3xl:right-0 3xl:w-[calc(100vw-40vw-40rem)]"
+        >
           <input
             id="user-id"
             type="text"
@@ -134,7 +184,7 @@
           <input
             id="user-input"
             type="text"
-            placeholder="Type a message"
+            placeholder="Share your thoughts..."
             class="w-full rounded-l-md border px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-accent"
           />
           <button
@@ -204,17 +254,17 @@
             maxlength="256"
             required
           >
-      <%= plant.description %>
-    </textarea
+    <%= plant.description %>
+  </textarea
           >
         </div>
         <% const d = plant.dateTimeSeen %>
         <!-- prettier-ignore -->
         <% const formattedDate =
-                ('000' + d.getFullYear()).slice(-4) + "-" + ('0' + (d.getMonth()+1)).slice(-2) + '-' +
-                ('0' + d.getDate()).slice(-2) + "T" + ('0' + d.getHours()).slice(-2) + ":" +
-                ('0' + d.getMinutes()).slice(-2);
-        %>
+        ('000' + d.getFullYear()).slice(-4) + "-" + ('0' + (d.getMonth()+1)).slice(-2) + '-' +
+        ('0' + d.getDate()).slice(-2) + "T" + ('0' + d.getHours()).slice(-2) + ":" +
+        ('0' + d.getMinutes()).slice(-2);
+%>
         <div class="form-group mb-4">
           <label for="dateTimeSeen" class="block text-text">Time seen</label>
           <input
@@ -249,16 +299,16 @@
           >
             <!-- prettier-ignore -->
             <option selected="<%= (plant.sunExposure === 'None') ? 'selected' : '' %>">
-              None
-            </option>
+      None
+    </option>
             <!-- prettier-ignore -->
             <option selected="<%= (plant.sunExposure === 'Partial') ? 'selected' : '' %>">
-              Partial
-            </option>
+      Partial
+    </option>
             <!-- prettier-ignore -->
             <option selected="<%= (plant.sunExposure === 'Full') ? 'selected' : '' %>">
-              Full
-            </option>
+      Full
+    </option>
           </select>
         </div>
 
