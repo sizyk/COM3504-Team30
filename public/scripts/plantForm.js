@@ -283,6 +283,10 @@ async function submitPlantForm(formElem) {
 
   const { displayName, countryCode } = await reverseGeocode(lat, lng);
 
+  if (displayName === 'error') {
+    return new Promise((resolve, reject) => { reject(new Error('Geocoding failed! Please try again.')); });
+  }
+
   const flagEmoji = getFlagEmoji(countryCode);
 
   const plant = { // Get data from the form
@@ -363,8 +367,8 @@ export default function addEventListeners(card) {
 
   // Wrap these last two in try/catch as single querySelector means event listener will throw error
   // if nothing is found
-  // If image cannot be loaded for whatever reason, throw a 415 error (Unsupported Media Type)
   try {
+    // If image cannot be loaded for whatever reason, throw a 415 error (Unsupported Media Type)
     card.querySelector('[data-img="preview"]').addEventListener('error', () => handleErrorResponse(415, card.dataset.plant));
   } catch (e) { /* empty */ }
 
