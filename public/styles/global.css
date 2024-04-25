@@ -140,8 +140,8 @@ main {
 }
 
 #theme-toggle {
-  height: 2rem;
-  aspect-ratio: 1.75;
+  height: 1.75rem;
+  aspect-ratio: 1.9;
   border-radius: 25px;
   display: flex;
   align-items: center;
@@ -149,14 +149,14 @@ main {
   padding: 0 5px;
 
   > #moving-switch {
-    height: 1.5rem;
+    height: 1.25rem;
     aspect-ratio: 1;
     border-radius: 50%;
     transition: transform 0.1s ease-in-out;
   }
 
   &[data-theme='dark'] > #moving-switch {
-    transform: translateX(100%);
+    transform: translateX(calc(1.75rem * 1.9 - (1.25rem + 10px)));
   }
 }
 

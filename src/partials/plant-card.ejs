@@ -1,6 +1,6 @@
 <div
   id="card-<%= plant._id %>"
-  class="plant-card touchscreen-hover h-[28rem] overflow-hidden border-8 border-text dark:border-text-inverse bg-cover bg-center"
+  class="plant-card touchscreen-hover h-[28rem] overflow-hidden border-8 border-text bg-cover bg-center dark:border-text-inverse"
   style="background-image: url('<%= plant.image %>')"
   data-hasleaves="<%= plant.hasLeaves %>"
   data-hasflowers="<%= plant.hasFlowers %>"
@@ -10,25 +10,42 @@
   data-identified="true"
   data-plant-card
   data-plant="<%=plant._id%>"
+  data-user="<%=plant.author%>"
 >
-  <div class="plant-info flex h-full max-h-full flex-col gap-2 text-background dark:text-background-inverse">
+  <div
+    class="plant-info flex h-full max-h-full flex-col gap-2 text-background dark:text-background-inverse"
+  >
     <div class="plant-name relative isolate px-2">
       <h2 class="text-3xl font-bold" data-name><%= plant.name %></h2>
       <p class="italic" data-scientific>Flower Scientific Name</p>
-      <div class="flex items-center gap-2 mt-2">
+      <div
+        class="has-tooltip touchscreen-hover mt-2 flex w-max max-w-full items-center gap-2"
+      >
         <span class="material-symbols-outlined">schedule</span>
         <span data-date class="mb-0.5"><%= plant.displayDate %></span>
-      </div>
-      <div class="flex items-center gap-2 my-2">
-        <span class="material-symbols-outlined">pin_drop</span>
-        <span data-location class="mb-0.5"><%= plant.placeName %> <%= plant.flag %></span>
+        <span class="tooltip-content tooltip-top"> Time of Sighting </span>
       </div>
       <div
-        class="absolute bottom-0 left-0 -z-10 h-[200%] w-full bg-gradient-to-t from-text dark:from-text-inverse from-55%"
+        class="has-tooltip touchscreen-hover my-2 flex w-max max-w-full items-center gap-2"
+      >
+        <span class="material-symbols-outlined">pin_drop</span>
+        <span data-location class="mb-0.5"
+          ><%= plant.placeName %> <%= plant.flag %></span
+        >
+        <span class="tooltip-content tooltip-top"> Location of Sighting </span>
+      </div>
+      <div
+        class="absolute bottom-0 left-0 -z-10 h-[200%] w-full bg-gradient-to-t from-text from-55% dark:from-text-inverse"
       ></div>
     </div>
-    <p class="flex-fill-remaining-space overflow-ellipsis my-2 px-2" data-description>
-      <%= plant.description.slice(0, 128) %> <%= plant.description.length > 128 ? "..." : "" %>
+    <p
+      class="flex-fill-remaining-space my-2 overflow-ellipsis px-2"
+      data-description
+    >
+      <!-- Truncate at first word boundary after 80 characters, to prevent overflow -->
+      <% if (plant.description.length > 80) { %> <%=
+      plant.description.match(/^.{80}\w*/) %>... <% } else { %> <%=
+      plant.description %> <% } %>
     </p>
     <div
       class="m-2 flex flex-row justify-evenly gap-2 rounded-lg bg-background p-2 dark:bg-background-inverse"
