@@ -1,5 +1,6 @@
 import { showMessage } from '../utils/flash-messages.mjs';
 import { buildDateString } from '../utils/plantUtils.mjs';
+import { plantAddEvent } from '../utils/CustomEvents.mjs';
 import DBController from '../utils/DBController.mjs';
 
 showMessage('Connection to server lost! Showing locally stored plants.', 'info', 'wifi_off');
@@ -19,4 +20,5 @@ DBController.get('plants', {}, (plants) => {
 
     document.getElementById('no-plants-warning').classList.add('hidden');
   });
+  document.dispatchEvent(plantAddEvent);
 });
