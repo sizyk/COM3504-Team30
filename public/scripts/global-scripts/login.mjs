@@ -48,11 +48,19 @@ function hideLoginModal() {
 }
 
 function showLogoutButton() {
-  document.getElementById('logout-button').classList.remove('invisible');
+  const logoutButton = document.getElementById('logout-button');
+
+  if (logoutButton) {
+    logoutButton.classList.remove('invisible');
+  }
 }
 
 function hideLogoutButton() {
-  document.getElementById('logout-button').classList.add('invisible');
+  const logoutButton = document.getElementById('logout-button');
+
+  if (logoutButton) {
+    logoutButton.classList.add('invisible');
+  }
 }
 
 function handleLogout() {
@@ -112,7 +120,10 @@ export default function initLogin() {
   const logoutButton = document.getElementById('logout-button');
   document.addEventListener('DOMContentLoaded', handleLogin);
   loginModal.addEventListener('submit', onLoginSubmit);
-  logoutButton.addEventListener('click', handleLogout);
+
+  if (logoutButton) {
+    logoutButton.addEventListener('click', handleLogout);
+  }
 
   document.addEventListener(plantAddEvent.type, updateUserPostedString);
 }

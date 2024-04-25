@@ -22,7 +22,7 @@
     </div>
 
     <nav
-      class="flex h-12 w-screen items-center justify-between border-b-2 border-background-hover bg-background px-4 md:border-none md:bg-none"
+      class="z-10 flex h-12 w-screen items-center justify-between border-b-2 border-background-hover bg-background px-4 md:border-none md:bg-none"
     >
       <a
         href="/"
@@ -137,17 +137,25 @@
         </div>
       </div>
     </div>
+
     <main
       id="card"
-      class="mx-auto mt-24 w-10/12"
+      class="flex-fill-remaining-space h-1 overflow-scroll"
       data-plant-card
       data-plant=""
     ></main>
 
-    <footer class="flex h-12 items-center justify-center">
+    <footer class="z-10 flex h-12 items-center justify-center bg-background">
       <p class="text-xl">Bottom Text</p>
     </footer>
 
     <div id="js-variables" class="hidden"></div>
   </body>
+
+  <script>
+    window.plantsAppOffline = true;
+  </script>
+  <script src="/public/scripts/ejs.min.js" type="module"></script>
+  <script src="/public/scripts/offline/plant.js" type="module"></script>
+  <script src="/public/scripts/global.js" type="module"></script>
 </html>
