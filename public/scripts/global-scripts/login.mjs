@@ -30,6 +30,39 @@ function handleLogin() {
     // If no user is "logged in", show the login modal
     showLoginModal();
   } else {
+    const plantGrid = document.getElementById('plant-grid');
+    if (plantGrid !== null) {
+      let plantCount = 0;
+      Array.from(plantGrid.children).forEach((plant) => {
+        if (plant.dataset.user === username) {
+          plantCount += 1;
+        }
+      });
+
+      let userCompliment;
+      if (plantCount === 0) {
+        userCompliment = 's. You can get started by clicking the plus icon!';
+      } else if (plantCount === 1) {
+        userCompliment = '. Congrats on getting started!';
+      } else if (plantCount < 5) {
+        userCompliment = 's. Keep it up!';
+      } else {
+        userCompliment = 's! Amazing job!';
+      }
+
+      const userPostString = `You have posted ${plantCount} plant${userCompliment}`;
+
+      localStorage.setItem('user-posted-string', userPostString);
+    }
+
+    document.querySelectorAll('[data-fill="user-posted-string"]').forEach((elem) => {
+      elem.innerText = localStorage.getItem('user-posted-string');
+    });
+
+    document.querySelectorAll('[data-fill="username"]').forEach((elem) => {
+      elem.innerText = username;
+    });
+
     showLogoutButton();
   }
 }
@@ -42,7 +75,7 @@ function onLoginSubmit(e) {
     // Hide the modal after login
     hideLoginModal();
     showMessage(`Welcome ${username}!`, 'info');
-    showLogoutButton();
+    handleLogin();
   } else {
     showMessage('Please Login', 'info');
   }
