@@ -27,6 +27,7 @@ function connectHandler() {
   }
 
   onlineStatus.innerText = 'wifi';
+  onlineStatus.title = 'Online';
 }
 
 /**
@@ -34,6 +35,7 @@ function connectHandler() {
  */
 function disconnectHandler() {
   onlineStatus.innerText = 'wifi_off';
+  onlineStatus.title = 'Offline';
 }
 
 /**
