@@ -63,6 +63,20 @@ function handleLogin() {
       elem.innerText = username;
     });
 
+    document.querySelectorAll('[data-fill="user-avatar"]').forEach((elem) => {
+      if (window.plantsAppOffline) {
+        elem.innerHTML = `
+          <div class="h-full aspect-square hover-button font-bold text-4xl rounded-lg">
+            ${username.charAt(0)}
+          </div>
+        `;
+      } else {
+        elem.innerHTML = `
+          <img src="https://api.dicebear.com/8.x/thumbs/svg?radius=20&seed=${username}" alt="${username}'s avatar" />
+        `;
+      }
+    });
+
     showLogoutButton();
   }
 }
