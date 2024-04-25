@@ -4,6 +4,7 @@ import updateCard, { buildDateString } from './utils/plantUtils.mjs';
 import getUsername from './utils/localStore.mjs';
 import PLANT_MAP from './mapDriver.js';
 import { getFlagEmoji, reverseGeocode } from './utils/geoUtils.mjs';
+import { plantAddEvent } from './utils/CustomEvents.mjs';
 
 /**
  * Shows coordinates on the form
@@ -390,7 +391,10 @@ if (plantAddForm) {
     document.getElementById('plant-add-modal').classList.remove('active');
     showMessage('Adding plant...', 'info', 'info', true);
     submitPlantForm(plantAddForm)
-      .then(() => showMessage('Plant added successfully!', 'success', 'done'))
+      .then(() => {
+        showMessage('Plant added successfully!', 'success', 'done');
+        document.dispatchEvent(plantAddEvent);
+      })
       .catch((e) => {
         showMessage(e, 'error', 'error');
       });

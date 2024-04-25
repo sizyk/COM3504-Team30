@@ -1,3 +1,5 @@
+import { leafletInvalidateEvent } from '../utils/CustomEvents.mjs';
+
 const ALL_TAB_BUTTONS = document.querySelectorAll('[data-toggle="tab"]');
 
 /**
@@ -15,7 +17,7 @@ function activateTab(tabList, tabID) {
       tab.classList.add('active');
       if ('hasLeafletMap' in tab.dataset) {
         // Force leaflet map to invalidate size when removing display: hidden
-        tab.querySelector('[data-is-leaflet]').dispatchEvent(new Event('leaflet-invalidate'));
+        tab.querySelector('[data-is-leaflet]').dispatchEvent(leafletInvalidateEvent);
       }
 
       // Allow tab buttons to update themselves
