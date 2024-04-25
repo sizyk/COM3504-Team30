@@ -20,15 +20,14 @@ function setModalVisibility(modal) {
  * @param modal {HTMLDivElement} the modal to initialise
  */
 export function initialiseModal(modal) {
-  if (modal.id === 'login-modal') {
-    return;
-  }
-  const toggleBtn = document.querySelector(`[data-toggle="modal"][data-target="${modal.id}"]`);
-  toggleBtn.addEventListener('click', (e) => {
-    modal.classList.toggle('active');
-    setModalVisibility(modal);
-    e.stopPropagation();
-    e.preventDefault();
+  document.querySelectorAll(`[data-toggle="modal"][data-target="${modal.id}"]`).forEach((toggleBtn) => {
+    toggleBtn.addEventListener('click', (e) => {
+      modal.classList.toggle('active');
+
+      setModalVisibility(modal);
+      e.stopPropagation();
+      e.preventDefault();
+    });
   });
 
   modal.querySelectorAll(`[data-close="modal"][data-target="${modal.id}"]`).forEach((closeBtn) => {
