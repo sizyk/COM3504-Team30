@@ -183,6 +183,15 @@ main {
 
   .plant-name {
     transform: translateY(-100%);
+    div:last-child {
+      --tw-gradient-from: color-mix(
+        in srgb,
+        var(--text-light),
+        rgba(255, 255, 255, 0) 10%
+      ) var(--tw-gradient-from-position);
+      --tw-gradient-to: rgb(255 255 255 / 0) var(--tw-gradient-to-position);
+      --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to)
+    }
   }
 
   &:hover, &.hover {
