@@ -1,15 +1,15 @@
 <div
   role="button"
   id="theme-toggle"
-  class="pointer-events-auto fixed right-4 top-4 isolate bg-background-inverse"
+  class="pointer-events-auto isolate bg-background-inverse relative"
   data-theme="light"
   aria-label="Theme Toggle Switch"
 >
   <div
-    class="absolute left-0 z-10 flex w-full items-center justify-between pe-[5px] ps-[7px] text-background"
+    class="absolute left-0 z-10 flex w-full items-center justify-between pe-[5px] ps-[7px] text-background pointer-events-none"
   >
-    <i class="material-symbols-outlined !text-xl">light_mode</i>
-    <i class="material-symbols-outlined !text-xl">dark_mode</i>
+    <i class="material-symbols-outlined !text-lg">light_mode</i>
+    <i class="material-symbols-outlined !text-lg">dark_mode</i>
   </div>
   <div id="moving-switch" class="z-20 bg-background"></div>
 </div>
