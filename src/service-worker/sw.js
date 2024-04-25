@@ -54,6 +54,7 @@ self.addEventListener('install', (event) => {
       '/public/scripts/offline/index.js',
       '/public/scripts/offline/plant.js',
 
+      '/public/scripts/utils/CustomEvents.mjs',
       '/public/scripts/utils/DBController.mjs',
       '/public/scripts/utils/flash-messages.mjs',
       '/public/scripts/utils/geoUtils.mjs',
@@ -65,10 +66,10 @@ self.addEventListener('install', (event) => {
       '/public/scripts/chat.js',
       '/public/scripts/ejs.min.js',
       '/public/scripts/filters.js',
-      '/public/scripts/sortPlants.js',
       '/public/scripts/global.js',
       '/public/scripts/mapDriver.js',
       '/public/scripts/plantForm.js',
+      '/public/scripts/sortPlants.js',
 
       '/public/styles/dist/global.css',
 

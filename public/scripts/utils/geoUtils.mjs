@@ -18,11 +18,27 @@ export function getFlagEmoji(countryCode) {
  *    when resolved, returns a JSON object containing a place's display name, and its country
  */
 export async function reverseGeocode(lat, lng) {
-  const res = await fetch(`https://nominatim.openstreetmap.org/reverse.php?lat=${lat}&lon=${lng}&zoom=16&format=jsonv2`);
-  const resJson = await res.json();
+  // Return unknown location to indicate that geocoding should be performed on sync
+  if (!window.navigator.onLine) {
+    return {
+      displayName: 'Offline Location',
+      countryCode: 'gb',
+    };
+  }
 
-  return {
-    displayName: resJson['display_name'].split(',').slice(0, 3).join(','), /* eslint-disable-line dot-notation */
-    countryCode: resJson['address']['country_code'], /* eslint-disable-line dot-notation */
-  };
+  try {
+    const res = await fetch(`https://nominatim.openstreetmap.org/reverse.php?lat=${lat}&lon=${lng}&zoom=16&format=jsonv2`);
+    const resJson = await res.json();
+
+    return {
+      displayName: resJson['display_name'].split(',').slice(0, 3).join(','), /* eslint-disable-line dot-notation */
+      countryCode: resJson['address']['country_code'], /* eslint-disable-line dot-notation */
+    };
+  } catch (e) {
+    // Return error location to indicate that geocoding failed
+    return {
+      displayName: 'error',
+      countryCode: 'gb',
+    };
+  }
 }
