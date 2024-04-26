@@ -136,7 +136,6 @@ function sendChatMessage() {
   const userMessage = userInput.value;
   // Get username from localStore
   const username = getUsername();
-  console.log(username, userMessage);
   // If username is not set do nothing
   if (username == null) {
     return;
