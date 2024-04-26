@@ -115,8 +115,15 @@ function receiveChat(params) {
       message: params.message,
       dateTime: params.dateTime,
     };
-    DBController.createOrUpdate('chats', newChat, () => {}, () => showMessage('Failed to add chat. Please try again.', 'error', 'error'));
+
     addUserMessage(params.message, params.user);
+
+    if (params.user !== getUsername()) {
+      return;
+    }
+
+    // Only push to DB if message sent by current user
+    DBController.createOrUpdate('chats', newChat, () => {}, () => showMessage('Failed to add chat. Please try again.', 'error', 'error'));
   } catch (error) {
     showMessage('Failed to send message', 'error');
   }
