@@ -15,7 +15,7 @@
     "plantrender": "ejs -m $ src/views/plant.ejs -o public/cached-views/plant.ejs editModalName=\"<%= plant._id + '-edit-plant-modal' %>\"; echo 'FIX EDIT MODAL ID!'",
 
     "cacheindex": "ejs src/layouts/main.ejs title=\"All Plants\" children='../views/index.ejs' plants='[]' dataset=\"\" scripts=\"\" -o public/cached-views/empty-index.html\n",
-    "cacheplant": "ejs src/layouts/main.ejs title=\"Individual Plant\" children='../partials/modal-content/map-modal.ejs' dataset=\"\" scripts=\"\" -o public/cached-views/empty-plant.html\n"
+    "cacheplant": "ejs src/layouts/main.ejs title=\"Individual Plant\" children='../partials/modal-content/map-modal.ejs' dataset=\"\" scripts=\"\" navbarUserAvatar=\"true\" -o public/cached-views/empty-plant.html\n"
   },
   "dependencies": {
     "body-parser": "^1.20.2",

@@ -22,7 +22,7 @@
     </div>
 
     <nav
-      class="z-10 flex h-12 w-screen items-center justify-between border-b-2 border-background-hover bg-background px-4"
+      class="z-20 flex h-12 w-screen items-center justify-between border-b-2 border-background-hover bg-background px-4"
     >
       <a
         href="/"
@@ -97,6 +97,59 @@
             <i class="material-symbols-outlined !text-lg">dark_mode</i>
           </div>
           <div id="moving-switch" class="z-20 bg-background"></div>
+        </div>
+
+        <button
+          type="button"
+          class="flex aspect-square h-12 items-center justify-center border-text px-2"
+          data-toggle="modal"
+          data-target="user-details-modal"
+          data-fill="user-avatar"
+        ></button>
+
+        <div
+          class="modal invisible"
+          id="user-details-modal"
+          tabindex="-1"
+          role="dialog"
+          data-modal=""
+        >
+          <div
+            class="modal-overlay"
+            data-close="modal"
+            data-target="user-details-modal"
+          ></div>
+          <div class="modal-container">
+            <div class="mb-4 flex items-center justify-between">
+              <h5 class="modal-title text-xl font-semibold">
+                Your User Details
+              </h5>
+              <button
+                class="close-modal flex justify-center rounded border border-gray-300 bg-background hover:bg-error hover:text-background"
+                aria-label="Close modal"
+                title="Close modal"
+                data-close="modal"
+                data-target="user-details-modal"
+              >
+                <span class="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="flex w-64 max-w-[80vw] flex-col items-center gap-3">
+                <div class="text-3xl font-bold">
+                  Hi, <span data-fill="username"></span>!
+                </div>
+                <div data-fill="user-posted-string" class="text-center"></div>
+                <button
+                  id="logout-button"
+                  class="hover-button-error flex w-max items-center gap-2 rounded px-3 py-2 font-bold"
+                >
+                  <span class="material-symbols-outlined">logout</span>
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </nav>
