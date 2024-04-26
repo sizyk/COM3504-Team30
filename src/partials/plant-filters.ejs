@@ -11,7 +11,11 @@
 </button>
 
 <div id="filters" class="max-lg:modal invisible lg:visible" data-modal>
-  <div class="modal-overlay lg:hidden" data-close="modal" data-target="filters"></div>
+  <div
+    class="modal-overlay lg:hidden"
+    data-close="modal"
+    data-target="filters"
+  ></div>
   <div class="max-lg:modal-container">
     <div class="mb-4 flex items-center justify-between lg:hidden">
       <h5 class="modal-title text-xl font-semibold">Filter Plants</h5>
@@ -28,6 +32,16 @@
     <div
       class="max-lg:modal-body flex flex-col items-center gap-4 text-xl lg:h-16 lg:flex-row lg:items-stretch lg:justify-evenly"
     >
+      <button
+        id="sort-button-small"
+        class="ml-auto mr-2 flex items-center gap-0.5 lg:hidden"
+      >
+        Sort by time seen
+        <span id="sort-icon-small" class="material-symbols-outlined"
+          >arrow_drop_up</span
+        >
+        <!-- Up arrow symbol -->
+      </button>
       <div class="flex items-center gap-2 lg:flex-col lg:gap-0">
         <label for="has-leaves-filter">Leaves?</label>
         <input
@@ -55,6 +69,16 @@
           id="has-fruits-nuts-filter"
           class="lg:flex-fill-remaining-space aspect-square h-8"
           data-filterfeature="hasfruitsnuts"
+          data-filtervalue="any"
+        />
+      </div>
+      <div class="flex items-center gap-2 lg:flex-col lg:gap-0">
+        <label for="identified-filter">Identified?</label>
+        <input
+          type="checkbox"
+          id="identified-filter"
+          class="lg:flex-fill-remaining-space aspect-square h-8"
+          data-filterfeature="identified"
           data-filtervalue="any"
         />
       </div>

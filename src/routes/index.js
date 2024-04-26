@@ -21,7 +21,7 @@ router.get('/', (req, res) => {
     const data = {
       title: 'All Plants',
       plants: allPlants || [],
-      scripts: ['filters', 'plantForm', 'ejs.min', 'mapDriver', 'locationPicker'],
+      scripts: ['sortPlants', 'filters', 'plantForm', 'ejs.min', 'mapDriver', 'locationPicker'],
       useLeaflet: true,
       dataset: {
         centre: [0, 0],

@@ -211,10 +211,10 @@
         <% const d = plant.dateTimeSeen %>
         <!-- prettier-ignore -->
         <% const formattedDate =
-          ('000' + d.getFullYear()).slice(-4) + "-" + ('0' + (d.getMonth()+1)).slice(-2) + '-' +
-          ('0' + d.getDate()).slice(-2) + "T" + ('0' + d.getHours()).slice(-2) + ":" +
-          ('0' + d.getMinutes()).slice(-2);
-  %>
+                ('000' + d.getFullYear()).slice(-4) + "-" + ('0' + (d.getMonth()+1)).slice(-2) + '-' +
+                ('0' + d.getDate()).slice(-2) + "T" + ('0' + d.getHours()).slice(-2) + ":" +
+                ('0' + d.getMinutes()).slice(-2);
+        %>
         <div class="form-group mb-4">
           <label for="dateTimeSeen" class="block text-text">Time seen</label>
           <input
@@ -249,16 +249,16 @@
           >
             <!-- prettier-ignore -->
             <option selected="<%= (plant.sunExposure === 'None') ? 'selected' : '' %>">
-        None
-      </option>
+              None
+            </option>
             <!-- prettier-ignore -->
             <option selected="<%= (plant.sunExposure === 'Partial') ? 'selected' : '' %>">
-        Partial
-      </option>
+              Partial
+            </option>
             <!-- prettier-ignore -->
             <option selected="<%= (plant.sunExposure === 'Full') ? 'selected' : '' %>">
-        Full
-      </option>
+              Full
+            </option>
           </select>
         </div>
 

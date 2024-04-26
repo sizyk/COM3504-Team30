@@ -16,14 +16,21 @@
   <%- include('../partials/flash-message.ejs') %>
   <%- include('../partials/onlineIndicator.ejs') %>
   <%- include('../partials/themeToggle.ejs') %>
+  <a href="/" id="home-button" class="material-symbols-outlined fixed top-[1.05rem] left-12 size-7 text-text" title="Home Page">
+    <img
+            class="aspect-square h-full rounded-xl dark:bg-background-inverse"
+            src="/public/img/logo.svg"
+            alt="HomePage Icon"
+    />
+  </a>
+  <button id="logout-button" class="fixed top-5 right-20 text-text invisible" title="Logout">
+    <span class="material-symbols-outlined size-full">logout</span>
+  </button>
 
   <%- include('../partials/login-modal.ejs') %>
   <% /* Render child elements of the layout here */%>
   <%- include(children) %>
   <%- include('../partials/footer.ejs') %>
-  <button id="logout-button" class="fixed hover-button-secondary rounded px-3 py-2 text-center font-bold invisible">
-    Logout
-  </button>
   <%- include('../partials/js-variables.ejs') %>
 </body>
 <% if (typeof useLeaflet !== 'undefined' && useLeaflet) { %>
