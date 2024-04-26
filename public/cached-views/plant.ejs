@@ -12,7 +12,7 @@
   data-toggle="modal"
   data-target="image-full-modal"
 >
-  Click on the image to view at full size
+  Click on the image to view in full
 </div>
 
 <div class="modal invisible" id="image-full-modal" tabindex="-1" role="dialog">
@@ -43,19 +43,27 @@
   class="flex flex-col items-center px-4 py-2 lg:ml-[40vw] lg:mt-0 lg:flex-row lg:items-start"
 >
   <!--  Content Div  -->
-  <div class="flex h-[100%] max-w-[35rem] flex-col overflow-scroll">
+  <div class="flex h-[100%] w-[35rem] max-w-full flex-col overflow-scroll">
     <div class="border-b-4 border-text">
       <h2 class="text-3xl font-bold" data-name><%= plant.name %></h2>
-      <p class="italic" data-scientific>Flower Scientific Name</p>
-      <p>Discovered by <b><%= plant.author%></b></p>
-      <div class="mb-1 flex flex-row justify-between">
-        <p>
-          <span data-spotted><%= plant.displayDate %></span>
-          <span data-emoji><%= plant.emoji %></span>
-        </p>
+      <p class="mb-3 italic" data-scientific>Flower Scientific Name</p>
+      <div class="mb-1 flex items-center gap-1">
+        Discovered by
+        <b><%= plant.author %></b>
+      </div>
+      <div class="mb-1 flex items-center gap-1">
+        <span class="material-symbols-outlined">schedule</span>
+        <span class="mb-0.5"><%= plant.displayDate %></span>
       </div>
 
-      <div class="flex items-center justify-between">
+      <div class="mb-3 flex flex-row justify-between">
+        <div class="flex items-center gap-1">
+          <span class="material-symbols-outlined">pin_drop</span>
+          <span class="mb-0.5"><%= plant.placeName %> <%= plant.flag %></span>
+        </div>
+      </div>
+
+      <div class="mb-1 flex items-center justify-between">
         <div
           class="flex justify-evenly gap-1 rounded-lg bg-background p-0.5 dark:bg-background-inverse"
         >
