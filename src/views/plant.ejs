@@ -3,7 +3,7 @@
   id="card-<%=plant._id%>"
   data-plant-card
   data-plant="<%=plant._id%>"
-  class="flex-fill-remaining-space h-1 overflow-scroll"
+  class="flex-fill-remaining-space h-1 overflow-y-scroll"
 >
   <!--  Image Div  -->
   <div
@@ -34,7 +34,7 @@
     class="flex flex-col items-center px-4 py-2 lg:ml-[40vw] lg:mt-0 lg:flex-row lg:items-start"
   >
     <!--  Content Div  -->
-    <div class="flex h-[100%] w-[35rem] max-w-full flex-col overflow-scroll">
+    <div class="flex h-[100%] w-[35rem] max-w-full flex-col overflow-y-scroll">
       <div class="border-b-4 border-text">
         <h2 class="text-3xl font-bold" data-name><%= plant.name %></h2>
         <p class="mb-3 italic" data-scientific>Flower Scientific Name</p>

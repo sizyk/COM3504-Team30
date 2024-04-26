@@ -92,6 +92,11 @@
 }
 
 /*===GENERAL RULES============================================================*/
+.overflow-y-scroll {
+  /* Hide horizontal scrollbars in chrome */
+  overflow-x: hidden;
+}
+
 main {
   @apply flex-fill-remaining-space;
 }
