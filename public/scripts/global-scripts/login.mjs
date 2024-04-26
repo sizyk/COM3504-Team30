@@ -71,10 +71,19 @@ function handleLogout() {
 
 function handleLogin() {
   const username = localStorage.getItem('username');
+  const editButton = document.getElementById('edit-button');
   if (!username) {
-    // If no user is "logged in", show the login modal
+    // If no user is "logged in", show the login modal & hide the edit button
+    if (editButton) {
+      editButton.classList.add('invisible');
+    }
     showLoginModal();
   } else {
+    // If wrong user is "logged in", hide the edit button
+    if (editButton && username !== editButton.dataset.user) {
+      editButton.classList.add('invisible');
+    }
+
     updateUserPostedString();
 
     document.querySelectorAll('[data-fill="username"]').forEach((elem) => {
