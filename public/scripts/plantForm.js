@@ -383,26 +383,35 @@ export default function addEventListeners(card) {
   } catch (e) { /* empty */ }
 }
 
+/**
+ * Runs the form submission function in the background, to make it non-blocking
+ * @param plantAddForm {HTMLFormElement} the form element to submit
+ */
+function submitBackgroundTask(plantAddForm) {
+  // Ensure user has validated their image
+  if (document.getElementById('imageInputCheckboxNew').checked && !document.getElementById('imageValidatedNew').checked) {
+    handleErrorResponse('not-validated', 'New');
+    return;
+  }
+
+  // Hide form and inform user that plant is being added in the background
+  document.getElementById('plant-add-modal').classList.remove('active');
+  showMessage('Adding plant...', 'info', 'info', true);
+
+  // Run async submit function
+  submitPlantForm(plantAddForm)
+    .then(() => {
+      showMessage('Plant added successfully!', 'success', 'done');
+      document.dispatchEvent(plantAddEvent);
+    })
+    .catch((e) => {
+      showMessage(e, 'error', 'error');
+    });
+}
+
 const plantAddForm = document.getElementById('createPlantForm');
 if (plantAddForm) {
-  plantAddForm.addEventListener('submit', () => {
-    // Ensure user has validated their image
-    if (document.getElementById('imageInputCheckboxNew').checked && !document.getElementById('imageValidatedNew').checked) {
-      handleErrorResponse('not-validated', 'New');
-      return;
-    }
-
-    document.getElementById('plant-add-modal').classList.remove('active');
-    showMessage('Adding plant...', 'info', 'info', true);
-    submitPlantForm(plantAddForm)
-      .then(() => {
-        showMessage('Plant added successfully!', 'success', 'done');
-        document.dispatchEvent(plantAddEvent);
-      })
-      .catch((e) => {
-        showMessage(e, 'error', 'error');
-      });
-  });
+  plantAddForm.addEventListener('submit', () => submitBackgroundTask(plantAddForm));
   addEventListeners(plantAddForm);
 }
 
