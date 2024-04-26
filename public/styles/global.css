@@ -97,6 +97,10 @@
   overflow-x: hidden;
 }
 
+* {
+  scrollbar-width: thin;
+}
+
 main {
   @apply flex-fill-remaining-space;
 }
