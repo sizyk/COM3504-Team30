@@ -33,22 +33,14 @@
     <div
       class="max-xl:modal-body flex flex-col items-center gap-4 text-xl xl:h-16 xl:flex-row xl:items-stretch xl:justify-evenly"
     >
-      <button
-        id="sort-button-small"
-        class="ml-auto mr-2 flex items-center gap-0.5 xl:hidden"
-      >
-        Sort by time seen
-        <span id="sort-icon-small" class="material-symbols-outlined"
-          >arrow_drop_up</span
-        >
-        <!-- Up arrow symbol -->
-      </button>
+      <div class="lg:hidden"><%- include('../partials/sort-button.ejs') %></div>
       <div class="flex items-center gap-2 xl:flex-col xl:gap-0">
         <label for="has-leaves-filter">Leaves?</label>
         <input
           type="checkbox"
           id="has-leaves-filter"
           class="xl:flex-fill-remaining-space aspect-square h-8"
+          data-filter
           data-filterfeature="hasleaves"
           data-filtervalue="any"
         />
@@ -59,6 +51,7 @@
           type="checkbox"
           id="has-flowers-filter"
           class="xl:flex-fill-remaining-space aspect-square h-8"
+          data-filter
           data-filterfeature="hasflowers"
           data-filtervalue="any"
         />
@@ -69,6 +62,7 @@
           type="checkbox"
           id="has-fruits-nuts-filter"
           class="xl:flex-fill-remaining-space aspect-square h-8"
+          data-filter
           data-filterfeature="hasfruitsnuts"
           data-filtervalue="any"
         />
@@ -79,6 +73,7 @@
           type="checkbox"
           id="identified-filter"
           class="xl:flex-fill-remaining-space aspect-square h-8"
+          data-filter
           data-filterfeature="identified"
           data-filtervalue="any"
         />
@@ -88,6 +83,7 @@
         <select
           id="sun-exposure-filter"
           class="xl:flex-fill-remaining-space h-8 border-2 border-text border-text bg-background px-2 text-text dark:bg-background-inverse dark:text-background"
+          data-filter
           data-filterfeature="sunexposure"
           data-filtervalue="any"
         >

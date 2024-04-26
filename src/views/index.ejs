@@ -82,7 +82,7 @@
     No plants yet! Click 'Add Plant' to get started.
   </h3>
   <div class="tabs flex-fill-remaining-space flex w-full flex-col">
-    <div class="tab-buttons hidden flex-row gap-2 lg:flex">
+    <div class="tab-buttons hidden flex-row items-center lg:flex">
       <button
         class="tab-button flex items-center gap-1"
         data-toggle="tab"
@@ -99,20 +99,12 @@
       >
         <span class="material-symbols-outlined">map</span> Map View
       </button>
-      <button
-        id="sort-button"
-        class="ml-auto mr-2 hidden items-center gap-0.5 lg:flex"
-      >
-        Sort by time seen
-        <span id="sort-icon" class="material-symbols-outlined"
-          >arrow_drop_up</span
-        >
-        <!-- Up arrow symbol -->
-      </button>
+
+      <%- include('../partials/sort-button.ejs') %>
     </div>
     <!-- need defined height here otherwise it'll keep expanding to min height of plant cards -->
     <div
-      class="tab-container flex-fill-remaining-space h-1 overflow-scroll border-text p-4 lg:rounded-xl lg:rounded-tl-none lg:border-2 lg:bg-background-hover"
+      class="tab-container flex-fill-remaining-space h-1 overflow-scroll border-text p-4 lg:rounded lg:rounded-tl-none lg:border-2 lg:bg-background-hover"
     >
       <div id="grid-view" class="tab-content">
         <%- include('../partials/plant-view-grid') %>
