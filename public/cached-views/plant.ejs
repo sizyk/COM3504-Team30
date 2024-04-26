@@ -68,7 +68,7 @@
       </div>
 
       <div class="mb-3 flex flex-col justify-between gap-1 xs:flex-row">
-        <div class="mb-3 flex flex-col items-start justify-around gap-1">
+        <div class="mb-3 flex flex-col items-start justify-evenly gap-1">
           <div class="flex items-center gap-1">
             <span class="material-symbols-outlined">pin_drop</span>
             <span class="mb-0.5"><%= plant.placeName %> <%= plant.flag %></span>
@@ -138,7 +138,7 @@
         </div>
 
         <div
-          class="mb-3 flex flex-row items-end justify-start gap-1 xs:flex-col xs:justify-around"
+          class="mb-3 flex flex-row items-end justify-start gap-1 xs:flex-col xs:justify-evenly"
         >
           <button
             class="hover-button rounded-lg px-4 py-1 text-center text-sm font-bold"
@@ -149,11 +149,13 @@
           </button>
 
           <button
+            id="edit-button"
             class="hover-button-secondary text-center21 w-max rounded-lg px-4 py-1 text-sm font-bold"
             data-toggle="modal"
             data-target="<%= editModalName %>"
+            data-user="<%= plant.author %>"
           >
-            Suggest Edit
+            Edit Plant
           </button>
         </div>
       </div>
