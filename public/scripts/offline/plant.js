@@ -40,6 +40,7 @@ DBController.get('plants', { _id: plantID }, (plants) => {
   mainElem.dataset.plant = plantID;
 
   initialiseModal(document.getElementById(`${plant._id}-edit-plant-modal`));
+  initialiseModal(document.getElementById('image-full-modal'));
 
   // eslint-disable-next-line no-use-before-define
   addEventListeners(document.getElementById(`card-${plant._id}`));
