@@ -28,6 +28,7 @@ function sortPlantsByDateTimeSeen() {
 
   document.querySelectorAll('[data-sort-icon]').forEach((icon) => {
     icon.style.rotate = ascendingOrder ? '0deg' : '180deg';
+    icon.title = `Click to sort in ${ascendingOrder ? 'ascending' : 'descending'} order`;
   });
 }
 
