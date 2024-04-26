@@ -24,6 +24,7 @@ router.get('/:id', (req, res) => {
             coordinates: [plant.latitude, plant.longitude],
           }],
         },
+        navUserAvatar: true,
       });
     } else {
       res.sendStatus(404);
