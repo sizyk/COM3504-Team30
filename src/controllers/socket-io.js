@@ -20,6 +20,10 @@ exports.init = (io) => {
         }
       }, 2000);
 
+      /**
+       * Checks if the user should receive a notification
+       * by checking if the current user owns the plant related to the chat
+       */
       socket.on('check', async (plant, username) => {
         const plantUser = await plantsController.getPlantsUser(plant);
         if (plantUser && plantUser === username && !userNotified.includes(username)) {
