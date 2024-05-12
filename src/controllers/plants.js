@@ -79,6 +79,7 @@ exports.get = (filter) => PlantModel.find(filter)
     return null;
   });
 
+// Function to get a plant's author
 exports.getPlantsUser = (plantId) => PlantModel.findById(plantId)
   .then((plant) => {
     if (plant) {

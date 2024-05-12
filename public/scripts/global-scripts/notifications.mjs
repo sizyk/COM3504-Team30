@@ -1,5 +1,9 @@
 import getUsername from '../utils/localStore.mjs';
 
+/**
+ * Initialises Notifications for the browser
+ * and sets up socket.io for real-time notifications
+ */
 export default async function initNotifications() {
   // Check if the browser supports notifications
   if ('Notification' in window) {
