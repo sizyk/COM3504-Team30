@@ -43,7 +43,6 @@ export default async function initNotifications() {
         }
         socket.emit('check', chat.plant, username);
       });
-
     });
 
     // When the user should receive a notification, send the notification through the service worker
