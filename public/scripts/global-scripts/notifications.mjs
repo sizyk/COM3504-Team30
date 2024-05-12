@@ -33,33 +33,31 @@ export default async function initNotifications() {
     socket = io();
   }
   if (socket && navigator.onLine) {
-    // When chnages are detected in the database emit a socket event that checks if the user should receive the notification
+    // When chnages are detected in the database emit a socket event that
+    // checks if the user should receive the notification
     socket.on('databaseChange', (data) => {
-
       const username = getUsername();
       data.forEach((chat) => {
-        const plant = chat.plant;
         if (username === chat.user) {
           return;
         }
-        socket.emit('check', plant, username);
+        socket.emit('check', chat.plant, username);
       });
 
     });
 
     // When the user should receive a notification, send the notification through the service worker
     socket.on('sendNotification', (username) => {
-
       if (Notification.permission === 'granted' && username === getUsername()) {
         navigator.serviceWorker.ready
           .then((serviceWorkerRegistration) => {
             serviceWorkerRegistration.showNotification(
               'Plants App',
-              { body: `New chat` },
+              { body: 'New chat' },
             )
               .then((r) => console.log(r));
           });
       }
     });
   }
-};
+}
