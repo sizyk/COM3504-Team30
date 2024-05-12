@@ -1,114 +1,162 @@
 <% var editModalName = plant._id + "-edit-plant-modal"%>
 <main
   id="card-<%=plant._id%>"
-  class="mx-auto mt-24 w-10/12"
   data-plant-card
   data-plant="<%=plant._id%>"
+  class="flex-fill-remaining-space h-1 overflow-y-scroll"
 >
-  <div class="grid grid-cols-1 gap-4 2xl:grid-cols-2">
-    <!--  Image Div  -->
-    <div class="m-auto">
-      <img
-        src="<%= plant.image %>"
-        alt=""
-        class="max-h-[65vh] overflow-hidden border-8 border-text"
-        data-plant-image
-      />
-    </div>
+  <!--  Image Div  -->
+  <div
+    class="left-0 top-12 h-[33vh] w-screen cursor-pointer bg-cover bg-center lg:fixed lg:top-0 lg:h-screen lg:w-[40vw]"
+    style="background-image: url('<%= plant.image %>')"
+    data-toggle="modal"
+    data-target="image-full-modal"
+  ></div>
+
+  <div
+    class="flex items-center justify-center font-bold transition-opacity duration-500 lg:fixed lg:top-0 lg:mt-0 lg:h-screen lg:w-[40vw] lg:cursor-pointer lg:bg-background-inverse lg:text-background lg:opacity-0 lg:hover:opacity-75 lg:dark:bg-background lg:dark:text-background-inverse"
+    data-toggle="modal"
+    data-target="image-full-modal"
+  >
+    Click on the image to view in full
+  </div>
+
+  <!-- prettier-ignore -->
+  <%-
+    include('../partials/modal.ejs', {
+      modalID: 'image-full-modal',
+      modalTitle: 'Full Plant Image',
+      modalContent: 'plant-image'
+    });
+  %>
+
+  <div
+    class="flex flex-col items-center px-4 py-2 lg:ml-[40vw] lg:mt-0 lg:flex-row lg:items-start"
+  >
     <!--  Content Div  -->
-    <div class="flex h-[100%] flex-col overflow-hidden">
+    <div class="flex h-[100%] w-[35rem] max-w-full flex-col overflow-y-scroll">
       <div class="border-b-4 border-text">
         <h2 class="text-3xl font-bold" data-name><%= plant.name %></h2>
-        <p class="italic" data-scientific>Flower Scientific Name</p>
-        <p>Discovered by <b><%= plant.author%></b></p>
-        <div class="mb-1 flex flex-row justify-between">
-          <p>
-            <span data-spotted><%= plant.spottedString %></span>
-            <span data-emoji><%= plant.emoji %></span>
-          </p>
+        <p class="mb-3 italic" data-scientific>Flower Scientific Name</p>
+        <div class="mb-1 flex items-center gap-1">
+          Discovered by
+          <b><%= plant.author %></b>
+        </div>
+        <div class="mb-1 flex items-center gap-1">
+          <span class="material-symbols-outlined">schedule</span>
+          <span class="mb-0.5"><%= plant.displayDate %></span>
+        </div>
 
-          <button
-            class="hover-button rounded-lg px-4 py-1 text-center text-sm font-bold"
-            data-toggle="modal"
-            data-target="plant-map-modal"
+        <div class="mb-3 flex flex-col justify-between gap-1 xs:flex-row">
+          <div class="mb-3 flex flex-col items-start justify-evenly gap-1">
+            <div class="flex items-center gap-1">
+              <span class="material-symbols-outlined">pin_drop</span>
+              <span class="mb-0.5"
+                ><%= plant.placeName %> <%= plant.flag %></span
+              >
+            </div>
+
+            <div
+              class="flex justify-evenly gap-1 rounded-lg bg-background p-0.5 dark:bg-background-inverse"
+            >
+              <div
+                class="has-tooltip touchscreen-hover aspect-square h-10"
+                data-leaves
+              >
+                <img
+                  src="/public/img/icons/has-leaf-<%= plant.hasLeaves %>.svg"
+                  alt="An icon showing that the plant has <%= plant.hasLeaves ? '' : 'no ' %>leaves"
+                />
+                <span class="tooltip-content tooltip-top">
+                  <%= plant.hasLeaves ? 'Has ' : 'Has no ' %>leaves
+                </span>
+              </div>
+
+              <div
+                class="has-tooltip touchscreen-hover aspect-square h-10"
+                data-flowers
+              >
+                <img
+                  src="/public/img/icons/flowers-<%= plant.hasFlowers %>.svg"
+                  alt="An icon showing that the plant has <%= plant.hasFlowers ? '' : 'no ' %>flowers"
+                />
+                <span class="tooltip-content tooltip-top">
+                  <%= plant.hasFlowers ? 'Has ' : 'Has no ' %>flowers
+                </span>
+              </div>
+              <div
+                class="has-tooltip touchscreen-hover aspect-square h-10"
+                data-sun
+              >
+                <img
+                  src="/public/img/icons/sun-<%= plant.sunExposure.toLowerCase() %>.svg"
+                  alt="An icon showing that the plant has <%= plant.sunExposure.toLowerCase().replace('ne', '') %> sun exposure"
+                />
+                <span class="tooltip-content tooltip-top">
+                  <%= plant.sunExposure.replace('ne', '') %> sun exposure
+                </span>
+              </div>
+              <div
+                class="has-tooltip touchscreen-hover aspect-square h-10"
+                data-fruit
+              >
+                <img
+                  src="/public/img/icons/fruits-or-nuts-<%= plant.hasFruit || plant.hasSeeds %>.svg"
+                  alt="An icon showing that the plant has <%= plant.hasFruit || plant.hasSeeds ? '' : 'no ' %>fruits or nuts"
+                />
+                <span class="tooltip-content tooltip-top">
+                  <%= plant.hasFruit || plant.hasSeeds ? 'Has ' : 'Has no ' %>
+                  fruit/nuts
+                </span>
+              </div>
+              <div
+                class="has-tooltip touchscreen-hover aspect-square h-10 rounded-full border border-text dark:border-background"
+                style="background-color: <%= plant.colour %>"
+                data-colour
+              >
+                <span class="tooltip-content tooltip-top">
+                  Colour of plant
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="mb-3 flex flex-row items-end justify-start gap-1 xs:flex-col xs:justify-evenly"
           >
-            View on Map
-          </button>
+            <button
+              class="hover-button rounded-lg px-4 py-1 text-center text-sm font-bold"
+              data-toggle="modal"
+              data-target="plant-map-modal"
+            >
+              View on Map
+            </button>
 
-          <!-- prettier-ignore -->
-          <%-
-          include('../partials/modal.ejs', {
+            <!-- prettier-ignore -->
+            <%-
+            include('../partials/modal.ejs', {
             modalID: 'plant-map-modal',
             modalTitle: 'Plant Location',
             modalContent: 'map-modal'
-          });
-          %>
+            });
+            %>
+
+            <button
+              id="edit-button"
+              class="hover-button-secondary text-center21 w-max rounded-lg px-4 py-1 text-sm font-bold"
+              data-toggle="modal"
+              data-target="<%= editModalName %>"
+              data-user="<%= plant.author %>"
+            >
+              Edit Plant
+            </button>
+          </div>
         </div>
       </div>
 
       <p class="flex-fill-remaining-space" data-description>
         <%= plant.description %>
       </p>
-      <div class="mt-auto">
-        <div
-          class="m-2 flex flex-row justify-evenly gap-2 rounded-lg bg-background p-2 dark:bg-background-inverse"
-        >
-          <div class="has-tooltip touchscreen-hover" data-leaves>
-            <img
-              src="/public/img/icons/has-leaf-<%= plant.hasLeaves %>.svg"
-              alt="An icon showing that the plant has <%= plant.hasLeaves ? '' : 'no ' %>leaves"
-            />
-            <span class="tooltip-content tooltip-top">
-              <%= plant.hasLeaves ? 'Has ' : 'Has no ' %>leaves
-            </span>
-          </div>
-
-          <div class="has-tooltip touchscreen-hover" data-flowers>
-            <img
-              src="/public/img/icons/flowers-<%= plant.hasFlowers %>.svg"
-              alt="An icon showing that the plant has <%= plant.hasFlowers ? '' : 'no ' %>flowers"
-            />
-            <span class="tooltip-content tooltip-top">
-              <%= plant.hasFlowers ? 'Has ' : 'Has no ' %>flowers
-            </span>
-          </div>
-          <div class="has-tooltip touchscreen-hover" data-sun>
-            <img
-              src="/public/img/icons/sun-<%= plant.sunExposure.toLowerCase() %>.svg"
-              alt="An icon showing that the plant has <%= plant.sunExposure.toLowerCase().replace('ne', '') %> sun exposure"
-            />
-            <span class="tooltip-content tooltip-top">
-              <%= plant.sunExposure.replace('ne', '') %> sun exposure
-            </span>
-          </div>
-          <div class="has-tooltip touchscreen-hover" data-fruit>
-            <img
-              src="/public/img/icons/fruits-or-nuts-<%= plant.hasFruit || plant.hasSeeds %>.svg"
-              alt="An icon showing that the plant has <%= plant.hasFruit || plant.hasSeeds ? '' : 'no ' %>fruits or nuts"
-            />
-            <span class="tooltip-content tooltip-top">
-              <%= plant.hasFruit || plant.hasSeeds ? 'Has ' : 'Has no ' %>
-              fruit/nuts
-            </span>
-          </div>
-          <div
-            class="has-tooltip touchscreen-hover aspect-square h-[3rem] rounded-full"
-            style="background-color: <%= plant.colour %>"
-            data-colour
-          >
-            <span class="tooltip-content tooltip-top"> Colour of plant </span>
-          </div>
-        </div>
-        <div class="flex flex-row justify-around gap-2 p-2">
-          <button
-            class="hover-button-secondary text-center21 w-1/2 rounded-lg px-4 py-2 text-sm font-bold"
-            data-toggle="modal"
-            data-target="<%= editModalName %>"
-          >
-            Suggest Edit
-          </button>
-        </div>
-      </div>
     </div>
     <!-- chat Div -->
     <%- include('../partials/chat.ejs') %>

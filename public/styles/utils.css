@@ -109,7 +109,7 @@
     /* use :not here so that container has no `transform` property when active */
     /* `transform` prevents fixed elements from being positioned relative to viewport (thanks css) */
     &:not(.active) {
-      &>.modal-container, &>.max-lg\:modal-container {
+      &>.modal-container, &>.max-lg\:modal-container, &>.max-xl\:modal-container {
         transform: translateY(50px);
       }
     }
@@ -121,7 +121,7 @@
         opacity: 0.5;
       }
 
-      &>.modal-container, &>.max-lg\:modal-container {
+      &>.modal-container, &>.max-lg\:modal-container, &>.max-xl\:modal-container {
         opacity: 1;
       }
     }
@@ -220,6 +220,23 @@
           border-color: black transparent transparent transparent;
         }
       }
+
+      &.tooltip-right {
+        left: calc(105% + 10px);
+        top: 50%;
+        transform: translateY(-50%);
+
+        &::after {
+          content: " ";
+          position: absolute;
+          top: 100%;  /* At the bottom of the tooltip */
+          left: 50%;
+          margin-left: -10px;
+          border-width: 10px;
+          border-style: solid;
+          border-color: black transparent transparent transparent;
+        }
+      }
     }
 
     &:hover, &.hover {
@@ -274,7 +291,7 @@
     height: 3rem;
     margin-bottom: -2px;
     padding: 5px 1rem;
-    border-radius: 20px 20px 0 0;
+    border-radius: 5px 5px 0 0;
     border: 2px solid var(--background-hover);
     border-bottom: none;
 

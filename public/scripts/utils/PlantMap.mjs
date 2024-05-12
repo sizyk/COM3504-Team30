@@ -1,4 +1,6 @@
 // Import leaflet L constant from window
+import { leafletInvalidateEvent } from './CustomEvents.mjs';
+
 const { L } = window;
 
 /*
@@ -84,7 +86,7 @@ export default class PlantMap {
 
     // Invalidate size to ensure entire map div is taken up by map
     // Prevents need for fixed width/height
-    this._mapDiv.addEventListener('leaflet-invalidate', () => {
+    this._mapDiv.addEventListener(leafletInvalidateEvent.type, () => {
       this._map.invalidateSize();
       if (!this._viewReset) {
         this.resetMapView();

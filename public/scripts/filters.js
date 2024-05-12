@@ -1,4 +1,4 @@
-const FILTER_ELEMS = document.querySelectorAll('#filters input, #filters select');
+const FILTER_ELEMS = document.querySelectorAll('[data-filter]');
 const CURRENT_FILTERS = {};
 
 /**

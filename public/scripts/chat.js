@@ -3,12 +3,12 @@ import { showMessage } from './utils/flash-messages.mjs';
 import IDB from './utils/IDB.mjs';
 import getUsername from './utils/localStore.mjs';
 
-let sendButton = document.getElementById('send-button');
-let userInput = document.getElementById('user-input');
-let chatbox = document.getElementById('chatbox');
-let chatContainer = document.getElementById('chat-interface');
-let openChatButton = document.getElementById('open-chat');
-let closeChatButton = document.getElementById('close-chat');
+let sendButton;
+let userInput;
+let chatbox;
+let chatContainer;
+let openChatButton;
+let closeChatButton;
 
 // Remove trailing forward slash (if any) and parse to get plant ID
 const [roomId] = window.location.href.replace(/\/$/, '').split('/').slice(-1);
@@ -18,8 +18,6 @@ if (typeof io !== 'undefined') {
   // eslint-disable-next-line no-undef
   socket = io();
 }
-
-let isChatboxOpen = false;
 
 /**
  * Encodes a string to hexadecimal string
@@ -98,23 +96,10 @@ function connectToRoom() {
 }
 
 /**
- * Clears the chatbox of all messages
- */
-function clearChatbox() {
-  chatbox.innerHTML = '';
-}
-
-/**
  * Toggles the chatbox to be open or closed
  */
 function toggleChatbox() {
   chatContainer.classList.toggle('hidden');
-  isChatboxOpen = !isChatboxOpen;
-  if (isChatboxOpen) {
-    connectToRoom();
-  } else if (!isChatboxOpen) {
-    clearChatbox();
-  }
 }
 
 /**
@@ -130,11 +115,14 @@ function receiveChat(params) {
       message: params.message,
       dateTime: params.dateTime,
     };
+    addUserMessage(params.message, params.user);
+
     if (params.user !== getUsername()) {
       return;
     }
+
+    // Only push to DB if message sent by current user
     DBController.createOrUpdate('chats', newChat, () => {}, () => showMessage('Failed to add chat. Please try again.', 'error', 'error'));
-    addUserMessage(params.message, params.user);
   } catch (error) {
     showMessage('Failed to send message', 'error');
   }
@@ -169,14 +157,7 @@ function sendChatMessage() {
   }
 }
 
-export default function addChatEventListeners() {
-  sendButton = document.getElementById('send-button');
-  userInput = document.getElementById('user-input');
-  chatbox = document.getElementById('chatbox');
-  chatContainer = document.getElementById('chat-interface');
-  openChatButton = document.getElementById('open-chat');
-  closeChatButton = document.getElementById('close-chat');
-
+export function addChatEventListeners() {
   openChatButton.addEventListener('click', toggleChatbox);
 
   closeChatButton.addEventListener('click', toggleChatbox);
@@ -194,10 +175,21 @@ export default function addChatEventListeners() {
   });
 }
 
+export default function initChat() {
+  sendButton = document.getElementById('send-button');
+  userInput = document.getElementById('user-input');
+  chatbox = document.getElementById('chatbox');
+  chatContainer = document.getElementById('chat-interface');
+  openChatButton = document.getElementById('open-chat');
+  closeChatButton = document.getElementById('close-chat');
+  addChatEventListeners();
+  connectToRoom();
+}
+
 if (socket) {
   socket.on('chat', receiveChat);
 }
 
 try {
-  addChatEventListeners();
+  initChat();
 } catch (e) { /* empty */ }

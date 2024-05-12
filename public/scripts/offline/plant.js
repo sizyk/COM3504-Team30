@@ -1,9 +1,9 @@
 import { showMessage } from '../utils/flash-messages.mjs';
 import DBController from '../utils/DBController.mjs';
-import { buildSpottedString } from '../utils/plantUtils.mjs';
+import { buildDateString } from '../utils/plantUtils.mjs';
 import { initialiseModal } from '../global-scripts/modals.mjs';
 import addEventListeners from '../plantForm.js';
-import addChatEventListeners from '../chat.js';
+import initChat from '../chat.js';
 
 showMessage('Connection to server lost! Showing locally stored info & chats.', 'info', 'wifi_off');
 
@@ -30,7 +30,7 @@ DBController.get('plants', { _id: plantID }, (plants) => {
 
   const plant = plants[0];
 
-  plant.spottedString = buildSpottedString(plant);
+  plant.displayDate = buildDateString(plant);
   plant.dateTimeSeen = new Date(plant.dateTimeSeen);
 
   // eslint-disable-next-line no-undef
@@ -40,9 +40,10 @@ DBController.get('plants', { _id: plantID }, (plants) => {
   mainElem.dataset.plant = plantID;
 
   initialiseModal(document.getElementById(`${plant._id}-edit-plant-modal`));
+  initialiseModal(document.getElementById('image-full-modal'));
 
   // eslint-disable-next-line no-use-before-define
   addEventListeners(document.getElementById(`card-${plant._id}`));
 
-  addChatEventListeners();
+  initChat();
 });

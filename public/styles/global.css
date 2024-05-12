@@ -14,6 +14,7 @@
      */
   :root {
     --text: #f1eee7;
+    --text-light: #262c26;
     --background: #212121;
     --primary: #a7c957;
     --secondary: #9adcc7;
@@ -52,6 +53,7 @@
 
   .light {
     --text: #262c26;
+    --text-light: #262c26;
     --background: #f1eee7;
     --primary: #2d5936;
     --secondary: #9adcc7;
@@ -90,6 +92,15 @@
 }
 
 /*===GENERAL RULES============================================================*/
+.overflow-y-scroll {
+  /* Hide horizontal scrollbars in chrome */
+  overflow-x: hidden;
+}
+
+* {
+  scrollbar-width: thin;
+}
+
 main {
   @apply flex-fill-remaining-space;
 }
@@ -138,8 +149,8 @@ main {
 }
 
 #theme-toggle {
-  height: 2rem;
-  aspect-ratio: 1.75;
+  height: 1.75rem;
+  aspect-ratio: 1.9;
   border-radius: 25px;
   display: flex;
   align-items: center;
@@ -147,14 +158,14 @@ main {
   padding: 0 5px;
 
   > #moving-switch {
-    height: 1.5rem;
+    height: 1.25rem;
     aspect-ratio: 1;
     border-radius: 50%;
     transition: transform 0.1s ease-in-out;
   }
 
   &[data-theme='dark'] > #moving-switch {
-    transform: translateX(100%);
+    transform: translateX(calc(1.75rem * 1.9 - (1.25rem + 10px)));
   }
 }
 
@@ -171,7 +182,7 @@ main {
   .plant-info {
     background-color: color-mix(
       in srgb,
-      var(--text),
+      var(--text-light),
       rgba(255, 255, 255, 0) 20%
     );
     transform: translateY(100%);
@@ -181,6 +192,15 @@ main {
 
   .plant-name {
     transform: translateY(-100%);
+    div:last-child {
+      --tw-gradient-from: color-mix(
+        in srgb,
+        var(--text-light),
+        rgba(255, 255, 255, 0) 10%
+      ) var(--tw-gradient-from-position);
+      --tw-gradient-to: rgb(255 255 255 / 0) var(--tw-gradient-to-position);
+      --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to)
+    }
   }
 
   &:hover, &.hover {
@@ -192,7 +212,7 @@ main {
     .plant-name {
       padding-top: 0;
 
-      div {
+      div:last-child {
         opacity: 0;
       }
     }

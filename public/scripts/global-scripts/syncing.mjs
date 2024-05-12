@@ -1,6 +1,7 @@
 import IDB from '../utils/IDB.mjs';
 import DBController from '../utils/DBController.mjs';
 import { clearMessage, showMessage } from '../utils/flash-messages.mjs';
+import { IDBOpenEvent } from '../utils/CustomEvents.mjs';
 
 const onlineStatus = document.getElementById('online-status');
 
@@ -11,7 +12,7 @@ const onlineStatus = document.getElementById('online-status');
  */
 function connectHandler() {
   // Use event listener to prevent sync attempts occurring before IDB is open
-  window.addEventListener('idb-open', () => {
+  window.addEventListener(IDBOpenEvent.type, () => {
     // Synchronise all events that were performed offline
     DBController.synchronise().then((success) => {
       if (success) {
@@ -23,10 +24,11 @@ function connectHandler() {
   });
 
   if (IDB.db) {
-    window.dispatchEvent(new Event('idb-open'));
+    window.dispatchEvent(IDBOpenEvent);
   }
 
   onlineStatus.innerText = 'wifi';
+  onlineStatus.title = 'Online';
 }
 
 /**
@@ -34,6 +36,7 @@ function connectHandler() {
  */
 function disconnectHandler() {
   onlineStatus.innerText = 'wifi_off';
+  onlineStatus.title = 'Offline';
 }
 
 /**
