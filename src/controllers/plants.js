@@ -67,9 +67,7 @@ exports.get = (filter) => PlantModel.find(filter)
 
       // const tz = dt.getTimezoneOffset();
 
-      p.spottedString = `${hour}:${min} on ${day}/${month}/${year}, in Sheffield `;
-
-      p.emoji = '🇬🇧';
+      p.displayDate = `${hour}:${min} on ${day}/${month}/${year}`;
     });
 
     return plants;

@@ -25,15 +25,21 @@ function sortPlantsByDateTimeSeen() {
 
   // Toggle sorting order for next click
   ascendingOrder = !ascendingOrder;
-  // Update sort button icon based on sorting order
-  const sortIcon = document.getElementById('sort-icon');
-  const sortIconSmall = document.getElementById('sort-icon-small');
-  sortIcon.innerText = ascendingOrder ? 'arrow_drop_up' : 'arrow_drop_down'; // Up or down arrow symbol
-  sortIconSmall.innerText = ascendingOrder ? 'arrow_drop_up' : 'arrow_drop_down';
+
+  document.querySelectorAll('[data-sort-icon]').forEach((icon) => {
+    icon.style.rotate = ascendingOrder ? '0deg' : '180deg';
+    icon.title = `Click to sort in ${ascendingOrder ? 'ascending' : 'descending'} order`;
+  });
 }
 
-// Add event listener to sort button
-const sortButton = document.getElementById('sort-button');
-const sortButtonSmall = document.getElementById('sort-button-small');
-sortButton.addEventListener('click', sortPlantsByDateTimeSeen);
-sortButtonSmall.addEventListener('click', sortPlantsByDateTimeSeen);
+document.querySelectorAll('[data-sort]').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    switch (btn.parentElement.querySelector('select').value) {
+      case 'Time Seen':
+        sortPlantsByDateTimeSeen();
+        break;
+      default:
+        break;
+    }
+  });
+});

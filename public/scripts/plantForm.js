@@ -1,9 +1,10 @@
 import DBController from './utils/DBController.mjs';
 import { showMessage } from './utils/flash-messages.mjs';
-import updateCard, { buildSpottedString } from './utils/plantUtils.mjs';
-import { initialiseModal } from './global-scripts/modals.mjs';
+import updateCard, { buildDateString } from './utils/plantUtils.mjs';
 import getUsername from './utils/localStore.mjs';
 import PLANT_MAP from './mapDriver.js';
+import { getFlagEmoji, reverseGeocode } from './utils/geoUtils.mjs';
+import { plantAddEvent } from './utils/CustomEvents.mjs';
 
 /**
  * Shows coordinates on the form
@@ -35,7 +36,7 @@ function getLocation(plantID) {
 
 /**
  * takes in an error code and adds the appropriate error message to the preview via the DOM
- * @param status {number} the status code of the error
+ * @param status {number | string} the status code of the error
  * @param plantID {string} the plantID of the modal to update
  */
 function handleErrorResponse(status, plantID) {
@@ -191,81 +192,68 @@ function toggleImageInput(plantID) {
  * @param plant {Object} the plant object to submit
  */
 function submitPlantToDB(plant) {
-  DBController.createOrUpdate(
-    'plants',
-    plant,
-    (message, plantObject) => {
-      showMessage(message, 'success', 'check_circle');
+  return new Promise((resolve, reject) => {
+    DBController.createOrUpdate(
+      'plants',
+      plant,
+      (message, plantObject) => {
+        const plantModal = document.getElementById(`${plantObject._id}-edit-plant-modal`);
+        if (plantModal !== null) {
+          updateCard(plantObject);
+          if (!window.plantsAppOffline) {
+            // Update plant's pin on the map
+            PLANT_MAP.updatePlantCoordinates(plantObject);
+          }
+          resolve();
+        } else {
+          plantObject.displayDate = buildDateString(plantObject);
+          // plantModal is null - therefore this is a new plant
+          // query server to generate its card on-the-fly
+          fetch('/public/cached-views/plant-card.ejs', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'text/html',
+            },
+          }).then((res) => res.text())
+            .then((p) => {
+              plantObject.dateTimeSeen = new Date(plantObject.dateTimeSeen);
+              // eslint-disable-next-line no-undef
+              const renderedTemplate = ejs.render(p, { plant: plantObject });
+              // Add new plant view to HTML & initialise relevant event listeners
+              document.getElementById('plant-grid').insertAdjacentHTML('beforeend', renderedTemplate);
 
-      const addModal = document.getElementById('plant-add-modal');
-      if (addModal !== null) {
-        addModal.classList.remove('active');
-      }
+              // eslint-disable-next-line no-use-before-define
+              addEventListeners(document.getElementById(`card-${plantObject._id}`));
+              document.getElementById('no-plants-warning').classList.add('hidden');
 
-      const plantModal = document.getElementById(`${plantObject._id}-edit-plant-modal`);
-      if (plantModal !== null) {
-        plantModal.classList.remove('active');
-        updateCard(plantObject);
-        if (!window.plantsAppOffline) {
-          // Update plant's pin on the map
-          PLANT_MAP.updatePlantCoordinates(plantObject);
+              if (!window.plantsAppOffline) {
+                PLANT_MAP.pinPlants([
+                  {
+                    _id: plantObject._id,
+                    image: plantObject.image,
+                    coordinates: [plantObject.latitude, plantObject.longitude],
+                  },
+                ]);
+              }
+              resolve();
+            })
+            .catch((e) => {
+              console.error(e);
+              reject(new Error('Plant failed to add! Please try again.'));
+            });
         }
-      } else {
-        plantObject.spottedString = buildSpottedString(plantObject);
-        // plantModal is null - therefore this is a new plant
-        // query server to generate its card on-the-fly
-        fetch('/public/cached-views/plant-card.ejs', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'text/html',
-          },
-        }).then((res) => res.text())
-          .then((p) => {
-            plantObject.dateTimeSeen = new Date(plantObject.dateTimeSeen);
-            // eslint-disable-next-line no-undef
-            const renderedTemplate = ejs.render(p, { plant: plantObject });
-            // Add new plant view to HTML & initialise relevant event listeners
-            document.getElementById('plant-grid').insertAdjacentHTML('beforeend', renderedTemplate);
-
-            initialiseModal(document.getElementById(`${plantObject._id}-edit-plant-modal`));
-
-            // eslint-disable-next-line no-use-before-define
-            addEventListeners(document.getElementById(`card-${plantObject._id}`));
-            document.getElementById('no-plants-warning').classList.add('hidden');
-
-            if (!window.plantsAppOffline) {
-              PLANT_MAP.pinPlants([
-                {
-                  _id: plantObject._id,
-                  image: plantObject.image,
-                  coordinates: [plantObject.latitude, plantObject.longitude],
-                },
-              ]);
-            }
-          })
-          .catch(() => {
-            document.getElementById('no-plants-warning').innerText = 'Failed to load view! Try clearing your cache & reloading when connected.';
-          });
-      }
-    },
-  );
+      },
+    );
+  });
 }
 
 /**
  * Submits the add plant form, or a plant's edit form, and updates the page live
  * @param formElem {HTMLFormElement} the form element that has been submitted
  */
-function submitPlantForm(formElem) {
+async function submitPlantForm(formElem) {
   const params = new FormData(formElem);
   const shouldShowUrl = formElem.querySelector('[data-change="toggle-input"]');
-
-  const plantID = params.has('_id') ? params.get('_id') : 'New';
-
-  // Ensure user has validated their image
-  if (shouldShowUrl.checked && params.get('url').trim() !== '' && !document.getElementById(`imageValidated${plantID}`).checked) {
-    handleErrorResponse('not-validated', plantID);
-    return;
-  }
 
   // Set ID on form submit, rather than on page load
   if (!params.has('_id')) {
@@ -287,20 +275,33 @@ function submitPlantForm(formElem) {
   const username = getUsername();
   // If username is not set do nothing
   if (username == null) {
-    return;
+    return new Promise((resolve, reject) => { reject(new Error('No username found! Please log in before adding a plant.')); });
   }
+
+  const lat = params.get('latitude').toString();
+  const lng = params.get('longitude').toString();
+
+  const { displayName, countryCode } = await reverseGeocode(lat, lng);
+
+  if (displayName === 'error') {
+    return new Promise((resolve, reject) => { reject(new Error('Geocoding failed! Please try again.')); });
+  }
+
+  const flagEmoji = getFlagEmoji(countryCode);
+
   const plant = { // Get data from the form
     _id: params.get('_id'),
     author: username, // replace with user when implemented
     name: params.get('name').trim(),
     description: params.get('description').trim(),
     dateTimeSeen: new Date(params.get('dateTimeSeen')),
-    emoji: '🇬🇧',
+    flag: flagEmoji,
+    placeName: displayName,
     size: params.get('size'),
     sunExposure: params.get('sunExposure'),
     colour: params.get('colour'),
-    longitude: params.get('longitude'),
-    latitude: params.get('latitude'),
+    latitude: lat,
+    longitude: lng,
     hasFlowers: params.get('hasFlowers'),
     hasLeaves: params.get('hasLeaves'),
     hasFruit: params.get('hasFruit'),
@@ -313,8 +314,13 @@ function submitPlantForm(formElem) {
     if (params.get('url').trim().length > 0) {
       plant.image = params.get('url').trim();
     }
-    submitPlantToDB(plant);
-  } else {
+
+    return new Promise((resolve, reject) => {
+      submitPlantToDB(plant).then(resolve).catch(reject);
+    });
+  }
+
+  return new Promise((resolve, reject) => {
     // If not using a URL, read file as base64
     const reader = new FileReader();
 
@@ -324,11 +330,11 @@ function submitPlantForm(formElem) {
         plant.image = reader.result;
       }
 
-      submitPlantToDB(plant);
+      submitPlantToDB(plant).then(resolve).catch(reject);
     });
 
     reader.readAsDataURL(params.get('image'));
-  }
+  });
 }
 
 /**
@@ -361,8 +367,8 @@ export default function addEventListeners(card) {
 
   // Wrap these last two in try/catch as single querySelector means event listener will throw error
   // if nothing is found
-  // If image cannot be loaded for whatever reason, throw a 415 error (Unsupported Media Type)
   try {
+    // If image cannot be loaded for whatever reason, throw a 415 error (Unsupported Media Type)
     card.querySelector('[data-img="preview"]').addEventListener('error', () => handleErrorResponse(415, card.dataset.plant));
   } catch (e) { /* empty */ }
 
@@ -377,9 +383,35 @@ export default function addEventListeners(card) {
   } catch (e) { /* empty */ }
 }
 
+/**
+ * Runs the form submission function in the background, to make it non-blocking
+ * @param plantAddForm {HTMLFormElement} the form element to submit
+ */
+function submitBackgroundTask(plantAddForm) {
+  // Ensure user has validated their image
+  if (document.getElementById('imageInputCheckboxNew').checked && !document.getElementById('imageValidatedNew').checked) {
+    handleErrorResponse('not-validated', 'New');
+    return;
+  }
+
+  // Hide form and inform user that plant is being added in the background
+  document.getElementById('plant-add-modal').classList.remove('active');
+  showMessage('Adding plant...', 'info', 'info', true);
+
+  // Run async submit function
+  submitPlantForm(plantAddForm)
+    .then(() => {
+      showMessage('Plant added successfully!', 'success', 'done');
+      document.dispatchEvent(plantAddEvent);
+    })
+    .catch((e) => {
+      showMessage(e, 'error', 'error');
+    });
+}
+
 const plantAddForm = document.getElementById('createPlantForm');
 if (plantAddForm) {
-  plantAddForm.addEventListener('submit', () => submitPlantForm(plantAddForm));
+  plantAddForm.addEventListener('submit', () => submitBackgroundTask(plantAddForm));
   addEventListeners(plantAddForm);
 }
 

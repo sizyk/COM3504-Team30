@@ -1,3 +1,5 @@
+import { IDBOpenEvent } from './CustomEvents.mjs';
+
 function defaultSuccess(e) {
   console.log(e.target.result);
 }
@@ -26,7 +28,7 @@ class IDB {
 
     request.onsuccess = () => {
       this.db = request.result;
-      window.dispatchEvent(new Event('idb-open'));
+      window.dispatchEvent(IDBOpenEvent);
     };
 
     request.onupgradeneeded = (e) => {

@@ -3,21 +3,22 @@
 
 <button
   type="button"
-  class="hover-button-secondary flex items-center gap-2 rounded px-3 py-2 text-center font-bold lg:hidden"
+  class="max-lg:hover-link lg:hover-button-secondary flex items-center px-2 lg:gap-2 lg:rounded lg:px-3 lg:py-2 lg:font-bold xl:hidden"
   data-toggle="modal"
   data-target="filters"
 >
-  Filters <span class="material-symbols-outlined"> filter_alt </span>
+  <span class="hidden lg:inline">Filter Plants</span>
+  <span class="material-symbols-outlined max-lg:!text-4xl"> filter_alt </span>
 </button>
 
-<div id="filters" class="max-lg:modal invisible lg:visible" data-modal>
+<div id="filters" class="max-xl:modal invisible xl:visible" data-modal>
   <div
-    class="modal-overlay lg:hidden"
+    class="modal-overlay xl:hidden"
     data-close="modal"
     data-target="filters"
   ></div>
-  <div class="max-lg:modal-container">
-    <div class="mb-4 flex items-center justify-between lg:hidden">
+  <div class="max-xl:modal-container">
+    <div class="mb-4 flex items-center justify-between xl:hidden">
       <h5 class="modal-title text-xl font-semibold">Filter Plants</h5>
       <button
         class="close-modal flex justify-center rounded border border-gray-300 bg-background hover:bg-error hover:text-background"
@@ -30,63 +31,59 @@
       </button>
     </div>
     <div
-      class="max-lg:modal-body flex flex-col items-center gap-4 text-xl lg:h-16 lg:flex-row lg:items-stretch lg:justify-evenly"
+      class="max-xl:modal-body flex flex-col items-center gap-4 text-xl xl:h-16 xl:flex-row xl:items-stretch xl:justify-evenly"
     >
-      <button
-        id="sort-button-small"
-        class="ml-auto mr-2 flex items-center gap-0.5 lg:hidden"
-      >
-        Sort by time seen
-        <span id="sort-icon-small" class="material-symbols-outlined"
-          >arrow_drop_up</span
-        >
-        <!-- Up arrow symbol -->
-      </button>
-      <div class="flex items-center gap-2 lg:flex-col lg:gap-0">
+      <div class="lg:hidden"><%- include('../partials/sort-button.ejs') %></div>
+      <div class="flex items-center gap-2 xl:flex-col xl:gap-0">
         <label for="has-leaves-filter">Leaves?</label>
         <input
           type="checkbox"
           id="has-leaves-filter"
-          class="lg:flex-fill-remaining-space aspect-square h-8"
+          class="xl:flex-fill-remaining-space aspect-square h-8"
+          data-filter
           data-filterfeature="hasleaves"
           data-filtervalue="any"
         />
       </div>
-      <div class="flex items-center gap-2 lg:flex-col lg:gap-0">
+      <div class="flex items-center gap-2 xl:flex-col xl:gap-0">
         <label for="has-flowers-filter">Flowers?</label>
         <input
           type="checkbox"
           id="has-flowers-filter"
-          class="lg:flex-fill-remaining-space aspect-square h-8"
+          class="xl:flex-fill-remaining-space aspect-square h-8"
+          data-filter
           data-filterfeature="hasflowers"
           data-filtervalue="any"
         />
       </div>
-      <div class="flex items-center gap-2 lg:flex-col lg:gap-0">
+      <div class="flex items-center gap-2 xl:flex-col xl:gap-0">
         <label for="has-fruits-nuts-filter">Fruits/Nuts?</label>
         <input
           type="checkbox"
           id="has-fruits-nuts-filter"
-          class="lg:flex-fill-remaining-space aspect-square h-8"
+          class="xl:flex-fill-remaining-space aspect-square h-8"
+          data-filter
           data-filterfeature="hasfruitsnuts"
           data-filtervalue="any"
         />
       </div>
-      <div class="flex items-center gap-2 lg:flex-col lg:gap-0">
+      <div class="flex items-center gap-2 xl:flex-col xl:gap-0">
         <label for="identified-filter">Identified?</label>
         <input
           type="checkbox"
           id="identified-filter"
-          class="lg:flex-fill-remaining-space aspect-square h-8"
+          class="xl:flex-fill-remaining-space aspect-square h-8"
+          data-filter
           data-filterfeature="identified"
           data-filtervalue="any"
         />
       </div>
-      <div class="flex items-center gap-2 lg:flex-col lg:gap-0">
+      <div class="flex items-center gap-2 xl:flex-col xl:gap-0">
         <label for="sun-exposure-filter">Sun Exposure</label>
         <select
           id="sun-exposure-filter"
-          class="lg:flex-fill-remaining-space h-8 border-2 border-text border-text bg-background px-2 text-text dark:bg-background-inverse dark:text-background"
+          class="xl:flex-fill-remaining-space h-8 border-2 border-text border-text bg-background px-2 text-text dark:bg-background-inverse dark:text-background"
+          data-filter
           data-filterfeature="sunexposure"
           data-filtervalue="any"
         >

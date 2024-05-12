@@ -2,7 +2,7 @@
  * Builds a human-readable string to display the time and date at which a plant was spotted
  * @param plant {object} the plant to build a spotted string for
  */
-export function buildSpottedString(plant) {
+export function buildDateString(plant) {
   const dt = new Date(plant.dateTimeSeen.toString());
   let day = dt.getDate().toString(); // Days are 1-indexed
   day = day > 9 ? day : `0${day}`;
@@ -21,7 +21,7 @@ export function buildSpottedString(plant) {
   // TODO - why is this 1.25
   // const tz = dt.getTimezoneOffset();
 
-  return `${hour}:${min} on ${day}/${month}/${year}, in Sheffield`;
+  return `${hour}:${min} on ${day}/${month}/${year}`;
 }
 
 /**
@@ -42,7 +42,7 @@ export default function updateCard(plant) {
   }
 
   card.querySelector('[data-name]').innerText = plant.name;
-  card.querySelector('[data-spotted]').innerText = buildSpottedString(plant);
+  card.querySelector('[data-spotted]').innerText = buildDateString(plant);
   card.querySelector('[data-description]').innerText = plant.description;
 
   // Update indicator SVGs

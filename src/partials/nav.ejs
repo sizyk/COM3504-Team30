@@ -1,27 +1,84 @@
-<nav class="fixed top-0 z-50 h-20 w-full text-xl font-bold">
-  <!-- Wrapper to allow nav links to appear behind nav -->
-  <div
-    class="flex h-full items-center justify-between gap-8 border-b-2 border-text bg-background p-4 pb-4"
+<nav
+  class="z-20 flex h-12 w-screen items-center justify-between border-b-2 border-background-hover bg-background px-4"
+>
+  <a
+    href="/"
+    id="home-button"
+    class="flex items-center gap-2 text-text"
+    title="Home Page"
   >
-    <div class="flex h-full items-center gap-8">
-      <div id="nav-button" class="md:hidden">X</div>
-      <img
-        class="aspect-square h-full rounded-xl dark:bg-background-inverse"
-        src="/public/img/logo.svg"
-        alt="The website's logo"
-      />
+    <!-- Logo in raw SVG format, so that it can be styled with CSS -->
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+    <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
-      <div id="nav-links" class="flex items-center gap-8">
-        <a href="/">A Page</a>
-        <a href="/page-2">A Second Page</a>
-        <a href="/page-3">A Third Page</a>
-      </div>
+    <svg
+      viewBox="0 0 12.7 12.7"
+      id="svg1"
+      xmlns="http://www.w3.org/2000/svg"
+      class="size-8 fill-text stroke-text"
+    >
+      <g id="layer1">
+        <path
+          id="path1-92"
+          style="stroke-opacity: 0"
+          d="M 1.8405352,0.46376312 C 1.6852178,0.73278079 1.4142875,1.1280639 1.4142875,1.5098613 c 0,0.3716618 0.3603964,0.492012 0.4262477,0.7377723 z m 0,0 c 0.1553174,0.26901767 0.4262477,0.66430078 0.4262477,1.04609818 0,0.3716618 -0.3603964,0.492012 -0.4262477,0.7377723 z"
+          transform="matrix(1.0799883,-1.7280971,1.7280971,1.0799883,2.0017438,6.2273084)"
+        />
+        <path
+          id="path1-9-2"
+          style="stroke-opacity: 0"
+          d="M 1.8405352,0.46376312 C 1.6852178,0.73278079 1.4142875,1.1280639 1.4142875,1.5098613 c 0,0.3716618 0.3603964,0.492012 0.4262477,0.7377723 z m 0,0 c 0.1553174,0.26901767 0.4262477,0.66430078 0.4262477,1.04609818 0,0.3716618 -0.3603964,0.492012 -0.4262477,0.7377723 z"
+          transform="matrix(1.6151743,1.1688994,-1.1688994,1.6151743,7.1571641,-0.23605453)"
+        />
+        <path
+          style="stroke-width: 0.661458"
+          d="m 7.091607,8.2907187 c 0,-0.7671501 0.6422767,-2.019103 0.3864556,-3.6300483 -0.00358,-0.022555 -0.00734,-0.045168 -0.011274,-0.06784"
+          id="path2"
+        />
+        <circle
+          style="stroke-width: 1.32291667; fill-opacity: 0"
+          id="path3"
+          cx="7.5034871"
+          cy="5.1655436"
+          r="4.0655861"
+        />
+        <path
+          id="rect4"
+          style="stroke-width: 0.30767706"
+          d="m 1.2121723,1.4696222 0.2729118,-0.00913 v 2.768851 l -0.4511931,-0.0084 z m 0.5458236,0 -0.2729118,-0.00913 v 2.768851 l 0.4511931,-0.0084 z"
+          transform="matrix(1.2161366,1.2161366,-1.2161366,1.2161366,4.6760889,4.4427505)"
+        />
+      </g>
+    </svg>
+    <span class="text-2xl font-bold"> PlantSpotter </span>
+  </a>
+  <div class="flex items-center gap-2">
+    <div
+      id="online-status"
+      title="Online"
+      class="material-symbols-outlined cursor-pointer text-text"
+    >
+      wifi
     </div>
-    <%- include('../partials/themeToggle.ejs') %>
+    <%- include('themeToggle.ejs') %>
+
+    <!-- prettier-ignore -->
+    <% if (typeof navUserAvatar !== 'undefined' && navUserAvatar) { %>
+      <button
+        type="button"
+        class="flex aspect-square h-12 items-center justify-center border-text px-2"
+        data-toggle="modal"
+        data-target="user-details-modal"
+        data-fill="user-avatar"
+      ></button>
+      <!-- prettier-ignore -->
+      <%-
+        include('../partials/modal.ejs', {
+          modalID: 'user-details-modal',
+          modalTitle: 'Your User Details',
+          modalContent: 'user-details-modal'
+        });
+      %>
+    <% } %>
   </div>
 </nav>
-
-<div
-  id="nav-shadow"
-  class="pointer-events-none fixed left-0 top-0 z-40 h-screen w-screen bg-text opacity-0 md:hidden dark:bg-text-inverse"
-></div>

@@ -31,9 +31,11 @@ module.exports = {
       },
 
       screens: {
+        'max-xl': {'max': '1279px'},
         'max-lg': {'max': '1023px'},
         'max-md': {'max': '767px'},
         '3xl': {'min': '1600px'},
+        'xs': {'min': '550px'},
       }
     },
   },

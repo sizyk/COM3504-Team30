@@ -1,33 +1,40 @@
-<div class="fixed bottom-0 right-0 mb-10 mr-10">
+<div class="fixed bottom-14 right-14">
   <button
     id="open-chat"
-    class="hover-button material-symbols-outlined fill-0 rounded-lg bg-accent p-2.5"
+    class="hover-button material-symbols-outlined fill-0 rounded-lg bg-accent p-2.5 3xl:hidden"
   >
     forum
   </button>
 </div>
 <div
   id="chat-interface"
-  class="fixed bottom-10 right-1/2 hidden w-96 max-w-[83.33333vw] translate-x-1/2 sm:right-10 sm:translate-x-0"
+  class="fixed bottom-10 hidden w-96 max-w-[83.33333vw] sm:right-10 3xl:block"
 >
-  <div class="w-full max-w-lg rounded-lg bg-white shadow-md">
+  <div
+    class="w-full max-w-lg rounded-lg bg-white shadow-md 3xl:fixed 3xl:right-0 3xl:top-0 3xl:flex 3xl:h-screen 3xl:w-[calc(100vw-40vw-40rem)] 3xl:flex-col 3xl:rounded-none 3xl:bg-background 3xl:py-12 3xl:shadow-none"
+  >
     <div
-      class="flex items-center justify-between rounded-t-lg border-b bg-primary p-4"
+      class="flex items-center justify-between rounded-t-lg border-b bg-primary p-4 3xl:justify-end 3xl:rounded-none 3xl:border-b-2 3xl:border-text 3xl:bg-background 3xl:pt-2"
     >
-      <p class="font-semibold text-white dark:text-on-secondary">Comments</p>
+      <p class="font-semibold text-background 3xl:text-2xl 3xl:text-text">
+        Live Chat & Comments
+      </p>
       <button
         id="close-chat"
-        class="close-modal flex justify-center rounded bg-background hover:bg-error hover:text-background"
+        class="close-modal flex justify-center rounded bg-background hover:bg-error hover:text-background 3xl:hidden"
         aria-label="close chat"
       >
         <span class="material-symbols-outlined">close</span>
       </button>
     </div>
-    <div id="chatbox" class="h-80 overflow-y-auto p-4">
+    <div id="chatbox" class="h-80 overflow-y-auto p-4 3xl:h-full">
       <!-- Chat messages will be displayed here -->
     </div>
     <div class="flex border-t p-4">
-      <form id="chat-form" class="flex w-full">
+      <form
+        id="chat-form"
+        class="flex w-full 3xl:fixed 3xl:bottom-12 3xl:right-0 3xl:w-[calc(100vw-40vw-40rem)]"
+      >
         <input
           id="user-id"
           type="text"
@@ -43,7 +50,7 @@
         <input
           id="user-input"
           type="text"
-          placeholder="Type a message"
+          placeholder="Share your thoughts..."
           class="w-full rounded-l-md border px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-accent"
         />
         <button
