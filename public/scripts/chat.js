@@ -130,6 +130,9 @@ function receiveChat(params) {
       message: params.message,
       dateTime: params.dateTime,
     };
+    if (params.user !== getUsername()) {
+      return;
+    }
     DBController.createOrUpdate('chats', newChat, () => {}, () => showMessage('Failed to add chat. Please try again.', 'error', 'error'));
     addUserMessage(params.message, params.user);
   } catch (error) {
