@@ -1,4 +1,5 @@
 import DBController from './utils/DBController.mjs';
+import getUsername from './utils/localStore.mjs';
 
 // clears the preview divs to show new data
 function clearPreview() {
@@ -9,7 +10,8 @@ function clearPreview() {
   document.getElementById('error').innerHTML = '';
 }
 
-export default function buildDBpediaQuery(urlSuffix) {
+// builds the SPARQL query for the given identification
+function buildDBpediaQuery(urlSuffix) {
   const urlPrefix = 'http://dbpedia.org/resource/';
   const resource = urlPrefix + urlSuffix.replace(/ /g, '_');
 
@@ -36,6 +38,7 @@ export default function buildDBpediaQuery(urlSuffix) {
   return `${endpointUrl}?query=${encodedQuery}&format=json`;
 }
 
+// gets the identification from the user input and updates the preview div
 function getIdentification() {
   const urlSuffix = document.getElementById('identification').value;
   const url = buildDBpediaQuery(urlSuffix);
@@ -50,16 +53,18 @@ function getIdentification() {
         document.getElementById('error').innerHTML = '<strong>Error:</strong> No data found for the given identification';
         document.getElementById('validationCheckbox').checked = false;
       } else { // if data found
+        const fullURI = `http://dbpedia.org/resource/${urlSuffix.replace(/ /g, '_')}`;
         // update the p and a tags
         document.getElementById('name').innerHTML = `<strong>Name: </strong>${bindings[0].label.value}`;
         document.getElementById('abtsract').innerHTML = `<strong>Abstract:</strong> ${bindings[0].abstract.value}`;
-        document.getElementById('uri').innerHTML = `<strong>URI:</strong> ${resource}`;
-        document.getElementById('uri').setAttribute('href', resource);
+        document.getElementById('uri').innerHTML = `<strong>URI:</strong> ${fullURI}`;
+        document.getElementById('uri').setAttribute('href', fullURI);
         document.getElementById('validationCheckbox').checked = true;
       }
     });
 }
 
+// uses DBController to update the plant object with the identification
 function submitIdentification() {
   // Ensure user has validated their URI
   if (!document.getElementById('validationCheckbox').checked) {
@@ -89,10 +94,11 @@ document.getElementById('submitValidationButton').addEventListener('click', () =
   submitIdentification(document.getElementById('identificationForm'));
 });
 
-// get plant object by the id
+// get plant object by the id in the url
 const plantID = window.location.href.split('/').pop();
 DBController.get('plants', { _id: plantID }, (plants) => {
   const plant = plants[0];
+  const username = getUsername();
   if (plant.identificationStatus === 'completed') {
     const urlSuffix = plant.identifiedName;
     const url = buildDBpediaQuery(urlSuffix);
@@ -101,7 +107,14 @@ DBController.get('plants', { _id: plantID }, (plants) => {
       .then((response) => response.json())
       .then((data) => {
         const { bindings } = data.results;
+        const fullURI = `http://dbpedia.org/resource/${urlSuffix.replace(/ /g, '_')}`;
         document.getElementById('description').innerHTML = bindings[0].abstract.value;
+        document.getElementById('dbpediaURI').setAttribute('href', fullURI);
+        document.getElementById('dbpediaURI').innerHTML = `DBPedia URI: ${fullURI}`;
       });
+  } else if (username === plant.author) {
+    // plant can be edited and identified only if user==author & plant is not identified
+    document.getElementById('identify-button').classList.remove('hidden');
+    document.getElementById('edit-button').classList.remove('hidden');
   }
 });
