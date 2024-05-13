@@ -14,12 +14,13 @@
   <div class="plant-info flex h-full flex-col gap-2 text-background">
     <div class="plant-name relative isolate px-2">
       <h2 class="text-3xl font-bold" data-name><%= plant.name %></h2>
-      <p class="italic" data-scientific>Flower Scientific Name</p>
+      <p class="italic" data-scientific><%= plant.identificationStatus === 'completed' ? plant.identifiedName : 'in-progress' %>
+        <span class="<%= plant.identificationStatus === 'completed' ? 'bg-primary' : 'bg-secondary' %> text-xs font-medium me-2 px-2.5 py-0.5 rounded"><%= plant.identificationStatus %></span>
+      </p>
       <p>
         <span data-spotted><%= plant.spottedString %></span>
         <span data-emoji><%= plant.emoji %></span>
       </p>
-      <p>Identification: <span class="<%= plant.identificationStatus === 'completed' ? 'bg-primary' : 'bg-secondary' %> text-xs font-medium me-2 px-2.5 py-0.5 rounded"><%= plant.identificationStatus %></span></p>
       <div
         class="absolute bottom-0 left-0 -z-10 h-[200%] w-full bg-gradient-to-t from-text from-55%"
       ></div>

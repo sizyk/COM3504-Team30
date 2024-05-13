@@ -59,7 +59,7 @@ function getIdentification() {
 function submitIdentification() {
   // Ensure user has validated their URI
   if (!document.getElementById('validationCheckbox').checked) {
-    console.log('Please validate your identification first');
+    document.getElementById('error').innerHTML = '<strong>Error:</strong> Please validate your identification before submitting';
     return;
   }
   // get plant object by the id
