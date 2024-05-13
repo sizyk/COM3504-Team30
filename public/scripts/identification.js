@@ -9,9 +9,8 @@ function clearPreview() {
   document.getElementById('error').innerHTML = '';
 }
 
-function getIdentification() {
+export default function buildDBpediaQuery(urlSuffix) {
   const urlPrefix = 'http://dbpedia.org/resource/';
-  const urlSuffix = document.getElementById('identification').value;
   const resource = urlPrefix + urlSuffix.replace(/ /g, '_');
 
   // The DBpedia SPARQL endpoint URL
@@ -34,7 +33,12 @@ function getIdentification() {
   const encodedQuery = encodeURIComponent(sparqlQuery);
 
   // Build the URL for the SPARQL query
-  const url = `${endpointUrl}?query=${encodedQuery}&format=json`;
+  return `${endpointUrl}?query=${encodedQuery}&format=json`;
+}
+
+function getIdentification() {
+  const urlSuffix = document.getElementById('identification').value;
+  const url = buildDBpediaQuery(urlSuffix);
   // Use fetch to retrieve the data
   fetch(url)
     .then((response) => response.json())
@@ -83,4 +87,21 @@ document.getElementById('validateButton').addEventListener('click', () => {
 
 document.getElementById('submitValidationButton').addEventListener('click', () => {
   submitIdentification(document.getElementById('identificationForm'));
+});
+
+// get plant object by the id
+const plantID = window.location.href.split('/').pop();
+DBController.get('plants', { _id: plantID }, (plants) => {
+  const plant = plants[0];
+  if (plant.identificationStatus === 'completed') {
+    const urlSuffix = plant.identifiedName;
+    const url = buildDBpediaQuery(urlSuffix);
+    // Use fetch to retrieve the data
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        const { bindings } = data.results;
+        document.getElementById('description').innerHTML = bindings[0].abstract.value;
+      });
+  }
 });
