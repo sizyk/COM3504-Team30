@@ -3,7 +3,7 @@
     autocomplete="off"
     target="fakesubmit"
     data-form="plant"
-    data-plant="New"
+    data-plant="Identification"
     enctype="multipart/form-data"
     method="POST"
     class="w-[32rem] max-w-[70vw]"
@@ -20,63 +20,46 @@
                 value=""
         />
     </div>
-    <button
-            id="submitButton"
-            type="button"
-            class="form-input hover-button rounded px-4 py-2 font-bold"
-            onclick="getIdentification()"
-    >
-        Submit
-    </button>
+    <div class="form-group mb-4 flex space-x-4" id="validationDiv">
+        <button
+                id="validateButton"
+                type="button"
+                class="form-input hover-button rounded px-4 py-2 font-bold"
+        >
+            Check Identification
+        </button>
+        <div class="mb-2 flex items-center">
+            <input
+                    id="validationCheckbox"
+                    name="validationCheckbox"
+                    type="checkbox"
+                    value="true"
+                    class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
+                    required
+                    disabled
+                    oninvalid="this.setCustomValidity('Enter a valid DBPedia URI to continue')"
+            />
+            <label
+                    for="validationCheckbox"
+                    class="ms-2 text-sm font-medium text-text"
+            >URI Validated?</label
+            >
+        </div>
+    </div>
 
     <div>
-        <p id="name">Name: </p>
-        <p id="abtsract">Abstract: </p>
-        <p><a id="uri" href="#">URI: </a></p>
+        <p id="name"></p>
+        <p id="abtsract"></p>
+        <p><a id="uri" href="#"></a></p>
+        <p id="error" class="text-error"></p>
     </div>
+    <button
+        id="submitValidationButton"
+        type="submit"
+        class="form-input hover-button rounded px-4 py-2 font-bold"
+    >
+        Submit Validation
+    </button>
 </form>
 
-<script>
-    function getIdentification(){
-        console.log('getIdentification')
-        const urlPrefix = 'http://dbpedia.org/resource/';
-        const urlSuffix = document.getElementById('identification').value;
-        const resource = urlPrefix + urlSuffix.replace(/ /g,"_");;
 
-        // The DBpedia SPARQL endpoint URL
-        const endpointUrl = 'https://dbpedia.org/sparql';
-
-        // The SPARQL query to retrieve data for the given resource
-        const sparqlQuery = `
-        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-        PREFIX dbo: <http://dbpedia.org/ontology/>
-
-        SELECT ?label ?abstract
-        WHERE {
-          <${resource}> rdfs:label ?label .
-          <${resource}> dbo:abstract ?abstract .
-        FILTER (langMatches(lang(?label), "en")) .
-        FILTER (langMatches(lang(?abstract), "en")) .
-        }`;
-
-        // Encode the query as a URL parameter
-        const encodedQuery = encodeURIComponent(sparqlQuery);
-
-        // Build the URL for the SPARQL query
-        const url = `${endpointUrl}?query=${encodedQuery}&format=json`;
-        // Use fetch to retrieve the data
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data.results);
-                // The results are in the 'data' object
-                let bindings = data.results.bindings;
-                let result = JSON.stringify(bindings);
-                // update the p and a tags
-                document.getElementById('name').innerHTML = 'Name: ' + bindings[0].label.value;
-                document.getElementById('abtsract').innerHTML = 'Abstract: ' + bindings[0].abstract.value;
-                document.getElementById('uri').innerHTML = 'URI: ' + resource;
-                document.getElementById('uri').setAttribute('href', resource);
-            });
-    }
-</script>
