@@ -74,6 +74,8 @@ Visit localhost:3000 to see the app.
 
 ## Git Statistics
 
+ToDo: Add Statistics screenshots once everything is merged
+
 jacksanders02 = Jack Sanders (jsanders4@sheffield.ac.uk)
 Fokkos = James March (jmarch2@sheffield.ac.uk)
 Andreas-Evripidou = Andreas Evripidou (eandreas1@sheffield.ac.uk)
@@ -81,4 +83,4 @@ sizyk = Stylianos Kyzis (skyzis1@sheffield.ac.uk)
 
 
 
-ToDo: Video
+ToDo: Video and Screenshot to demo the app
