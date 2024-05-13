@@ -5,20 +5,27 @@ exports.init = (io) => {
   io.sockets.on('connection', (socket) => {
     try {
       let lastChecked = new Date();
-      let userNotified = [];
+      let userNotified = []; // Array to store users that have been notified
 
-      // Query the 'chats' collection for changes every 2 seconds
-      setInterval(async () => {
-        const newChats = await chatsController.getNewChats(lastChecked);
-        userNotified = [];
-        // Update the last checked time
-        lastChecked = new Date();
+      /**
+       * Function to check for new chats every 2 seconds
+       */
+      socket.on('check for chats', () => {
+        // Query the 'chats' collection for changes every 2 seconds
+        setInterval(async () => {
+          const newChats = await chatsController.getNewChats(lastChecked);
+          userNotified = [];
+          // Update the last checked time
+          console.log('lastChecked', lastChecked);
+          lastChecked = new Date();
+          console.log('Checking for new chats...', newChats, 'new chats found!', lastChecked);
 
-        if (newChats && newChats.length > 0) {
-          // Emit a socket event with the new chats
-          io.emit('databaseChange', newChats);
-        }
-      }, 2000);
+          if (newChats && newChats.length > 0) {
+            // Emit a socket event with the new chats
+            io.emit('databaseChange', newChats);
+          }
+        }, 2000);
+      });
 
       /**
        * Checks if the user should receive a notification
