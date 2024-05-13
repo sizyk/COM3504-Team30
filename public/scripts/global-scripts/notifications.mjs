@@ -1,9 +1,10 @@
 import getUsername from '../utils/localStore.mjs';
 
+let sentNotifications = [];
+
 /**
  * Initialises Notifications for the browser
  * and sets up socket.io for real-time notifications
- * if the socket doesn't exist
  */
 export default async function initNotifications() {
   // Check if the browser supports notifications
@@ -31,24 +32,16 @@ export default async function initNotifications() {
     }
   }
 
+  // Initialise socket.io for real-time notifications - Creates multiple on load so further checks are needed
   if (typeof io !== 'undefined') {
-    let socketId = localStorage.getItem('socketId'); // try and get a socket id from local storage
-    if (socketId !== null) {
-      window.socket = io({ query: { socketId } }); // if a socket id is found, use it to connect to the server
-    } else { // if not initialise a new socket connection and start the process of checking for chats
       window.socket = io();
       if (navigator.onLine) {
-        window.socket.emit('check for chats');
-        window.socket.on('connect', () => {
-          localStorage.setItem('socketId', window.socket.id); // on connection, save the socket id to local storage
-        });
+        window.socket.emit('check for chats', getUsername());
       }
-
-    }
   }
   if (window.socket && navigator.onLine) {
 
-    // When chnages are detected in the database emit a socket event that
+    // When changes are detected in the database emit a socket event that
     // checks if the user should receive the notification
     window.socket.on('databaseChange', (data) => {
       const username = getUsername();
@@ -56,13 +49,16 @@ export default async function initNotifications() {
         if (username === chat.user) {
           return;
         }
-        window.socket.emit('check', chat.plant, username);
+        window.socket.emit('check', chat.plant, username, chat._id); // passes plant id and username for checks
       });
     });
 
     // When the user should receive a notification, send the notification through the service worker
-    window.socket.on('sendNotification', (username) => {
-      if (Notification.permission === 'granted' && username === getUsername()) {
+    window.socket.on('sendNotification', (username, id) => {
+      // Checks if notification is already sent, it doesn't send multiple notifications for the same chat
+      // Also checks if the notification is meant for the current user
+      if (Notification.permission === 'granted' && username === getUsername() && !sentNotifications.includes(id)) {
+        sentNotifications.push(id);
         navigator.serviceWorker.ready
           .then((serviceWorkerRegistration) => {
             serviceWorkerRegistration.showNotification(
