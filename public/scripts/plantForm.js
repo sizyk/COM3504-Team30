@@ -238,6 +238,7 @@ function submitPlantToDB(plant) {
               resolve();
             })
             .catch((e) => {
+              // eslint-disable-next-line no-console
               console.error(e);
               reject(new Error('Plant failed to add! Please try again.'));
             });
