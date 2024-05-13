@@ -1,6 +1,6 @@
 import getUsername from '../utils/localStore.mjs';
 
-let sentNotifications = [];
+const sentNotifications = [];
 
 /**
  * Initialises Notifications for the browser
@@ -32,15 +32,16 @@ export default async function initNotifications() {
     }
   }
 
-  // Initialise socket.io for real-time notifications - Creates multiple on load so further checks are needed
+  // Initialise socket.io for real-time notifications
+  // - Creates multiple on load so further checks are needed
   if (typeof io !== 'undefined') {
-      window.socket = io();
-      if (navigator.onLine) {
-        window.socket.emit('check for chats', getUsername());
-      }
+    //eslint-disable-next-line no-undef
+    window.socket = io();
+    if (navigator.onLine) {
+      window.socket.emit('check for chats', getUsername());
+    }
   }
   if (window.socket && navigator.onLine) {
-
     // When changes are detected in the database emit a socket event that
     // checks if the user should receive the notification
     window.socket.on('databaseChange', (data) => {
@@ -49,13 +50,16 @@ export default async function initNotifications() {
         if (username === chat.user) {
           return;
         }
-        window.socket.emit('check', chat.plant, username, chat._id); // passes plant id and username for checks
+        // passes plant id and username for checks
+        window.socket.emit('check', chat.plant, username, chat._id);
       });
     });
 
-    // When the user should receive a notification, send the notification through the service worker
+    // When the user should receive a notification,
+    // send the notification through the service worker
     window.socket.on('sendNotification', (username, id) => {
-      // Checks if notification is already sent, it doesn't send multiple notifications for the same chat
+      // Checks if notification is already sent,
+      // it doesn't send multiple notifications for the same chat
       // Also checks if the notification is meant for the current user
       if (Notification.permission === 'granted' && username === getUsername() && !sentNotifications.includes(id)) {
         sentNotifications.push(id);
