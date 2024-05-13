@@ -24,7 +24,7 @@
         <span data-spotted><%= plant.spottedString %></span>
         <span data-emoji><%= plant.emoji %></span>
       </p>
-      <p><span class="<%= plant.identificationStatus === 'completed' ? 'bg-primary' : 'bg-secondary' %> text-xs font-medium me-2 px-2.5 py-0.5 rounded"><%= plant.identificationStatus %></span></p>
+      <p>Identification: <span class="<%= plant.identificationStatus === 'completed' ? 'bg-primary' : 'bg-secondary' %> text-xs font-medium me-2 px-2.5 py-0.5 rounded"><%= plant.identificationStatus %></span></p>
       <div
         class="has-tooltip touchscreen-hover mt-2 flex w-max max-w-full items-center gap-2"
       >
