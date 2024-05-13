@@ -13,20 +13,20 @@ To install this project, follow these steps:
 
 1. Download the repository:
 2. Navigate into the project directory:
-"""
+```bash
 cd project
-"""
+```
 
 3. Install dependencies:
-"""bash
+```bash
 npm install
-"""
+```
 
 ## Usage
 To run the project, use the following command:
-"""bash
+```bash
 npm start
-"""
+```
 This will start the server and you should see a message indicating the server is running on a specific port (usually port 3000 by default).
 Visit localhost:3000 to see the app.
 
