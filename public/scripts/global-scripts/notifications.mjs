@@ -35,7 +35,7 @@ export default async function initNotifications() {
   // Initialise socket.io for real-time notifications
   // - Creates multiple on load so further checks are needed
   if (typeof io !== 'undefined') {
-    //eslint-disable-next-line no-undef
+    // eslint-disable-next-line no-undef
     window.socket = io();
     if (navigator.onLine) {
       window.socket.emit('check for chats', getUsername());
