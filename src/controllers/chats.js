@@ -55,3 +55,15 @@ exports.get = (filter) => ChatModel.find(filter)
     // return null in case of an error
     return null;
   });
+
+// Function to get new chats
+exports.getNewChats = (lastChecked) => {
+  const filter = lastChecked ? { dateTime: { $gt: lastChecked } } : {};
+  return ChatModel.find(filter)
+    .then((chats) => chats)
+    .catch((error) => {
+      log(error);
+      // return null in case of an error
+      return null;
+    });
+};

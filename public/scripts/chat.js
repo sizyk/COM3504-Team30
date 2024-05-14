@@ -115,7 +115,6 @@ function receiveChat(params) {
       message: params.message,
       dateTime: params.dateTime,
     };
-
     addUserMessage(params.message, params.user);
 
     if (params.user !== getUsername()) {
