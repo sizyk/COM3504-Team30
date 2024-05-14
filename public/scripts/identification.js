@@ -23,12 +23,14 @@ function buildDBpediaQuery(urlSuffix) {
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
         PREFIX dbo: <http://dbpedia.org/ontology/>
 
-        SELECT ?label ?abstract
+        SELECT ?label ?abstract ?type
         WHERE {
           <${resource}> rdfs:label ?label .
           <${resource}> dbo:abstract ?abstract .
+          <${resource}> rdf:type ?type .
         FILTER (langMatches(lang(?label), "en")) .
         FILTER (langMatches(lang(?abstract), "en")) .
+        FILTER (?type = dbo:Plant) .
         }`;
 
   // Encode the query as a URL parameter
@@ -50,7 +52,7 @@ function getIdentification() {
       const { bindings } = data.results;
 
       if (bindings[0] === undefined) { // if no data found
-        document.getElementById('error').innerHTML = '<strong>Error:</strong> No data found for the given identification';
+        document.getElementById('error').innerHTML = '<strong>Error:</strong> No plant data found for the given identification';
         document.getElementById('validationCheckbox').checked = false;
       } else { // if data found
         const fullURI = `http://dbpedia.org/resource/${urlSuffix.replace(/ /g, '_')}`;
