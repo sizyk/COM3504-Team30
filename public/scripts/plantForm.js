@@ -238,6 +238,7 @@ function submitPlantToDB(plant) {
               resolve();
             })
             .catch((e) => {
+              // eslint-disable-next-line no-console
               console.error(e);
               reject(new Error('Plant failed to add! Please try again.'));
             });
@@ -306,6 +307,8 @@ async function submitPlantForm(formElem) {
     hasLeaves: params.get('hasLeaves'),
     hasFruit: params.get('hasFruit'),
     hasSeeds: params.get('hasSeeds'),
+    identificationStatus: 'in-progress', // completed or in-progress
+    identifiedName: '', // URI reference to plant
   };
 
   // If user is using a URL, simply add it to the plant

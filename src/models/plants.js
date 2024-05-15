@@ -21,6 +21,8 @@ const PlantSchema = new Schema({
   hasLeaves: { type: Boolean, required: true },
   hasFruit: { type: Boolean, required: true },
   hasSeeds: { type: Boolean, required: true },
+  identificationStatus: { type: String, required: true }, // completed or in-progress
+  identifiedName: { type: String, required: false }, // URI reference to plant
 });
 
 // Configure the 'toObject' option for the schema to include getters
