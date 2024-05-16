@@ -3,17 +3,26 @@ import DBController from '../utils/DBController.mjs';
 import { clearMessage, showMessage } from '../utils/flash-messages.mjs';
 import { IDBOpenEvent } from '../utils/CustomEvents.mjs';
 import { displayPlantCards, indexPlantTemplate } from '../utils/plantUtils.mjs';
+import { addUserMessage } from '../chat.js';
 
 const onlineStatus = document.getElementById('online-status');
 
 /**
- * Method called when syncing is finished, updates the page to display new plants
- * @param filters {Object} any filters to apply to the GET request
- * @param card {indexPlantTemplate | singlePlantTemplate}
+ * Method called when syncing is finished, updates the page to display new plants/chats
  */
-function onSynchronise(filters, card) {
-  // Replace currently rendered cards with new ones
-  DBController.get('plants', filters, (plants) => displayPlantCards(card, plants));
+function onSynchronise() {
+  if (window.location.pathname === '/') {
+    // Replace currently rendered cards with new ones
+    DBController.get('plants', {}, (plants) => displayPlantCards(indexPlantTemplate, plants));
+  } else if (window.location.pathname.startsWith('/plant/')) {
+    // Remove trailing forward slash (if any) and parse to get plant ID
+    const [plantID] = window.location.href.replace(/\/$/, '').split('/').slice(-1);
+    DBController.get('chats', { plant: plantID }, (chats) => {
+      chats.forEach((chat) => {
+        addUserMessage(chat.message, chat.user);
+      });
+    });
+  }
 }
 
 /**
@@ -25,17 +34,13 @@ function syncDB() {
     if (success) {
       showMessage('Sync complete!', 'success', 'sync');
 
-      if (window.location.pathname === '/') {
-        onSynchronise({}, indexPlantTemplate);
-      }
+      onSynchronise();
     } else {
       showMessage('Sync failed. Refresh to try again.', 'error', 'sync');
     }
   }).catch((error) => {
     console.log(error);
-    if (window.location.pathname === '/') {
-      onSynchronise({}, indexPlantTemplate);
-    }
+    onSynchronise();
     clearMessage(); // Fail silently - rejected promise means nothing to sync
   });
 }
