@@ -115,7 +115,7 @@
         type="checkbox"
         value="true"
         class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
-        checked="<%= plant.hasFlowers ? 'checked' : '' %>"
+        <%if (plant.hasFlowers){%>checked<%}%>
       />
       <label for="hasFlowers" class="ms-2 text-sm font-medium text-text">
         Flowers
@@ -128,7 +128,7 @@
         type="checkbox"
         value="true"
         class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
-        checked="<%= plant.hasLeaves ? 'checked' : '' %>"
+        <%if (plant.hasLeaves){%>checked<%}%>
       />
       <label for="hasLeaves" class="ms-2 text-sm font-medium text-text">
         Leaves
@@ -141,7 +141,7 @@
         type="checkbox"
         value="true"
         class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
-        checked="<%= plant.hasFruit ? 'checked' : '' %>"
+        <%if (plant.hasFruit){%>checked<%}%>
       />
       <label for="hasFruit" class="ms-2 text-sm font-medium text-text">
         Fruit
@@ -154,7 +154,7 @@
         type="checkbox"
         value="true"
         class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
-        checked="<%= plant.hasSeeds ? 'checked' : '' %>"
+        <%if (plant.hasSeeds){%>checked<%}%>
       />
       <label for="hasSeeds" class="ms-2 text-sm font-medium text-text">
         Seeds
