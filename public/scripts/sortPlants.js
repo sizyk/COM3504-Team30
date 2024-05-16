@@ -1,6 +1,6 @@
 import { showMessage } from './utils/flash-messages.mjs';
 
-const EARTH_RADIUS = 6378137; // metres
+const EARTH_RADIUS = 6378.137; // km
 
 let userCoords = null;
 
@@ -16,14 +16,11 @@ let ascendingOrder = true;
  * @returns {number} the distance (in metres) between the two points
  */
 function calculateHaversine(lat1, lng1, lat2, lng2) {
-  // Convert to radians
-  lat1 *= (Math.PI / 180);
-  lng1 *= (Math.PI / 180);
-  lat2 *= (Math.PI / 180);
-  lng2 *= (Math.PI / 180);
+  const dLat = (lat2 - lat1) * (Math.PI / 180); // deg2rad below
+  const dLon = (lng2 - lng1) * (Math.PI / 180);
 
-  const a = Math.sin((lat2 - lat1) / 2) ** 2
-    + Math.cos(lat1) * Math.cos(lat2) * Math.sin((lng2 - lng1) / 2) ** 2;
+  const a = Math.sin(dLat / 2) ** 2
+    + Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * Math.sin(dLon / 2) ** 2;
 
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
@@ -55,10 +52,10 @@ function geoComparison(a, b) {
   // Computes haversine distance between two plants and the user's location
   // https://en.wikipedia.org/wiki/Haversine_formula
 
-  const lat1 = parseInt(a.dataset.latitude, 10);
-  const lng1 = parseInt(a.dataset.longitude, 10);
-  const lat2 = parseInt(b.dataset.latitude, 10);
-  const lng2 = parseInt(b.dataset.longitude, 10);
+  const lat1 = parseFloat(a.dataset.latitude);
+  const lng1 = parseFloat(a.dataset.longitude);
+  const lat2 = parseFloat(b.dataset.latitude);
+  const lng2 = parseFloat(b.dataset.longitude);
 
   const distA = calculateHaversine(lat1, lng1, userCoords.latitude, userCoords.longitude);
   const distB = calculateHaversine(lat2, lng2, userCoords.latitude, userCoords.longitude);
@@ -85,9 +82,7 @@ function sortPlants(compareFn) {
   plantCardsContainer.innerHTML = '';
 
   // Re-append sorted plant cards to container
-  plantCards.forEach((plantCard) => {
-    plantCardsContainer.appendChild(plantCard);
-  });
+  plantCards.forEach((plantCard) => plantCardsContainer.appendChild(plantCard));
 
   // Toggle sorting order for next click
   ascendingOrder = !ascendingOrder;
