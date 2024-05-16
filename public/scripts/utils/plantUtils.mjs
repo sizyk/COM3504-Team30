@@ -92,6 +92,7 @@ export function displayPlantCards(card, plants) {
 
   // Clone plant grid and remove all children, to update all plants at once rather than sequentially
   // (which would look bad from a UI perspective, if plants popped into view one-by-one)
+
   const newGrid = plantGrid.cloneNode();
   newGrid.innerHTML = '';
 
