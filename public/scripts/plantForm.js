@@ -192,6 +192,7 @@ function toggleImageInput(plantID) {
  * @param plant {Object} the plant object to submit
  */
 function submitPlantToDB(plant) {
+  const noPlants = document.getElementsByName('no-plants-warning');
   return new Promise((resolve, reject) => {
     DBController.createOrUpdate(
       'plants',
@@ -224,7 +225,10 @@ function submitPlantToDB(plant) {
 
               // eslint-disable-next-line no-use-before-define
               addEventListeners(document.getElementById(`card-${plantObject._id}`));
-              document.getElementById('no-plants-warning').classList.add('hidden');
+
+              if (noPlants !== null) {
+                noPlants.classList.add('hidden');
+              }
 
               if (!window.plantsAppOffline) {
                 PLANT_MAP.pinPlants([
