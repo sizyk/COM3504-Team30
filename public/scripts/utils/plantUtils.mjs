@@ -82,23 +82,26 @@ export default function updateCard(plant) {
 }
 
 /**
- * Function to display plant cards in an offline-safe manner
+ * Function to display plant cards in an offline-safe manner. Used instead of rendering directly to
+ * both improve load times and allow the same code to be used both online and offline.
  * @param card {indexPlantTemplate | singlePlantTemplate} the card with which to render each plant
  * @param plants {Object[]} the list of plants to display
  */
 export function displayPlantCards(card, plants) {
   if (PLANT_MAP !== null) {
-    PLANT_MAP.clear();
+    PLANT_MAP.clear(); // Clear map to re-place plant pins again
   }
 
   const noPlants = document.getElementById('no-plants-warning');
 
   // Clone plant grid and remove all children, to update all plants at once rather than sequentially
+  // (which would look bad from a UI perspective, if plants popped into view one-by-one)
   const newGrid = plantGrid.cloneNode();
   newGrid.innerHTML = '';
 
   const plantCoords = [];
 
+  // Render each new plant and add to the new grid
   plants.forEach((plant) => {
     plant.displayDate = buildDateString(plant);
     plant.dateTimeSeen = new Date(plant.dateTimeSeen);
@@ -113,15 +116,20 @@ export function displayPlantCards(card, plants) {
     );
   });
 
+  // Add 'no plant' warning
   if (plants.length === 0) {
     noPlants.innerText = "No plants added yet! Click 'Add Plant' to get started.";
     newGrid.appendChild(noPlants);
   }
 
+  // Replace old plant grid (contains a loading GIF) with new one
   plantGrid.replaceWith(newGrid);
+
+  // Update user posted string
   document.dispatchEvent(plantAddEvent);
 
   if (PLANT_MAP !== null) {
+    // Re-add all pants
     PLANT_MAP.pinPlants(plantCoords);
   }
 }

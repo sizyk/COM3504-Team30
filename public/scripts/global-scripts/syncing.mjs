@@ -17,6 +17,8 @@ function onSynchronise() {
   } else if (window.location.pathname.startsWith('/plant/')) {
     // Remove trailing forward slash (if any) and parse to get plant ID
     const [plantID] = window.location.href.replace(/\/$/, '').split('/').slice(-1);
+
+    // Display all chats
     DBController.get('chats', { plant: plantID }, (chats) => {
       chats.forEach((chat) => {
         addUserMessage(chat.message, chat.user);
@@ -34,7 +36,7 @@ function syncDB() {
     if (success) {
       showMessage('Sync complete!', 'success', 'sync');
 
-      onSynchronise();
+      onSynchronise(); // Perform post-sync task
     } else {
       showMessage('Sync failed. Refresh to try again.', 'error', 'sync');
     }
