@@ -32,10 +32,11 @@ export default function updateCard(plant) {
   const card = document.getElementById(`card-${plant._id}`);
 
   const cardImage = card.querySelector('[data-plant-image]');
+  console.log(cardImage)
 
   if (Object.prototype.hasOwnProperty.call(plant, 'image')) {
     if (cardImage) {
-      cardImage.src = plant.image;
+      cardImage.style.backgroundImage = `url('${plant.image}')`;
     } else {
       card.style.backgroundImage = `url('${plant.image}')`;
     }
