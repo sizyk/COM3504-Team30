@@ -18,7 +18,6 @@
     class="flex items-center justify-center font-bold transition-opacity duration-500 lg:fixed lg:top-0 lg:mt-0 lg:h-screen lg:w-[40vw] lg:cursor-pointer lg:bg-background-inverse lg:text-background lg:opacity-0 lg:hover:opacity-75 lg:dark:bg-background lg:dark:text-background-inverse"
     data-toggle="modal"
     data-target="image-full-modal"
-    data-plant-image
   >
     Click on the image to view in full
   </div>
@@ -46,7 +45,7 @@
         </div>
         <div class="mb-1 flex items-center gap-1">
           <span class="material-symbols-outlined">schedule</span>
-          <span class="mb-0.5"><%= plant.displayDate %></span>
+          <span class="mb-0.5" data-spotted><%= plant.displayDate %></span>
         </div>
 
         <div class="mb-3 flex flex-col justify-between gap-1 xs:flex-row">
