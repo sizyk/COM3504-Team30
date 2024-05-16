@@ -32,7 +32,7 @@ Visit localhost:3000 to see the app.
 
 ## List of Pages
 ### View all plant sightings page
-- View, Add, Sort, Filter plant sightings
+- View, Add, Sort, and Filter plant sightings
 - Map view of the sightings
 ### Individual plant page
 - View full details of a plant sighting
@@ -47,24 +47,24 @@ Visit localhost:3000 to see the app.
 - Once logged in, a user can access the rest of the features of the website, detailed below
 - A user can log out by clicking the ``Logout’’ button
 ### Adding a plant
-- For the sighting's location can use your current geolocation or pick a location from a map
-- Adding an image for a sighting can be done by selecting an image from your files, taking a picture from your camera(Only for mobile devices) and by providing a link of a png image.
+- For the sighting's location, you can use your current geolocation or pick a location from a map
+- Adding an image for a sighting can be done by selecting an image from your files, taking a picture from your camera (mobile only) or providing a link to an image file.
 ### Editing a plant
 - Users can edit all attributes of a plant sighting while identification is in progress
 ### Identifying a plant
-- Once the correct scientific name of a plant sighting is added, information from DBPedia are used to update the plant's details. 
+- Once the correct scientific name of a plant sighting is added, information from DBPedia is used to update the plant's details. 
 ### Chatting
 - Users can use the chat feature to communicate with the sightings creator to help identify the plant
 - The plant's creator receives chat notifications
 ### View Plant(s)
 - Show all plants and individual page
-- Show plants o the map
+- Show plants on a map using Leaflet and OpenStreetMap
 - Users can filter plants by their identification status, their properties, and their exposure to sun
-- Users can sort the plants by the date their where added and their distances from the user.
+- Users can sort the plants by the date they were added and the distances from the user.
 ### Responsiveness
-- The app works for all type of screens ranging from computer screens to tables and mobile devices screens.
+- The app works for different aspect ratios and screen sizes, accounting for phones, tablets and desktops.
 ### Progressive Web App
-- The app can be downloaded as a PWA app and used offline.
+- The app can be downloaded as a PWA app and used offline, with changes made offline syncing when a user goes online and vice versa.
 
 
 ## Team Dynamics
@@ -84,6 +84,4 @@ Fokkos = James March (jmarch2@sheffield.ac.uk)
 Andreas-Evripidou = Andreas Evripidou (eandreas1@sheffield.ac.uk)
 sizyk = Stylianos Kyzis (skyzis1@sheffield.ac.uk)
 
-
-
-ToDo: Video and Screenshot to demo the app
+## Screenshots
