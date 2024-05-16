@@ -203,7 +203,7 @@ function submitPlantToDB(plant) {
       'plants',
       plant,
       (message, plantObject) => {
-        const plantModal = document.getElementById(`${plantObject._id}-edit-plant-modal`);
+        const plantModal = document.getElementById('edit-plant-modal');
         if (plantModal !== null) {
           updateCard(plantObject);
           if (!window.plantsAppOffline) {
@@ -354,20 +354,25 @@ async function submitPlantForm(formElem) {
  * Add all event listeners that are required for plant form functionality
  */
 export default function addEventListeners(card) {
+  let id = card.dataset.plant;
+  if (document.getElementById('editPlantForm')) {
+    id = 'Edit';
+  }
+
   card.querySelectorAll('[data-click="geolocation"]').forEach((elem) => {
-    elem.addEventListener('click', () => getLocation(card.dataset.plant));
+    elem.addEventListener('click', () => getLocation(id));
   });
 
   card.querySelectorAll('[data-click="delete"]').forEach((elem) => {
-    elem.addEventListener('click', () => deletePlant(card.dataset.plant));
+    elem.addEventListener('click', () => deletePlant(id));
   });
 
   card.querySelectorAll('[data-change="preview"]').forEach((elem) => {
-    elem.addEventListener('change', () => previewImage(card.dataset.plant));
+    elem.addEventListener('change', () => previewImage(id));
   });
 
   card.querySelectorAll('[data-click="preview"]').forEach((elem) => {
-    elem.addEventListener('click', () => previewImage(card.dataset.plant));
+    elem.addEventListener('click', () => previewImage(id));
   });
 
   card.querySelectorAll('[data-form="plant"]').forEach((formElem) => {
@@ -375,21 +380,21 @@ export default function addEventListeners(card) {
   });
 
   card.querySelectorAll('[data-change="toggle-input"]').forEach((elem) => {
-    elem.addEventListener('change', () => toggleImageInput(card.dataset.plant));
+    elem.addEventListener('change', () => toggleImageInput(id));
   });
 
   // Wrap these last two in try/catch as single querySelector means event listener will throw error
   // if nothing is found
   try {
     // If image cannot be loaded for whatever reason, throw a 415 error (Unsupported Media Type)
-    card.querySelector('[data-img="preview"]').addEventListener('error', () => handleErrorResponse(415, card.dataset.plant));
+    card.querySelector('[data-img="preview"]').addEventListener('error', () => handleErrorResponse(415, id));
   } catch (e) { /* empty */ }
 
   try {
     card.querySelector('input[name="url"]').addEventListener('keydown', (e) => {
       if (e.code === 'Enter') {
         e.preventDefault();
-        previewImage(card.dataset.plant).then(() => {
+        previewImage(id).then(() => {
         });
       }
     });
@@ -400,7 +405,7 @@ export default function addEventListeners(card) {
  * Runs the form submission function in the background, to make it non-blocking
  * @param plantAddForm {HTMLFormElement} the form element to submit
  */
-function submitBackgroundTask(plantAddForm) {
+function submitBackgroundTaskAdd(plantAddForm) {
   // Ensure user has validated their image
   if (document.getElementById('imageInputCheckboxNew').checked && !document.getElementById('imageValidatedNew').checked) {
     handleErrorResponse('not-validated', 'New');
@@ -422,10 +427,30 @@ function submitBackgroundTask(plantAddForm) {
     });
 }
 
+function submitBackgroundTaskEdit() {
+  // Ensure user has validated their image
+  if (document.getElementById('imageInputCheckboxEdit').checked && !document.getElementById('imageValidatedEdit').checked) {
+    handleErrorResponse('not-validated', 'New');
+    return;
+  }
+
+  // Hide form and inform user that plant is being added in the background
+  document.getElementById('edit-plant-modal').classList.remove('active');
+  showMessage('Adding plant...', 'info', 'info', true);
+
+  showMessage('Plant edited successfully!', 'success', 'done');
+}
+
 const plantAddForm = document.getElementById('createPlantForm');
 if (plantAddForm) {
-  plantAddForm.addEventListener('submit', () => submitBackgroundTask(plantAddForm));
+  plantAddForm.addEventListener('submit', () => submitBackgroundTaskAdd(plantAddForm));
   addEventListeners(plantAddForm);
+}
+
+const plantEditForm = document.getElementById('editPlantForm');
+if (plantEditForm) {
+  plantEditForm.addEventListener('submit', () => submitBackgroundTaskEdit(plantEditForm));
+  addEventListeners(plantEditForm);
 }
 
 document.querySelectorAll('[data-plant-card]').forEach(addEventListeners);

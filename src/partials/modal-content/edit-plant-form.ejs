@@ -1,5 +1,5 @@
 <form
-  id="editPlantForm-<%= plant._id %>"
+  id="editPlantForm"
   target="fakesubmit"
   data-form="plant"
   data-plant="<%= plant._id %>"
@@ -169,12 +169,12 @@
     >Image Settings</label
   >
   <div
-    id="imageSettings<%=plant._id%>"
+    id="imageSettingsEdit"
     class="form-group mb-4 flex flex-col justify-between sm:flex-row"
   >
     <div class="mb-2 flex items-center">
       <input
-        id="imageInputCheckbox<%=plant._id%>"
+        id="imageInputCheckboxEdit"
         name="imageInput"
         type="checkbox"
         value="url"
@@ -187,7 +187,7 @@
     </div>
     <div class="mb-2 flex items-center">
       <input
-        id="imageValidated<%=plant._id%>"
+        id="imageValidatedEdit"
         name="imageValidated"
         type="checkbox"
         value="true"
@@ -198,19 +198,19 @@
         oninvalid="this.setCustomValidity('Upload or enter a valid URL and preview to continue')"
       />
       <label
-        for="imageValidated<%=plant._id%>"
+        for="imageValidatedEdit"
         class="ms-2 text-sm font-medium text-text"
         >Image validated?</label
       >
     </div>
   </div>
-  <div class="form-group mb-4" id="imageDiv<%=plant._id%>">
-    <label class="block text-text" for="image<%=plant._id%>"
+  <div class="form-group mb-4" id="imageDivEdit">
+    <label class="block text-text" for="imageEdit"
       >Upload Image</label
     >
     <input
       class="file:form-input file:hover-button w-full cursor-pointer file:rounded file:px-4 file:py-2 file:font-bold"
-      id="image<%=plant._id%>"
+      id="imageEdit"
       name="image"
       type="file"
       aria-describedby="file_input_help"
@@ -219,12 +219,12 @@
       data-default="<%= plant.image %>"
     />
   </div>
-  <div class="form-group mb-4 flex hidden space-x-2" id="urlDiv<%=plant._id%>">
+  <div class="form-group mb-4 flex hidden space-x-2" id="urlDivEdit">
     <div class="w-3/4">
-      <label for="url<%=plant._id%>">Enter URL:</label>
+      <label for="urlEdit">Enter URL:</label>
       <input
         type="text"
-        id="url<%=plant._id%>"
+        id="urlEdit"
         name="url"
         class="form-input mt-1 block w-full grow-0 rounded border border-gray-300 bg-background-light pl-2 text-text"
       />
@@ -237,7 +237,7 @@
       Preview
     </button>
   </div>
-  <div id="imagePreviewContainer<%=plant._id%>">
+  <div id="imagePreviewContainerEdit">
     <label class="block text-text" for="preview">Image Preview</label>
     <object
       type="image/svg+xml"
@@ -245,7 +245,7 @@
       class="hidden aspect-square w-1/2 rounded"
     ></object>
     <img
-      id="preview<%=plant._id%>"
+      id="previewEdit"
       src="<%= plant.image %>"
       alt="your image"
       class="w-1/2"
@@ -253,7 +253,7 @@
     />
   </div>
   <p
-    id="previewError<%=plant._id%>"
+    id="previewErrorEdit"
     class="my-2 hidden px-2 font-bold text-error"
   ></p>
   <div class="form-group mb-4 flex space-x-2">
