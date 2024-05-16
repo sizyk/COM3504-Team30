@@ -54,6 +54,7 @@ class DBController {
       }).then((resJson) => {
         onSuccess(resJson);
       }).catch((error) => {
+        console.log(`Failed to GET from ${collection}: ${error}`);
         onError(`Failed to GET from ${collection}: ${error}`);
       });
   }
@@ -299,6 +300,11 @@ class DBController {
         fetch(`/api/${store}`)
           .then((res) => res.json())
           .then((objects) => {
+            if (objects.length === 0) {
+              // Nothing to upload, so resolve
+              resolve(true);
+            }
+
             const resolver = Array(objects.length).fill(false);
             let i = 0;
             objects.forEach((o) => {

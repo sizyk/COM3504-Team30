@@ -173,9 +173,17 @@ export default class PlantMap {
     }
   }
 
+  clear() {
+    Object.values(this._plantMarkers).forEach((element) => {
+      element.removeFrom(this._map);
+    });
+
+    this._plantMarkers = {};
+  }
+
   /**
    * Draws pins for a list of plant coordinates, and stores them in an object
-   * @param plants {{id: string, coordinates: int[]}[]}
+   * @param plants {{_id: string, coordinates: int[], image: string}[]}
    */
   pinPlants(plants) {
     plants.forEach((plant) => {

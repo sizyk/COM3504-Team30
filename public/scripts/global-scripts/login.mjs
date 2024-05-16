@@ -8,7 +8,7 @@ import { plantAddEvent } from '../utils/CustomEvents.mjs';
 function updateUserPostedString() {
   const plantGrid = document.getElementById('plant-grid');
   const username = localStorage.getItem('username');
-  if (plantGrid !== null && username !== null) {
+  if (window.location.pathname === '/' && plantGrid !== null && username !== null) {
     let plantCount = 0;
     Array.from(plantGrid.children).forEach((plant) => {
       if (plant.dataset.user === username) {
@@ -128,6 +128,7 @@ export default function initLogin() {
   const loginModal = document.getElementById('login-modal');
   const logoutButton = document.getElementById('logout-button');
   document.addEventListener('DOMContentLoaded', handleLogin);
+  handleLogin();
   loginModal.addEventListener('submit', onLoginSubmit);
 
   if (logoutButton) {

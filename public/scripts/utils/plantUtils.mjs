@@ -1,3 +1,11 @@
+import { plantAddEvent } from './CustomEvents.mjs';
+import PLANT_MAP from '../mapDriver.js';
+
+const plantGrid = document.getElementById('plant-grid');
+
+export const indexPlantTemplate = await fetch('/public/cached-views/plant-card.ejs').then((res) => res.text());
+export const singlePlantTemplate = await fetch('/public/cached-views/plant.ejs').then((res) => res.text());
+
 /**
  * Builds a human-readable string to display the time and date at which a plant was spotted
  * @param plant {object} the plant to build a spotted string for
@@ -69,6 +77,47 @@ export default function updateCard(plant) {
   card.querySelector('[data-colour]').style.backgroundColor = plant.colour;
 }
 
-export function renderCardsOffline() {
+/**
+ * Function to display plant cards in an offline-safe manner
+ * @param card {indexPlantTemplate | singlePlantTemplate} the card with which to render each plant
+ * @param plants {Object[]} the list of plants to display
+ */
+export function displayPlantCards(card, plants) {
+  if (PLANT_MAP !== null) {
+    PLANT_MAP.clear();
+  }
 
+  const noPlants = document.getElementById('no-plants-warning');
+
+  // Clone plant grid and remove all children, to update all plants at once rather than sequentially
+  const newGrid = plantGrid.cloneNode();
+  newGrid.innerHTML = '';
+
+  const plantCoords = [];
+
+  plants.forEach((plant) => {
+    plant.displayDate = buildDateString(plant);
+    plant.dateTimeSeen = new Date(plant.dateTimeSeen);
+    // eslint-disable-next-line no-undef
+    const renderedTemplate = ejs.render(card, { plant });
+    // Add new plant view to HTML & initialise relevant event listeners
+    newGrid.insertAdjacentHTML('beforeend', renderedTemplate);
+
+    // Add coordinate to be rendered on the map
+    plantCoords.push(
+      { _id: plant._id, coordinates: [plant.latitude, plant.longitude], image: plant.image },
+    );
+  });
+
+  if (plants.length === 0) {
+    noPlants.innerText = "No plants added yet! Click 'Add Plant' to get started.";
+    newGrid.appendChild(noPlants);
+  }
+
+  plantGrid.replaceWith(newGrid);
+  document.dispatchEvent(plantAddEvent);
+
+  if (PLANT_MAP !== null) {
+    PLANT_MAP.pinPlants(plantCoords);
+  }
 }

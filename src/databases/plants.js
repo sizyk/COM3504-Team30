@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const log = require('debug')('app:db');
 
 // Define the MongoDB connection URL including the database name
-const mongoDB = 'mongodb://localhost:27017/com3504';
+const mongoDB = 'mongodb://localhost:27017/com3504demo';
 
 // Set Monmgoose to use ES6 Promises
 mongoose.Promise = global.Promise;

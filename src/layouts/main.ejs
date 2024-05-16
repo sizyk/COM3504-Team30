@@ -25,6 +25,7 @@
 <% if (typeof useLeaflet !== 'undefined' && useLeaflet) { %>
   <script src="/public/scripts/leaflet/leaflet.js"></script>
 <% } %>
+<script src="/public/scripts/ejs.min.js"></script>
 <% for(let i=0; i<scripts.length; i++) { %>
   <script
     src="/public/scripts/<%= scripts[i] %>.js"
