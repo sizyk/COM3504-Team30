@@ -5,19 +5,28 @@
   data-hasleaves="<%= plant.hasLeaves %>"
   data-hasflowers="<%= plant.hasFlowers %>"
   data-hasfruitsnuts="<%= plant.hasFruit || plant.hasSeeds %>"
+  data-identified="<%= plant.identificationStatus === 'completed' %>"
   data-sunexposure="<%= plant.sunExposure.toLowerCase() %>"
   data-dateTimeSeen="<%= plant.dateTimeSeen %>"
   data-identified="true"
   data-plant-card
   data-plant="<%=plant._id%>"
   data-user="<%=plant.author%>"
+  data-latitude="<%=plant.latitude%>"
+  data-longitude="<%=plant.longitude%>"
 >
   <div
     class="plant-info flex h-full max-h-full flex-col gap-2 text-background dark:text-background-inverse"
   >
     <div class="plant-name relative isolate px-2">
       <h2 class="text-3xl font-bold" data-name><%= plant.name %></h2>
-      <p class="italic" data-scientific>Flower Scientific Name</p>
+      <p class="italic" data-scientific><%= plant.identificationStatus === 'completed' ? plant.identifiedName : '' %>
+        <span class="<%= plant.identificationStatus === 'completed' ? 'bg-primary' : 'bg-secondary' %> text-xs font-medium me-2 px-2.5 py-0.5 rounded"><%= plant.identificationStatus %></span>
+      </p>
+      <p>
+        <span data-spotted><%= plant.spottedString %></span>
+        <span data-emoji><%= plant.emoji %></span>
+      </p>
       <div
         class="has-tooltip touchscreen-hover mt-2 flex w-max max-w-full items-center gap-2"
       >

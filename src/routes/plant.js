@@ -14,7 +14,7 @@ router.get('/:id', (req, res) => {
       renderLayout(res, 'plant', {
         title: 'Individual Plant',
         plant,
-        scripts: ['mapDriver', 'plantForm', 'chat'],
+        scripts: ['mapDriver', 'plantForm', 'chat', 'identification'],
         useLeaflet: true,
         dataset: {
           centre: [plant.latitude, plant.longitude],

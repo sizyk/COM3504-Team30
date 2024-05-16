@@ -8,8 +8,10 @@ import initSyncing from './global-scripts/syncing.mjs';
 import initSW from './global-scripts/serviceWorker.mjs';
 import initLogin from './global-scripts/login.mjs';
 import initTabs from './global-scripts/tabs.mjs';
+import initNotifications from './global-scripts/notifications.mjs';
 
 initSW();
+initNotifications();
 initThemeToggle();
 initModals();
 initTouchScreen();

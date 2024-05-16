@@ -1,0 +1,66 @@
+<form
+    id="identificationForm"
+    autocomplete="off"
+    target="fakesubmit"
+    data-form="plant"
+    data-plant="Identification"
+    enctype="multipart/form-data"
+    method="POST"
+    class="w-[32rem] max-w-[70vw]"
+>
+    <div class="form-group mb-4">
+        <label for="identification" class="block text-text">Identification</label>
+        <input
+                type="text"
+                class="form-input mt-1 block w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
+                id="identification"
+                name="identification"
+                maxlength="40"
+                required
+                value=""
+                onchange="document.getElementById('validationCheckbox').checked = false;"
+        />
+    </div>
+    <div class="form-group mb-4 flex space-x-4" id="validationDiv">
+        <button
+                id="validateButton"
+                type="button"
+                class="form-input hover-button rounded px-4 py-2 font-bold"
+        >
+            Check Identification
+        </button>
+        <div class="mb-2 flex items-center">
+            <input
+                    id="validationCheckbox"
+                    name="validationCheckbox"
+                    type="checkbox"
+                    value="true"
+                    class="form-input focus:primary-hover h-6 w-6 rounded border-text-hover bg-text text-primary"
+                    required
+                    disabled
+                    oninvalid="this.setCustomValidity('Enter a valid DBPedia URI to continue')"
+            />
+            <label
+                    for="validationCheckbox"
+                    class="ms-2 text-sm font-medium text-text"
+            >URI Validated?</label
+            >
+        </div>
+    </div>
+
+    <div>
+        <p id="name"></p>
+        <p id="abtsract"></p>
+        <p><a id="uri" href="#"></a></p>
+        <p id="error" class="text-error"></p>
+    </div>
+    <button
+        id="submitValidationButton"
+        type="submit"
+        class="form-input hover-button rounded px-4 py-2 font-bold"
+    >
+        Submit Validation
+    </button>
+</form>
+
+
