@@ -9,6 +9,7 @@ let chatbox;
 let chatContainer;
 let openChatButton;
 let closeChatButton;
+let identificationStatus;
 
 // Remove trailing forward slash (if any) and parse to get plant ID
 const [roomId] = window.location.href.replace(/\/$/, '').split('/').slice(-1);
@@ -182,6 +183,13 @@ export default function initChat() {
   chatContainer = document.getElementById('chat-interface');
   openChatButton = document.getElementById('open-chat');
   closeChatButton = document.getElementById('close-chat');
+  identificationStatus = document.getElementById(`card-${roomId}`).dataset.identified;
+  // Disable chat if plant is identified
+  if (identificationStatus === 'true') {
+    userInput.disabled = true;
+  } else {
+    userInput.disabled = false;
+  }
   addChatEventListeners();
   connectToRoom();
 }
