@@ -40,15 +40,10 @@ export default function updateCard(plant) {
   const card = document.getElementById(`card-${plant._id}`);
 
   const cardImage = card.querySelector('[data-plant-image]');
-  console.log(cardImage)
+  const fullImage = document.getElementById('full-image');
 
-  if (Object.prototype.hasOwnProperty.call(plant, 'image')) {
-    if (cardImage) {
-      cardImage.style.backgroundImage = `url('${plant.image}')`;
-    } else {
-      card.style.backgroundImage = `url('${plant.image}')`;
-    }
-  }
+  cardImage.style.backgroundImage = `url('${plant.image}')`;
+  fullImage.src = plant.image;
 
   card.querySelector('[data-name]').innerText = plant.name;
   card.querySelector('[data-spotted]').innerText = buildDateString(plant);
