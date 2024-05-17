@@ -119,7 +119,7 @@ export default class PlantMap {
     if (type === 'pickLocation') {
       this._chosenLocation = null;
 
-      if (JSVarDiv.dataset.lat && JSVarDiv.dataset.lng) {
+      if (JSVarDiv !== null && JSVarDiv.dataset.lat && JSVarDiv.dataset.lng) {
         const latlng = new L.LatLng(
           parseFloat(JSVarDiv.dataset.lat),
           parseFloat(JSVarDiv.dataset.lng),
