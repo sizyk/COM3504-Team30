@@ -1,5 +1,6 @@
 import { plantAddEvent } from './CustomEvents.mjs';
 import PLANT_MAP from '../mapDriver.js';
+import initTouchScreen from '../global-scripts/touchHover.mjs';
 
 const plantGrid = document.getElementById('plant-grid');
 
@@ -123,6 +124,9 @@ export function displayPlantCards(card, plants) {
 
   // Replace old plant grid (contains a loading GIF) with new one
   plantGrid.replaceWith(newGrid);
+
+  // Enable touch hover on the new cards
+  initTouchScreen();
 
   // Update user posted string
   document.dispatchEvent(plantAddEvent);
