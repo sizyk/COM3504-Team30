@@ -1,6 +1,5 @@
 import DBController from './utils/DBController.mjs';
 import { showMessage } from './utils/flash-messages.mjs';
-import IDB from './utils/IDB.mjs';
 import getUsername from './utils/localStore.mjs';
 
 let sendButton;
@@ -9,6 +8,7 @@ let chatbox;
 let chatContainer;
 let openChatButton;
 let closeChatButton;
+let identificationStatus;
 
 // Remove trailing forward slash (if any) and parse to get plant ID
 const [roomId] = window.location.href.replace(/\/$/, '').split('/').slice(-1);
@@ -52,7 +52,7 @@ function createUniqueId(timestamp, username) {
  * @param {string} message - The message to add
  * @param {string} user - The user who sent the message
  */
-function addUserMessage(message, user) {
+export function addUserMessage(message, user) {
   const messageElement = document.createElement('div');
   // Get username from localStore
   const username = getUsername();
@@ -84,15 +84,6 @@ function connectToRoom() {
     }
     socket.emit('create or join', roomId, username);
   }
-
-  DBController.get('chats', { plant: roomId }, (chats) => {
-    chats.forEach((chat) => {
-      // PUT all chats to IDB, to ensure that the latest version of all are saved locally
-      // eslint-disable-next-line no-console
-      IDB.put('chats', chat, () => {}, console.error);
-      addUserMessage(chat.message, chat.user);
-    });
-  });
 }
 
 /**
@@ -182,6 +173,18 @@ export default function initChat() {
   chatContainer = document.getElementById('chat-interface');
   openChatButton = document.getElementById('open-chat');
   closeChatButton = document.getElementById('close-chat');
+  identificationStatus = document.getElementById('plant').dataset.identified;
+
+  // Disable chat if plant is identified
+  if (identificationStatus === 'true') {
+    userInput.disabled = true;
+    userInput.placeholder = 'Chat disabled for identified plants';
+    userInput.classList.add('font-bold');
+    userInput.style.cursor = 'not-allowed';
+  } else {
+    userInput.disabled = false;
+    userInput.placeholder = 'Share your thoughts...';
+  }
   addChatEventListeners();
   connectToRoom();
 }

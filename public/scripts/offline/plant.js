@@ -1,17 +1,14 @@
 import { showMessage } from '../utils/flash-messages.mjs';
 import DBController from '../utils/DBController.mjs';
-import { buildDateString } from '../utils/plantUtils.mjs';
+import { buildDateString, singlePlantTemplate } from '../utils/plantUtils.mjs';
 import { initialiseModal } from '../global-scripts/modals.mjs';
-import addEventListeners from '../plantForm.js';
-import initChat from '../chat.js';
+import { initForm } from '../plantForm.js';
+import initChat, { addUserMessage } from '../chat.js';
+import getUsername from '../utils/localStore.mjs';
 
 showMessage('Connection to server lost! Showing locally stored info & chats.', 'info', 'wifi_off');
 
-const mainElem = document.getElementById('card');
-
-const ejsTemplate = await fetch('/public/cached-views/plant.ejs').then((res) => res.text()).catch(() => {
-  mainElem.insertAdjacentHTML('afterbegin', '<h2 class="text-3xl font-bold text-center">Failed to load view! Try clearing your cache & reloading when connected.</h2>');
-});
+const mainElem = document.getElementById('plant-grid');
 
 // Remove trailing forward slash (if any) and parse to get plant ID
 const [plantID] = window.location.href.replace(/\/$/, '').split('/').slice(-1);
@@ -23,27 +20,40 @@ DBController.get('plants', { _id: plantID }, (plants) => {
     return;
   }
 
-  // If template failed to load, its type will not be string as it will be void
-  if (typeof ejsTemplate !== 'string') {
-    return;
-  }
-
   const plant = plants[0];
 
   plant.displayDate = buildDateString(plant);
   plant.dateTimeSeen = new Date(plant.dateTimeSeen);
 
   // eslint-disable-next-line no-undef
-  mainElem.insertAdjacentHTML('afterbegin', ejs.render(ejsTemplate, { plant }));
+  mainElem.insertAdjacentHTML('afterbegin', ejs.render(singlePlantTemplate, { plant }));
 
-  mainElem.id = `card-${plantID}`;
+  mainElem.id = 'plant';
   mainElem.dataset.plant = plantID;
+  mainElem.dataset.identified = String(plant.identificationStatus === 'completed');
 
-  initialiseModal(document.getElementById(`${plant._id}-edit-plant-modal`));
+  initialiseModal(document.getElementById('edit-plant-modal'));
   initialiseModal(document.getElementById('image-full-modal'));
 
-  // eslint-disable-next-line no-use-before-define
-  addEventListeners(document.getElementById(`card-${plant._id}`));
+  if (getUsername() === plant.author && plant.identificationStatus !== 'completed') {
+    // plant can be edited and identified only if user==author & plant is not identified
+    const idButton = document.getElementById('identify-button');
+    if (idButton !== null) {
+      idButton.classList.remove('hidden');
+    }
+
+    const editButton = document.getElementById('edit-button');
+    if (editButton !== null) {
+      editButton.classList.remove('hidden');
+    }
+  }
+
+  initForm();
 
   initChat();
+
+  // Get all chats for the requested plant
+  DBController.get('chats', { plant: plantID }, (chats) => {
+    chats.forEach((chat) => addUserMessage(chat.message, chat.user));
+  }, () => { /* fail silently */ });
 });

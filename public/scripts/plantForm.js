@@ -1,10 +1,11 @@
 import DBController from './utils/DBController.mjs';
 import { showMessage } from './utils/flash-messages.mjs';
-import updateCard, { buildDateString } from './utils/plantUtils.mjs';
+import updateEditedPlant, { buildDateString } from './utils/plantUtils.mjs';
 import getUsername from './utils/localStore.mjs';
 import PLANT_MAP from './mapDriver.js';
 import { getFlagEmoji, reverseGeocode } from './utils/geoUtils.mjs';
 import { plantAddEvent } from './utils/CustomEvents.mjs';
+import initTouchScreen from './global-scripts/touchHover.mjs';
 
 /**
  * Shows coordinates on the form
@@ -56,6 +57,9 @@ function handleErrorResponse(status, plantID) {
       break;
     case 'not-validated':
       errorMessage = "Please validate your image URL first! (click 'Preview')";
+      break;
+    case 'large':
+      errorMessage = 'File too large! (Max. 10MB)';
       break;
     default:
       errorMessage = `Error: ${status}`;
@@ -125,12 +129,15 @@ async function previewImage(plantID) {
   } else {
     const image = document.getElementById(`image${plantID}`);
     const [file] = image.files;
-    if (file) {
+    if (file.size < 10485760) { // max. file size 10MB
+      document.getElementById(`previewError${plantID}`).classList.add('hidden');
       document.getElementById(`imagePreviewContainer${plantID}`).classList.remove('hidden');
       document.getElementById(`preview${plantID}`).classList.remove('hidden');
       preview.src = URL.createObjectURL(file);
       checkbox.checked = true;
       checkbox.dispatchEvent(new Event('input')); // Trigger input event for form validation
+    } else {
+      handleErrorResponse('large', plantID);
     }
   }
 }
@@ -187,6 +194,20 @@ function toggleImageInput(plantID) {
   }
 }
 
+// clears all inputs in the create plant form
+function clearForm() {
+  const form = document.getElementById('createPlantForm');
+  form.querySelectorAll('input').forEach((input) => {
+    input.value = '';
+  });
+  form.querySelectorAll('textarea').forEach((textarea) => {
+    textarea.value = '';
+  });
+  form.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
+    checkbox.checked = false;
+  });
+}
+
 /**
  * Submits a plant to the database, for creation (or updating)
  * @param plant {Object} the plant object to submit
@@ -197,9 +218,9 @@ function submitPlantToDB(plant) {
       'plants',
       plant,
       (message, plantObject) => {
-        const plantModal = document.getElementById(`${plantObject._id}-edit-plant-modal`);
-        if (plantModal !== null) {
-          updateCard(plantObject);
+        const editPlantModal = document.getElementById('edit-plant-modal');
+        if (editPlantModal !== null) {
+          updateEditedPlant(plantObject);
           if (!window.plantsAppOffline) {
             // Update plant's pin on the map
             PLANT_MAP.updatePlantCoordinates(plantObject);
@@ -207,7 +228,8 @@ function submitPlantToDB(plant) {
           resolve();
         } else {
           plantObject.displayDate = buildDateString(plantObject);
-          // plantModal is null - therefore this is a new plant
+          // editPlantModal is null - therefore this is a new plant
+          clearForm();
           // query server to generate its card on-the-fly
           fetch('/public/cached-views/plant-card.ejs', {
             method: 'GET',
@@ -224,7 +246,11 @@ function submitPlantToDB(plant) {
 
               // eslint-disable-next-line no-use-before-define
               addEventListeners(document.getElementById(`card-${plantObject._id}`));
-              document.getElementById('no-plants-warning').classList.add('hidden');
+
+              const noPlants = document.getElementById('no-plants-warning');
+              if (noPlants !== null) {
+                noPlants.classList.add('hidden');
+              }
 
               if (!window.plantsAppOffline) {
                 PLANT_MAP.pinPlants([
@@ -235,6 +261,10 @@ function submitPlantToDB(plant) {
                   },
                 ]);
               }
+
+              // Enable touch hover on the new cards
+              initTouchScreen();
+
               resolve();
             })
             .catch((e) => {
@@ -248,11 +278,26 @@ function submitPlantToDB(plant) {
   });
 }
 
+// Set the max date for the date input to the current date and time adjusted for timezone
+function setDatetimeMax() {
+  const dateInput = document.getElementById('dateTimeSeen');
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+
+  const localDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+  dateInput.max = localDateTime;
+}
+
 /**
  * Submits the add plant form, or a plant's edit form, and updates the page live
  * @param formElem {HTMLFormElement} the form element that has been submitted
  */
 async function submitPlantForm(formElem) {
+  setDatetimeMax(); // reset the max date to the current date and time
   const params = new FormData(formElem);
   const shouldShowUrl = formElem.querySelector('[data-change="toggle-input"]');
 
@@ -279,12 +324,21 @@ async function submitPlantForm(formElem) {
     return new Promise((resolve, reject) => { reject(new Error('No username found! Please log in before adding a plant.')); });
   }
 
-  const lat = params.get('latitude').toString();
-  const lng = params.get('longitude').toString();
+  let lat = params.get('latitude').toString();
+  let lng = params.get('longitude').toString();
+
+  if (lat === null) {
+    lat = '0';
+  }
+
+  if (lng === null) {
+    lng = '0';
+  }
 
   const { displayName, countryCode } = await reverseGeocode(lat, lng);
 
-  if (displayName === 'error') {
+  // Only check for geo error if not offline
+  if (!window.plantsAppOffline && displayName === 'error') {
     return new Promise((resolve, reject) => { reject(new Error('Geocoding failed! Please try again.')); });
   }
 
@@ -344,20 +398,25 @@ async function submitPlantForm(formElem) {
  * Add all event listeners that are required for plant form functionality
  */
 export default function addEventListeners(card) {
+  let id = card.dataset.plant;
+  if (document.getElementById('editPlantForm')) {
+    id = 'Edit';
+  }
+
   card.querySelectorAll('[data-click="geolocation"]').forEach((elem) => {
-    elem.addEventListener('click', () => getLocation(card.dataset.plant));
+    elem.addEventListener('click', () => getLocation(id));
   });
 
   card.querySelectorAll('[data-click="delete"]').forEach((elem) => {
-    elem.addEventListener('click', () => deletePlant(card.dataset.plant));
+    elem.addEventListener('click', () => deletePlant(id));
   });
 
   card.querySelectorAll('[data-change="preview"]').forEach((elem) => {
-    elem.addEventListener('change', () => previewImage(card.dataset.plant));
+    elem.addEventListener('change', () => previewImage(id));
   });
 
   card.querySelectorAll('[data-click="preview"]').forEach((elem) => {
-    elem.addEventListener('click', () => previewImage(card.dataset.plant));
+    elem.addEventListener('click', () => previewImage(id));
   });
 
   card.querySelectorAll('[data-form="plant"]').forEach((formElem) => {
@@ -365,21 +424,21 @@ export default function addEventListeners(card) {
   });
 
   card.querySelectorAll('[data-change="toggle-input"]').forEach((elem) => {
-    elem.addEventListener('change', () => toggleImageInput(card.dataset.plant));
+    elem.addEventListener('change', () => toggleImageInput(id));
   });
 
   // Wrap these last two in try/catch as single querySelector means event listener will throw error
   // if nothing is found
   try {
     // If image cannot be loaded for whatever reason, throw a 415 error (Unsupported Media Type)
-    card.querySelector('[data-img="preview"]').addEventListener('error', () => handleErrorResponse(415, card.dataset.plant));
+    card.querySelector('[data-img="preview"]').addEventListener('error', () => handleErrorResponse(415, id));
   } catch (e) { /* empty */ }
 
   try {
     card.querySelector('input[name="url"]').addEventListener('keydown', (e) => {
       if (e.code === 'Enter') {
         e.preventDefault();
-        previewImage(card.dataset.plant).then(() => {
+        previewImage(id).then(() => {
         });
       }
     });
@@ -390,7 +449,7 @@ export default function addEventListeners(card) {
  * Runs the form submission function in the background, to make it non-blocking
  * @param plantAddForm {HTMLFormElement} the form element to submit
  */
-function submitBackgroundTask(plantAddForm) {
+function submitBackgroundTaskAdd(plantAddForm) {
   // Ensure user has validated their image
   if (document.getElementById('imageInputCheckboxNew').checked && !document.getElementById('imageValidatedNew').checked) {
     handleErrorResponse('not-validated', 'New');
@@ -412,23 +471,54 @@ function submitBackgroundTask(plantAddForm) {
     });
 }
 
-const plantAddForm = document.getElementById('createPlantForm');
-if (plantAddForm) {
-  plantAddForm.addEventListener('submit', () => submitBackgroundTask(plantAddForm));
-  addEventListeners(plantAddForm);
+function submitBackgroundTaskEdit() {
+  // Ensure user has validated their image
+  if (document.getElementById('imageInputCheckboxEdit').checked && !document.getElementById('imageValidatedEdit').checked) {
+    handleErrorResponse('not-validated', 'New');
+    return;
+  }
+
+  // Hide form and inform user that plant is being added in the background
+  document.getElementById('edit-plant-modal').classList.remove('active');
+  showMessage('Adding plant...', 'info', 'info', true);
+
+  showMessage('Plant edited successfully!', 'success', 'done');
 }
 
-document.querySelectorAll('[data-plant-card]').forEach(addEventListeners);
+/**
+ * Initialises all forms on the screen
+ */
+export function initForm() {
+  const plantAddForm = document.getElementById('createPlantForm');
+  if (plantAddForm) {
+    plantAddForm.addEventListener('submit', () => submitBackgroundTaskAdd(plantAddForm));
+    addEventListeners(plantAddForm);
+  }
 
-// Handle new location being passed from location picker
-document.addEventListener('pick-location', (e) => {
-  // Convert location to format expected by showPosition
-  const location = {
-    coords: {
-      latitude: e.detail.lat,
-      longitude: e.detail.lng,
-    },
-  };
+  const plantEditForm = document.getElementById('editPlantForm');
+  if (plantEditForm) {
+    plantEditForm.addEventListener('submit', () => submitBackgroundTaskEdit(plantEditForm));
+    addEventListeners(plantEditForm);
+  }
 
-  showPosition(location, 'New');
-});
+  document.querySelectorAll('[data-plant-card]').forEach(addEventListeners);
+
+  setDatetimeMax();
+
+  // Handle new location being passed from location picker
+  document.addEventListener('pick-location', (e) => {
+    // Convert location to format expected by showPosition
+    const location = {
+      coords: {
+        latitude: e.detail.lat,
+        longitude: e.detail.lng,
+      },
+    };
+
+    showPosition(location, e.detail.plantID);
+  });
+}
+
+try {
+  initForm();
+} catch (e) { /* fail silently */ }
