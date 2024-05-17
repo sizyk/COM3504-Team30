@@ -57,6 +57,9 @@ function handleErrorResponse(status, plantID) {
     case 'not-validated':
       errorMessage = "Please validate your image URL first! (click 'Preview')";
       break;
+    case 'large':
+      errorMessage = 'File too large! (Max. 10MB)';
+      break;
     default:
       errorMessage = `Error: ${status}`;
       break;
@@ -125,12 +128,15 @@ async function previewImage(plantID) {
   } else {
     const image = document.getElementById(`image${plantID}`);
     const [file] = image.files;
-    if (file) {
+    if (file.size < 10485760) { // max. file size 10MB
+      document.getElementById(`previewError${plantID}`).classList.add('hidden');
       document.getElementById(`imagePreviewContainer${plantID}`).classList.remove('hidden');
       document.getElementById(`preview${plantID}`).classList.remove('hidden');
       preview.src = URL.createObjectURL(file);
       checkbox.checked = true;
       checkbox.dispatchEvent(new Event('input')); // Trigger input event for form validation
+    } else {
+      handleErrorResponse('large', plantID);
     }
   }
 }
@@ -192,7 +198,6 @@ function toggleImageInput(plantID) {
  * @param plant {Object} the plant object to submit
  */
 function submitPlantToDB(plant) {
-  const noPlants = document.getElementsByName('no-plants-warning');
   return new Promise((resolve, reject) => {
     DBController.createOrUpdate(
       'plants',
@@ -226,6 +231,7 @@ function submitPlantToDB(plant) {
               // eslint-disable-next-line no-use-before-define
               addEventListeners(document.getElementById(`card-${plantObject._id}`));
 
+              const noPlants = document.getElementById('no-plants-warning');
               if (noPlants !== null) {
                 noPlants.classList.add('hidden');
               }
