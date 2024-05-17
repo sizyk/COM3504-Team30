@@ -1,3 +1,16 @@
+<!-- prettier-ignore -->
+<%-
+  include('../modal.ejs', {
+    modalID: 'pick-location-modal',
+    modalTitle: 'Click on the Map to Choose a Location',
+    modalContent: 'map-modal',
+    mapID: 'pick-location-map',
+    plantID: plant._id,
+    latitude: plant.latitude,
+    longitude: plant.longitude,
+  });
+%>
+
 <form
   id="editPlantForm"
   target="fakesubmit"
@@ -8,7 +21,6 @@
   autocomplete="off"
   class="w-[32rem] max-w-[70vw]"
 >
-  <input id="_id" name="_id" type="hidden" value="<%= plant._id %>" />
   <input id="_id" name="_id" type="hidden" value="<%= plant._id %>" />
   <div class="form-group mb-4">
     <label for="name" class="block text-text">Name</label>
@@ -254,13 +266,13 @@
     id="previewErrorEdit"
     class="my-2 hidden px-2 font-bold text-error"
   ></p>
-  <div class="form-group mb-4 flex space-x-2">
+  <div class="form-group mb-4 flex flex-col gap-2 space-x-2">
     <input
       type="text"
       id="latitude<%=plant._id%>"
       name="latitude"
       class="form-input mt-1 block hidden w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
-      value="<%= plant.latitude %>"
+      value="<%=plant.latitude%>"
       required
       readonly
     />
@@ -269,28 +281,40 @@
       id="longitude<%=plant._id%>"
       name="longitude"
       class="form-input mt-1 block hidden w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
-      value="<%= plant.longitude %>"
+      value="<%=plant.longitude%>"
       readonly
     />
-    <div class="w-3/4">
+    <div class="flex items-center gap-2">
       <label for="coordinates">Coordinates:</label>
       <input
         type="text"
         id="coordinates<%=plant._id%>"
         name="coordinates"
-        class="form-input mt-1 block w-full grow-0 rounded border border-gray-300 bg-background-light pl-2 text-text"
-        value="(<%= plant.latitude %>,<%= plant.longitude %>)"
+        class="form-input flex-fill-remaining-space mt-1 block rounded border border-gray-300 bg-background-light pl-2 text-text"
+        value="(<%=plant.latitude.toFixed(5)%>,<%=plant.longitude.toFixed(5)%>)"
         required
         readonly
       />
     </div>
-    <button
-      class="form-input hover-button w-1/4 grow-0 rounded px-4 py-2 font-bold"
-      type="button"
-      data-click="geolocation"
-    >
-      Get
-    </button>
+    <div class="flex items-center gap-2">
+      <button
+        class="form-input hover-button flex-1 rounded px-4 py-2 font-bold"
+        type="button"
+        data-click="geolocation"
+      >
+        Get Location From GPS
+      </button>
+      or
+      <button
+        type="button"
+        class="hover-button flex flex-1 items-center gap-2 rounded px-3 py-2 text-center font-bold"
+        data-toggle="modal"
+        data-target="pick-location-modal"
+      >
+        <span class="material-symbols-outlined"> pin_drop </span> Choose From a
+        Map
+      </button>
+    </div>
   </div>
   <div class="mt-4 flex w-full space-x-4" id="buttonsDiv">
     <button
