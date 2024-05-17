@@ -1,5 +1,8 @@
 # COM3504-Team30
 
+## Video Walkthrough
+A video walkthrough of our project can be found [here](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+
 ## Prerequisites
 
 Before you begin, ensure you have met the following requirements:
@@ -62,9 +65,9 @@ Visit localhost:3000 to see the app.
 - Users can filter plants by their identification status, their properties, and their exposure to sun
 - Users can sort the plants by the date they were added and the distances from the user.
 ### Responsiveness
-Great care was taken to ensure that the app works well (and looks good) at any screen size. For example, through careful use of CSS breakpoints, the UIs for mobile and desktop look drastically different - with the desktop site looking like a native desktop application, and the mobile site looking like a native mobile application. Furthermore, in order to better user experience even more, a dark/light theme toggle was added, enabling users to choose the style that they are most comfortable with.
+Great care was taken to ensure the app works well (and looks good) at any screen size. For example, through careful use of CSS breakpoints, the UIs for mobile and desktop look drastically different - with the desktop site looking like a native desktop application and the mobile site looking like a native mobile application. Furthermore, to better user experience even more, a dark/light theme toggle was added, enabling users to choose the style that they are most comfortable with.
 
-Screenshots of the main pages on both mobile and desktop (and with both colour schemes) can be found below (click to expand, or alternatively, full-size images can be found in `readme-imgs`).
+Below are screenshots of the main pages on mobile and desktop (and with both colour schemes) (click to expand; alternatively, full-size images can be found in `readme-imgs`).
 
 | <img src="readme-img/home-laptop-light.png" height=300> | <img src="readme-img/home-mobile-light.png" height=300> |
 |---------------------------------------------------------|---------------------------------------------------------|
@@ -87,15 +90,15 @@ Screenshots of the main pages on both mobile and desktop (and with both colour s
 ### Progressive Web App
 - The app can be downloaded as a PWA app and used offline, with changes made offline syncing when a user goes online and vice versa.
 
-Synchronisation was not done utilising the background sync API, as was recommended. The reason for this is that this API is not supported on non-Chromium browsers (firefox and safari are the main ones), which alienates a sizeable proportion of the global population - according to (statcounter.com)[https://gs.statcounter.com/browser-market-share], these browsers have a combined ~20% market share, meaning 1 in 5 people would not be able to use the app if the background sync API were to be used. In fact, this number is likely to be higher, given the popularity of apple devices, and the fact that any browser downloaded onto an apple device must run on apple's own WebKit browser engine (which, as mentioned earlier, does not support the background sync API).
+Synchronisation was not done utilising the background sync API, as was recommended. The reason for this is that this API is not supported on non-Chromium browsers (Firefox and Safari are the main ones), which alienates a sizeable proportion of the global population - according to [StatCounter.com](https://gs.statcounter.com/browser-market-share), these browsers have a combined ~20% market share, meaning 1 in 5 people would not be able to use the app if the background sync API were to be used. This number is likely to be higher, given the popularity of Apple devices and the fact that any browser downloaded onto an Apple device must run on Apple's own WebKit browser engine (which, as mentioned earlier, does not support the background sync API).
 
-In place of the background sync API, a custom synchronisation handler was created, which is fast, easy-to-use, and expandable to any number of different collections. The code for this can be seen in `public/scripts/DBController.mjs`, and a brief overview will be given in this section.
+In place of the background sync API, a custom synchronisation handler was created. This handler is fast, easy to use, and expandable to any number of different collections. The code for this can be seen in `public/scripts/DBController.mjs`; a brief overview will be given in this section.
 
-`DBController` means that there is no need to worry about whether to send a request to MongoDB or to IndexedDB, as it automatically handles this by first attempting to query the website's API route (with a format of `/api/{collection}` - allowing for a very simple route handler, which again, is modular and can be easily expanded for any number of collections). If this request fails due to the server being unavailable, then this error is caught, and `DBController` instead performs the requested action on the IndexedDB.
+`DBController` means that there is no need to worry about whether to send a request to MongoDB or IndexedDB, as it automatically handles this by first attempting to query the website's API route (with a format of `/api/{collection}` - allowing for a very simple route handler, which again, is modular and can be easily expanded for any number of collections). If this request fails due to the server being unavailable, then this error is caught, and `DBController` instead performs the requested action on the IndexedDB.
 
-When `DBController` fails to push something to MongoDB, then the operation is added to a synchronisation queue. Once the user is online again, the `synchronise` method of `DBController` is called, which sequentially goes through the queue, and performs all operations, in order to sync the local database to the remote. After this, remote data is fetched and stored locally, to ensure the two databases are fully up-to-date with one another.
+When `DBController` fails to push something to MongoDB, the operation is added to a synchronisation queue. Once the user is online again, the `synchronise` method of `DBController` is called, which sequentially goes through the queue and performs all operations to sync the local database to the remote. After this, remote data is fetched and stored locally to ensure the two databases are fully up-to-date.
 
-This whole process is made much easier through the use of client-side rendering, using the browser build of `ejs`. In `public/cached-views`, a couple of views and html files are stored (and cached by the service worker). From here, they can be used to immediately render the results of synchronisations, without the need for an additional refresh. These have also been used for offline mode (with the service worker intercepting requests for `/` and `/plant/:id`, fetching plant information from `DBController`, and then rendering them using the cached views) and even normal rendering - with a large number of plants, a GET request to mongoDB took a number of seconds, so it was found to be better for UX to instead immediately load the page with no plants, showing a loading icon, and then fetching the plants in the background and rendering them client-side.
+This process is made much easier through client-side rendering, using the browser build of `ejs`. In `public/cached-views`, a couple of views and HTML files are stored (and cached by the service worker). From here, they can be used to immediately render the results of synchronisations without needing an additional refresh. These have also been used for offline mode (with the service worker intercepting requests for `/` and `/plant/:id`, fetching plant information from `DBController`, and then rendering them using the cached views) and even normal rendering - with a large number of plants, a GET request to mongoDB took several seconds, so it was found to be better for UX to instead immediately load the page with no plants, showing a loading icon, and then fetching the plants in the background and rendering them client-side.
 
 ## Team Dynamics
 | Name      	         | Role      	                  |
@@ -106,8 +109,6 @@ This whole process is made much easier through the use of client-side rendering,
 | Stylianos Kyzis 	   | Full-Stack Dev 	             |
 
 ## Git Statistics
-
-ToDo: Add Statistics screenshots once everything is merged
 
 - jacksanders02 = Jack Sanders (jsanders4@sheffield.ac.uk)
 - Fokkos = James March (jmarch2@sheffield.ac.uk)
