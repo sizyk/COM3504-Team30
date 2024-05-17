@@ -5,7 +5,6 @@
     modalTitle: 'Click on the Map to Choose a Location',
     modalContent: 'map-modal',
     mapID: 'pick-location-map',
-    plantID: plant._id,
     latitude: plant.latitude,
     longitude: plant.longitude,
   });
@@ -270,7 +269,7 @@
   <div class="form-group mb-4 flex flex-col gap-2 space-x-2">
     <input
       type="text"
-      id="latitude<%=plant._id%>"
+      id="latitudeEdit"
       name="latitude"
       class="form-input mt-1 block hidden w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
       value="<%=plant.latitude%>"
@@ -279,7 +278,7 @@
     />
     <input
       type="text"
-      id="longitude<%=plant._id%>"
+      id="longitudeEdit"
       name="longitude"
       class="form-input mt-1 block hidden w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
       value="<%=plant.longitude%>"
@@ -289,7 +288,7 @@
       <label for="coordinates">Coordinates:</label>
       <input
         type="text"
-        id="coordinates<%=plant._id%>"
+        id="coordinatesEdit"
         name="coordinates"
         class="form-input flex-fill-remaining-space mt-1 block rounded border border-gray-300 bg-background-light pl-2 text-text"
         value="(<%=plant.latitude.toFixed(5)%>,<%=plant.longitude.toFixed(5)%>)"
