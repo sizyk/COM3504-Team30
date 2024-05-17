@@ -1,6 +1,6 @@
 import DBController from './utils/DBController.mjs';
 import { showMessage } from './utils/flash-messages.mjs';
-import updateCard, { buildDateString } from './utils/plantUtils.mjs';
+import updateEditedPlant, { buildDateString } from './utils/plantUtils.mjs';
 import getUsername from './utils/localStore.mjs';
 import PLANT_MAP from './mapDriver.js';
 import { getFlagEmoji, reverseGeocode } from './utils/geoUtils.mjs';
@@ -205,7 +205,7 @@ function submitPlantToDB(plant) {
       (message, plantObject) => {
         const plantModal = document.getElementById('edit-plant-modal');
         if (plantModal !== null) {
-          updateCard(plantObject);
+          updateEditedPlant(plantObject);
           if (!window.plantsAppOffline) {
             // Update plant's pin on the map
             PLANT_MAP.updatePlantCoordinates(plantObject);

@@ -36,8 +36,8 @@ export function buildDateString(plant) {
  * Updates a plant card to reflect the most current information on that plant
  * @param plant {object} the plant whose plant card must be updated
  */
-export default function updateCard(plant) {
-  const card = document.getElementById(`card-${plant._id}`);
+export default function updateEditedPlant(plant) {
+  const card = document.getElementById('plant');
 
   const cardImage = card.querySelector('[data-plant-image]');
   const fullImage = document.getElementById('full-image');
@@ -75,6 +75,8 @@ export default function updateCard(plant) {
   sunIndicator.querySelector('span').innerText = `${plant.sunExposure.replace('ne', '')} sun exposure.`;
 
   card.querySelector('[data-colour]').style.backgroundColor = plant.colour;
+
+  PLANT_MAP.updatePlantCoordinates(plant);
 }
 
 /**
