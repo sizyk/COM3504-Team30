@@ -59,6 +59,7 @@
       type="datetime-local"
       id="dateTimeSeen"
       name="dateTimeSeen"
+      max="<%= new Date().toISOString().split('.')[0] %>"
       class="form-input mt-1 block w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
       value="<%= formattedDate %>"
       required
