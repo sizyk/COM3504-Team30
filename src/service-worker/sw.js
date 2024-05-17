@@ -45,6 +45,7 @@ self.addEventListener('install', (event) => {
 
       '/public/scripts/global-scripts/login.mjs',
       '/public/scripts/global-scripts/modals.mjs',
+      '/public/scripts/global-scripts/notifications.mjs',
       '/public/scripts/global-scripts/serviceWorker.mjs',
       '/public/scripts/global-scripts/syncing.mjs',
       '/public/scripts/global-scripts/tabs.mjs',
@@ -67,6 +68,8 @@ self.addEventListener('install', (event) => {
       '/public/scripts/ejs.min.js',
       '/public/scripts/filters.js',
       '/public/scripts/global.js',
+      '/public/scripts/identification.js',
+      '/public/scripts/locationPicker.js',
       '/public/scripts/mapDriver.js',
       '/public/scripts/plantForm.js',
       '/public/scripts/sortPlants.js',
