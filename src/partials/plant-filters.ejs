@@ -35,7 +35,7 @@
     >
       <div class="lg:hidden"><%- include('../partials/sort-button.ejs') %></div>
       <div class="flex items-center gap-2 xl:flex-col xl:gap-0">
-        <label for="has-flowers-filter">Identified?</label>
+        <label for="identified-filter">Identified?</label>
         <input
           type="checkbox"
           id="identified-filter"
@@ -75,17 +75,6 @@
           class="xl:flex-fill-remaining-space aspect-square h-8"
           data-filter
           data-filterfeature="hasfruitsnuts"
-          data-filtervalue="any"
-        />
-      </div>
-      <div class="flex items-center gap-2 xl:flex-col xl:gap-0">
-        <label for="identified-filter">Identified?</label>
-        <input
-          type="checkbox"
-          id="identified-filter"
-          class="xl:flex-fill-remaining-space aspect-square h-8"
-          data-filter
-          data-filterfeature="identified"
           data-filtervalue="any"
         />
       </div>
