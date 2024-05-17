@@ -57,14 +57,14 @@
   <div class="flex h-[100%] w-[35rem] max-w-full flex-col overflow-y-scroll">
     <div class="border-b-4 border-text">
       <h2 class="text-3xl font-bold" data-name><%= plant.name %></h2>
-      <p class="mb-3 italic" data-scientific>Flower Scientific Name</p>
+      <p class="mb-3 italic" data-scientific><%= plant.identifiedName %></p>
       <div class="mb-1 flex items-center gap-1">
         Discovered by
         <b><%= plant.author %></b>
       </div>
       <div class="mb-1 flex items-center gap-1">
         <span class="material-symbols-outlined">schedule</span>
-        <span class="mb-0.5"><%= plant.displayDate %></span>
+        <span class="mb-0.5" data-spotted><%= plant.displayDate %></span>
       </div>
 
       <div class="mb-3 flex flex-col justify-between gap-1 xs:flex-row">
@@ -150,7 +150,7 @@
 
           <button
             id="edit-button"
-            class="hover-button-secondary text-center21 w-max rounded-lg px-4 py-1 text-sm font-bold"
+            class="hover-button-secondary text-center21 hidden w-max rounded-lg px-4 py-1 text-sm font-bold"
             data-toggle="modal"
             data-target="<%= editModalName %>"
             data-user="<%= plant.author %>"
@@ -160,7 +160,7 @@
         </div>
       </div>
     </div>
-
+    <p><a id="dbpediaURI" href="#"></a></p>
     <p class="flex-fill-remaining-space" data-description>
       <%= plant.description %>
     </p>

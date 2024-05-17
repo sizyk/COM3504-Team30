@@ -88,20 +88,26 @@ function submitIdentification() {
 /**
  * Add all event listeners that are required for identification functionality
  */
-document.getElementById('validateButton').addEventListener('click', () => {
-  getIdentification();
-});
+const valButton = document.getElementById('validateButton');
+if (valButton !== null) {
+  valButton.addEventListener('click', () => {
+    getIdentification();
+  });
+}
 
-document.getElementById('submitValidationButton').addEventListener('click', () => {
-  submitIdentification(document.getElementById('identificationForm'));
-});
+const submitValButton = document.getElementById('validateButton');
+if (submitValButton !== null) {
+  submitValButton.addEventListener('click', () => {
+    submitIdentification(document.getElementById('identificationForm'));
+  });
+}
 
 // get plant object by the id in the url
 const plantID = window.location.href.split('/').pop();
 DBController.get('plants', { _id: plantID }, (plants) => {
   const plant = plants[0];
   const username = getUsername();
-  if (plant.identificationStatus === 'completed') {
+  if (plant.identificationStatus === 'completed' && !window.plantsAppOffline) {
     const urlSuffix = plant.identifiedName;
     const url = buildDBpediaQuery(urlSuffix);
     // Use fetch to retrieve the data
@@ -116,7 +122,14 @@ DBController.get('plants', { _id: plantID }, (plants) => {
       });
   } else if (username === plant.author) {
     // plant can be edited and identified only if user==author & plant is not identified
-    document.getElementById('identify-button').classList.remove('hidden');
-    document.getElementById('edit-button').classList.remove('hidden');
+    const idButton = document.getElementById('identify-button');
+    if (idButton !== null) {
+      idButton.classList.remove('hidden');
+    }
+
+    const editButton = document.getElementById('edit-button');
+    if (editButton !== null) {
+      editButton.classList.remove('hidden');
+    }
   }
 });
