@@ -173,12 +173,16 @@ export default function initChat() {
   chatContainer = document.getElementById('chat-interface');
   openChatButton = document.getElementById('open-chat');
   closeChatButton = document.getElementById('close-chat');
-  identificationStatus = document.getElementById(`card-${roomId}`).dataset.identified;
+  identificationStatus = document.getElementById('plant').dataset.identified;
+
   // Disable chat if plant is identified
   if (identificationStatus === 'true') {
     userInput.disabled = true;
+    userInput.placeholder = 'Chat disabled for identified plants';
+    userInput.classList.add('font-bold');
   } else {
     userInput.disabled = false;
+    userInput.placeholder = 'Share your thoughts...';
   }
   addChatEventListeners();
   connectToRoom();
