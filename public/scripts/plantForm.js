@@ -194,6 +194,20 @@ function toggleImageInput(plantID) {
   }
 }
 
+// clears all inputs in the create plant form
+function clearForm() {
+  const form = document.getElementById('createPlantForm');
+  form.querySelectorAll('input').forEach((input) => {
+    input.value = '';
+  });
+  form.querySelectorAll('textarea').forEach((textarea) => {
+    textarea.value = '';
+  });
+  form.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
+    checkbox.checked = false;
+  });
+}
+
 /**
  * Submits a plant to the database, for creation (or updating)
  * @param plant {Object} the plant object to submit
@@ -204,8 +218,8 @@ function submitPlantToDB(plant) {
       'plants',
       plant,
       (message, plantObject) => {
-        const plantModal = document.getElementById('edit-plant-modal');
-        if (plantModal !== null) {
+        const editPlantModal = document.getElementById('edit-plant-modal');
+        if (editPlantModal !== null) {
           updateEditedPlant(plantObject);
           if (!window.plantsAppOffline) {
             // Update plant's pin on the map
@@ -214,7 +228,8 @@ function submitPlantToDB(plant) {
           resolve();
         } else {
           plantObject.displayDate = buildDateString(plantObject);
-          // plantModal is null - therefore this is a new plant
+          // editPlantModal is null - therefore this is a new plant
+          clearForm();
           // query server to generate its card on-the-fly
           fetch('/public/cached-views/plant-card.ejs', {
             method: 'GET',
