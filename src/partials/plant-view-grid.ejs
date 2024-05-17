@@ -2,8 +2,14 @@
   id="plant-grid"
   class="grid grid-cols-1 gap-10 md:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4"
 >
-  <!-- prettier-ignore -->
-  <% plants?.forEach((p) => { %>
-    <%- include('plant-card.ejs', {plant: p}) %>
-  <% }) %>
+  <object
+    id="loading-gif"
+    type="image/svg+xml"
+    data="/public/img/loading.svg"
+    class="aspect-square w-72 rounded absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+  ></object>
+  <h3
+    id="no-plants-warning"
+    class="m-auto max-w-[90vw] text-center w-max text-2xl font-bold absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+  ></h3>
 </div>

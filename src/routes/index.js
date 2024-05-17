@@ -2,35 +2,21 @@ const express = require('express');
 const renderLayout = require('../helpers/layout-renderer');
 
 const router = express.Router();
-const plants = require('../controllers/plants');
 
 /* GET home page. */
 router.get('/', (req, res) => {
-  const result = plants.get({});
-  result.then((allPlants) => {
-    const plantCoords = [];
+  const data = {
+    title: 'All Plants',
+    plants: [], // Will be fetched locally, to make loading faster
+    scripts: ['sortPlants', 'filters', 'plantForm', 'mapDriver', 'locationPicker'],
+    useLeaflet: true,
+    dataset: {
+      centre: [0, 0],
+      plants: [],
+    },
+  };
 
-    allPlants.forEach((plant) => {
-      plantCoords.push({
-        _id: plant._id,
-        coordinates: [plant.latitude, plant.longitude],
-        image: plant.image,
-      });
-    });
-
-    const data = {
-      title: 'All Plants',
-      plants: allPlants || [],
-      scripts: ['sortPlants', 'filters', 'plantForm', 'ejs.min', 'mapDriver', 'locationPicker'],
-      useLeaflet: true,
-      dataset: {
-        centre: [0, 0],
-        plants: plantCoords,
-      },
-    };
-
-    renderLayout(res, 'index', data);
-  });
+  renderLayout(res, 'index', data);
 });
 
 // Fix 404 when refreshing page after submitting plant form

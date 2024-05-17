@@ -1,3 +1,11 @@
+import { plantAddEvent } from './CustomEvents.mjs';
+import PLANT_MAP from '../mapDriver.js';
+
+const plantGrid = document.getElementById('plant-grid');
+
+export const indexPlantTemplate = await fetch('/public/cached-views/plant-card.ejs').then((res) => res.text());
+export const singlePlantTemplate = await fetch('/public/cached-views/plant.ejs').then((res) => res.text());
+
 /**
  * Builds a human-readable string to display the time and date at which a plant was spotted
  * @param plant {object} the plant to build a spotted string for
@@ -73,6 +81,55 @@ export default function updateCard(plant) {
   card.querySelector('[data-colour]').style.backgroundColor = plant.colour;
 }
 
-export function renderCardsOffline() {
+/**
+ * Function to display plant cards in an offline-safe manner. Used instead of rendering directly to
+ * both improve load times and allow the same code to be used both online and offline.
+ * @param card {indexPlantTemplate | singlePlantTemplate} the card with which to render each plant
+ * @param plants {Object[]} the list of plants to display
+ */
+export function displayPlantCards(card, plants) {
+  if (PLANT_MAP !== null) {
+    PLANT_MAP.clear(); // Clear map to re-place plant pins again
+  }
 
+  const noPlants = document.getElementById('no-plants-warning');
+
+  // Clone plant grid and remove all children, to update all plants at once rather than sequentially
+  // (which would look bad from a UI perspective, if plants popped into view one-by-one)
+  const newGrid = plantGrid.cloneNode();
+  newGrid.innerHTML = '';
+
+  const plantCoords = [];
+
+  // Render each new plant and add to the new grid
+  plants.forEach((plant) => {
+    plant.displayDate = buildDateString(plant);
+    plant.dateTimeSeen = new Date(plant.dateTimeSeen);
+    // eslint-disable-next-line no-undef
+    const renderedTemplate = ejs.render(card, { plant });
+    // Add new plant view to HTML & initialise relevant event listeners
+    newGrid.insertAdjacentHTML('beforeend', renderedTemplate);
+
+    // Add coordinate to be rendered on the map
+    plantCoords.push(
+      { _id: plant._id, coordinates: [plant.latitude, plant.longitude], image: plant.image },
+    );
+  });
+
+  // Add 'no plant' warning
+  if (plants.length === 0) {
+    noPlants.innerText = "No plants added yet! Click 'Add Plant' to get started.";
+    newGrid.appendChild(noPlants);
+  }
+
+  // Replace old plant grid (contains a loading GIF) with new one
+  plantGrid.replaceWith(newGrid);
+
+  // Update user posted string
+  document.dispatchEvent(plantAddEvent);
+
+  if (PLANT_MAP !== null) {
+    // Re-add all pants
+    PLANT_MAP.pinPlants(plantCoords);
+  }
 }

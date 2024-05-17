@@ -1,6 +1,5 @@
 import DBController from './utils/DBController.mjs';
 import { showMessage } from './utils/flash-messages.mjs';
-import IDB from './utils/IDB.mjs';
 import getUsername from './utils/localStore.mjs';
 
 let sendButton;
@@ -52,7 +51,7 @@ function createUniqueId(timestamp, username) {
  * @param {string} message - The message to add
  * @param {string} user - The user who sent the message
  */
-function addUserMessage(message, user) {
+export function addUserMessage(message, user) {
   const messageElement = document.createElement('div');
   // Get username from localStore
   const username = getUsername();
@@ -84,15 +83,6 @@ function connectToRoom() {
     }
     socket.emit('create or join', roomId, username);
   }
-
-  DBController.get('chats', { plant: roomId }, (chats) => {
-    chats.forEach((chat) => {
-      // PUT all chats to IDB, to ensure that the latest version of all are saved locally
-      // eslint-disable-next-line no-console
-      IDB.put('chats', chat, () => {}, console.error);
-      addUserMessage(chat.message, chat.user);
-    });
-  });
 }
 
 /**
