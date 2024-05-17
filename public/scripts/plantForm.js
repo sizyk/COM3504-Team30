@@ -465,5 +465,5 @@ document.addEventListener('pick-location', (e) => {
     },
   };
 
-  showPosition(location, 'New');
+  showPosition(location, e.detail.plantID);
 });
