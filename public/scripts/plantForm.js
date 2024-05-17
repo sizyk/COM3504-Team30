@@ -324,12 +324,21 @@ async function submitPlantForm(formElem) {
     return new Promise((resolve, reject) => { reject(new Error('No username found! Please log in before adding a plant.')); });
   }
 
-  const lat = params.get('latitude').toString();
-  const lng = params.get('longitude').toString();
+  let lat = params.get('latitude').toString();
+  let lng = params.get('longitude').toString();
+
+  if (lat === null) {
+    lat = '0';
+  }
+
+  if (lng === null) {
+    lng = '0';
+  }
 
   const { displayName, countryCode } = await reverseGeocode(lat, lng);
 
-  if (displayName === 'error') {
+  // Only check for geo error if not offline
+  if (!window.plantsAppOffline && displayName === 'error') {
     return new Promise((resolve, reject) => { reject(new Error('Geocoding failed! Please try again.')); });
   }
 
