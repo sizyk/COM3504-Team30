@@ -114,4 +114,9 @@ ToDo: Add Statistics screenshots once everything is merged
 - Andreas-Evripidou = Andreas Evripidou (eandreas1@sheffield.ac.uk)
 - unzisizyk = Stylianos Kyzis (skyzis1@sheffield.ac.uk)
 
-## Screenshots
+### Statistics Screenshots
+<img src="readme-img/commit-graph.png" width="100%">
+
+## Stories Completed
+
+<img src="readme-img/StoriesCompleted.png" width="100%">
