@@ -5,4 +5,6 @@
 
 <% if (typeof plantID !== 'undefined' && typeof latitude !== 'undefined' && typeof longitude !== 'undefined') { %>
     <div id="location-vars" data-plant="<%= plantID %>" data-lat="<%= latitude %>" data-lng="<%= longitude %>"></div>
+<% } else { %>
+    <div id="location-vars" data-plant="New" data-lat="" data-lng=""></div>
 <% } %>
