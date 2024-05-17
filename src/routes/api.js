@@ -44,7 +44,7 @@ router.get('/:collection', (req, res) => {
 });
 
 /**
- * Wrapper for controller upsert method
+ * Wrapper for controller upsert (create or update) method
  */
 router.put('/:collection', async (req, res) => {
   // Ugly code to get rid of [Object: null prototype]
