@@ -263,6 +263,20 @@ function submitPlantToDB(plant) {
   });
 }
 
+// Set the max date for the date input to the current date and time adjusted for timezone
+function setDatetimeMax() {
+  const dateInput = document.getElementById('dateTimeSeen');
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+
+  const localDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+  dateInput.max = localDateTime;
+}
+
 /**
  * Submits the add plant form, or a plant's edit form, and updates the page live
  * @param formElem {HTMLFormElement} the form element that has been submitted
@@ -382,7 +396,6 @@ export default function addEventListeners(card) {
   });
 
   card.querySelectorAll('[data-form="plant"]').forEach((formElem) => {
-
     formElem.addEventListener('submit', () => submitPlantForm(formElem));
   });
 
@@ -461,21 +474,6 @@ if (plantEditForm) {
 }
 
 document.querySelectorAll('[data-plant-card]').forEach(addEventListeners);
-
-// Set the max date for the date input to the current date and time adjusted for timezone
-function setDatetimeMax() {
-  const dateInput = document.getElementById('dateTimeSeen');
-  console.log(dateInput);
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  const hours = String(now.getHours()).padStart(2, '0');
-  const minutes = String(now.getMinutes()).padStart(2, '0');
-
-  const localDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
-  dateInput.max = localDateTime;
-}
 
 setDatetimeMax();
 
