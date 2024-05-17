@@ -1,7 +1,7 @@
 # COM3504-Team30
 
 ## Video Walkthrough
-Videos walkthrough of our project can be found in [online functionality](https://youtu.be/he41j7Ftl0I?si=gzpBJXwD6XKGOuje), [offline functionality](https://youtu.be/e3rWebCXwWo), and [chat notifications]().
+Videos walkthrough of our project can be found in [online functionality](https://youtu.be/he41j7Ftl0I?si=gzpBJXwD6XKGOuje), [offline functionality](https://youtu.be/e3rWebCXwWo), and [chat notifications](https://youtu.be/GYex73opm2g).
 
 ## Prerequisites
 
@@ -15,6 +15,9 @@ Before you begin, ensure you have met the following requirements:
 To install this project, follow these steps:
 
 1. Download the repository:
+```bash
+git clone git@github.com:sizyk/COM3504-Team30.git
+```
 2. Navigate into the project directory:
 ```bash
 cd project
