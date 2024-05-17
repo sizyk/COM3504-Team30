@@ -62,26 +62,47 @@ Visit localhost:3000 to see the app.
 - Users can filter plants by their identification status, their properties, and their exposure to sun
 - Users can sort the plants by the date they were added and the distances from the user.
 ### Responsiveness
-- The app works for different aspect ratios and screen sizes, accounting for phones, tablets and desktops.
+Great care was taken to ensure that the app works well (and looks good) at any screen size. For example, through careful use of CSS breakpoints, the UIs for mobile and desktop look drastically different - with the desktop site looking like a native desktop application, and the mobile site looking like a native mobile application. Furthermore, in order to better user experience even more, a dark/light theme toggle was added, enabling users to choose the style that they are most comfortable with.
+
+Screenshots of the main pages on both mobile and desktop (and with both colour schemes) can be found below.
+
+| <img src="readme-img/home-laptop-light.png" height=450> | <img src="readme-img/home-mobile-light.png" height=450> |
+|---------------------------------------------------------|---------------------------------------------------------|
+
+| <img src="readme-img/home-laptop-dark.png" height=450> | <img src="readme-img/home-mobile-dark.png" height=450> |
+|--------------------------------------------------------|--------------------------------------------------------|
+
+| <img src="readme-img/map-laptop-light.png" height=450> | <img src="readme-img/map-mobile-light.png" height=450> |
+|--------------------------------------------------------|--------------------------------------------------------|
+
+| <img src="readme-img/map-laptop-dark.png" height=450> | <img src="readme-img/map-mobile-dark.png" height=450> |
+|-------------------------------------------------------|-------------------------------------------------------|
+
+| <img src="readme-img/plant-laptop-light.png" height=450> | <img src="readme-img/plant-mobile-light.png" height=450> |
+|----------------------------------------------------------|----------------------------------------------------------|
+
+| <img src="readme-img/plant-laptop-dark.png" height=450> | <img src="readme-img/plant-mobile-dark.png" height=450> |
+|---------------------------------------------------------|---------------------------------------------------------|
+
 ### Progressive Web App
 - The app can be downloaded as a PWA app and used offline, with changes made offline syncing when a user goes online and vice versa.
 
 
 ## Team Dynamics
-| Name      	| Role      	|
-|---------------|---------------|
-| Andreas Evripidou 	| Team Leader & Full-Stack Dev |
-| Jack Sanders	|  UI Leader & Full-Stack Dev |
-| James March		 |  Full-Stack Dev  	|
-| Stylianos Kyzis 	|  Full-Stack Dev 	|
+| Name      	         | Role      	                  |
+|---------------------|------------------------------|
+| Andreas Evripidou 	 | Team Leader & Full-Stack Dev |
+| Jack Sanders	       | UI Leader & Full-Stack Dev   |
+| James March		       | Full-Stack Dev  	            |
+| Stylianos Kyzis 	   | Full-Stack Dev 	             |
 
 ## Git Statistics
 
 ToDo: Add Statistics screenshots once everything is merged
 
-jacksanders02 = Jack Sanders (jsanders4@sheffield.ac.uk)
-Fokkos = James March (jmarch2@sheffield.ac.uk)
-Andreas-Evripidou = Andreas Evripidou (eandreas1@sheffield.ac.uk)
-sizyk = Stylianos Kyzis (skyzis1@sheffield.ac.uk)
+- jacksanders02 = Jack Sanders (jsanders4@sheffield.ac.uk)
+- Fokkos = James March (jmarch2@sheffield.ac.uk)
+- Andreas-Evripidou = Andreas Evripidou (eandreas1@sheffield.ac.uk)
+- unzisizyk = Stylianos Kyzis (skyzis1@sheffield.ac.uk)
 
 ## Screenshots
