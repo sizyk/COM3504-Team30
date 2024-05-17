@@ -49,13 +49,9 @@ Visit localhost:3000 to see the app.
 ## List of features
 ### Logging in / out
 - When a user first opens the project, they are presented with a modal to log in with
-
-    <img src="readme-img/login-modal.png" width="50%">
-
 - Once logged in, a user can access the rest of the features of the website, detailed below
 - A user can log out by clicking their auto-generated avatar and then the logout button on the modal that appears
 
-    <img src="readme-img/avatar-logout-combined.png" width="100%">
 ### Adding a plant
 - For the sighting's location, you can use your current geolocation or pick a location from a map
 - Adding an image for a sighting can be done by selecting an image from your files, taking a picture from your camera (mobile only) or providing a link to an image file.
