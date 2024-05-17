@@ -180,6 +180,7 @@ export default function initChat() {
     userInput.disabled = true;
     userInput.placeholder = 'Chat disabled for identified plants';
     userInput.classList.add('font-bold');
+    userInput.style.cursor = 'not-allowed';
   } else {
     userInput.disabled = false;
     userInput.placeholder = 'Share your thoughts...';
