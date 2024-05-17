@@ -28,7 +28,7 @@ npm install
 ```
 4. Optional -  Build CSS if required:
 ```bash
-npm run build -css
+npm run build-css
 ```
 
 ## Usage
