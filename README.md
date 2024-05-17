@@ -1,7 +1,7 @@
 # COM3504-Team30
 
 ## Video Walkthrough
-A video walkthrough of our project can be found [here](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+Videos walkthrough of our project can be found in [online functionality](https://youtu.be/he41j7Ftl0I?si=gzpBJXwD6XKGOuje), [offline functionality](https://youtu.be/e3rWebCXwWo), and [chat notifications]().
 
 ## Prerequisites
 
