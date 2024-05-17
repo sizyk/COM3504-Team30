@@ -88,11 +88,11 @@ Below are screenshots of the main pages on mobile and desktop (and with both col
 |---------------------------------------------------------|---------------------------------------------------------|
 
 ### Progressive Web App
-- The app can be downloaded as a PWA app and used offline, with changes made offline syncing when a user goes online and vice versa.
+- The app can be downloaded as a PWA and used offline, with changes made offline syncing when a user goes online and vice versa.
 
 Synchronisation was not done utilising the background sync API, as was recommended. The reason for this is that this API is not supported on non-Chromium browsers (Firefox and Safari are the main ones), which alienates a sizeable proportion of the global population - according to [StatCounter.com](https://gs.statcounter.com/browser-market-share), these browsers have a combined ~20% market share, meaning 1 in 5 people would not be able to use the app if the background sync API were to be used. This number is likely to be higher, given the popularity of Apple devices and the fact that any browser downloaded onto an Apple device must run on Apple's own WebKit browser engine (which, as mentioned earlier, does not support the background sync API).
 
-In place of the background sync API, a custom synchronisation handler was created. This handler is fast, easy to use, and expandable to any number of different collections. The code for this can be seen in `public/scripts/DBController.mjs`; a brief overview will be given in this section.
+A custom synchronisation handler was created in place of the background sync API. This handler is fast, easy to use, and expandable to various collections. The code for this can be seen in `public/scripts/DBController.mjs`; a brief overview will be given in this section.
 
 `DBController` means that there is no need to worry about whether to send a request to MongoDB or IndexedDB, as it automatically handles this by first attempting to query the website's API route (with a format of `/api/{collection}` - allowing for a very simple route handler, which again, is modular and can be easily expanded for any number of collections). If this request fails due to the server being unavailable, then this error is caught, and `DBController` instead performs the requested action on the IndexedDB.
 
