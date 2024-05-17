@@ -146,15 +146,21 @@ export default class PlantMap {
 
       document.getElementById('submit-location').addEventListener('click', () => {
         let event;
+        let latlng;
         // Create new custom event to pass coordinates of chosen location out of this map
         if (this._chosenLocation === null) {
           event = new CustomEvent('pick-location', { detail: { lat: 0, lng: 0, plantID: JSVarDiv.dataset.plant } });
+          latlng = new L.LatLng(0, 0);
         } else {
-          const latlng = this._chosenLocation.getLatLng().wrap();
+          latlng = this._chosenLocation.getLatLng().wrap();
           event = new CustomEvent('pick-location', { detail: { lat: latlng.lat, lng: latlng.lng, plantID: JSVarDiv.dataset.plant } });
         }
 
+        this._backupCentre = latlng;
         document.dispatchEvent(event);
+
+        // Give time for modal to disappear before resetting view
+        setTimeout(() => this.resetMapView(), 500);
       });
 
       this._mapDiv.style.cursor = 'pointer';

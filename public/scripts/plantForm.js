@@ -194,6 +194,20 @@ function toggleImageInput(plantID) {
   }
 }
 
+// clears all inputs in the create plant form
+function clearForm() {
+  const form = document.getElementById('createPlantForm');
+  form.querySelectorAll('input').forEach((input) => {
+    input.value = '';
+  });
+  form.querySelectorAll('textarea').forEach((textarea) => {
+    textarea.value = '';
+  });
+  form.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
+    checkbox.checked = false;
+  });
+}
+
 /**
  * Submits a plant to the database, for creation (or updating)
  * @param plant {Object} the plant object to submit
@@ -204,8 +218,8 @@ function submitPlantToDB(plant) {
       'plants',
       plant,
       (message, plantObject) => {
-        const plantModal = document.getElementById('edit-plant-modal');
-        if (plantModal !== null) {
+        const editPlantModal = document.getElementById('edit-plant-modal');
+        if (editPlantModal !== null) {
           updateEditedPlant(plantObject);
           if (!window.plantsAppOffline) {
             // Update plant's pin on the map
@@ -214,7 +228,8 @@ function submitPlantToDB(plant) {
           resolve();
         } else {
           plantObject.displayDate = buildDateString(plantObject);
-          // plantModal is null - therefore this is a new plant
+          // editPlantModal is null - therefore this is a new plant
+          clearForm();
           // query server to generate its card on-the-fly
           fetch('/public/cached-views/plant-card.ejs', {
             method: 'GET',
@@ -263,11 +278,26 @@ function submitPlantToDB(plant) {
   });
 }
 
+// Set the max date for the date input to the current date and time adjusted for timezone
+function setDatetimeMax() {
+  const dateInput = document.getElementById('dateTimeSeen');
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+
+  const localDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+  dateInput.max = localDateTime;
+}
+
 /**
  * Submits the add plant form, or a plant's edit form, and updates the page live
  * @param formElem {HTMLFormElement} the form element that has been submitted
  */
 async function submitPlantForm(formElem) {
+  setDatetimeMax(); // reset the max date to the current date and time
   const params = new FormData(formElem);
   const shouldShowUrl = formElem.querySelector('[data-change="toggle-input"]');
 
@@ -294,12 +324,21 @@ async function submitPlantForm(formElem) {
     return new Promise((resolve, reject) => { reject(new Error('No username found! Please log in before adding a plant.')); });
   }
 
-  const lat = params.get('latitude').toString();
-  const lng = params.get('longitude').toString();
+  let lat = params.get('latitude').toString();
+  let lng = params.get('longitude').toString();
+
+  if (lat === null) {
+    lat = '0';
+  }
+
+  if (lng === null) {
+    lng = '0';
+  }
 
   const { displayName, countryCode } = await reverseGeocode(lat, lng);
 
-  if (displayName === 'error') {
+  // Only check for geo error if not offline
+  if (!window.plantsAppOffline && displayName === 'error') {
     return new Promise((resolve, reject) => { reject(new Error('Geocoding failed! Please try again.')); });
   }
 
@@ -446,29 +485,40 @@ function submitBackgroundTaskEdit() {
   showMessage('Plant edited successfully!', 'success', 'done');
 }
 
-const plantAddForm = document.getElementById('createPlantForm');
-if (plantAddForm) {
-  plantAddForm.addEventListener('submit', () => submitBackgroundTaskAdd(plantAddForm));
-  addEventListeners(plantAddForm);
+/**
+ * Initialises all forms on the screen
+ */
+export function initForm() {
+  const plantAddForm = document.getElementById('createPlantForm');
+  if (plantAddForm) {
+    plantAddForm.addEventListener('submit', () => submitBackgroundTaskAdd(plantAddForm));
+    addEventListeners(plantAddForm);
+  }
+
+  const plantEditForm = document.getElementById('editPlantForm');
+  if (plantEditForm) {
+    plantEditForm.addEventListener('submit', () => submitBackgroundTaskEdit(plantEditForm));
+    addEventListeners(plantEditForm);
+  }
+
+  document.querySelectorAll('[data-plant-card]').forEach(addEventListeners);
+
+  setDatetimeMax();
+
+  // Handle new location being passed from location picker
+  document.addEventListener('pick-location', (e) => {
+    // Convert location to format expected by showPosition
+    const location = {
+      coords: {
+        latitude: e.detail.lat,
+        longitude: e.detail.lng,
+      },
+    };
+
+    showPosition(location, e.detail.plantID);
+  });
 }
 
-const plantEditForm = document.getElementById('editPlantForm');
-if (plantEditForm) {
-  plantEditForm.addEventListener('submit', () => submitBackgroundTaskEdit(plantEditForm));
-  addEventListeners(plantEditForm);
-}
-
-document.querySelectorAll('[data-plant-card]').forEach(addEventListeners);
-
-// Handle new location being passed from location picker
-document.addEventListener('pick-location', (e) => {
-  // Convert location to format expected by showPosition
-  const location = {
-    coords: {
-      latitude: e.detail.lat,
-      longitude: e.detail.lng,
-    },
-  };
-
-  showPosition(location, e.detail.plantID);
-});
+try {
+  initForm();
+} catch (e) { /* fail silently */ }

@@ -1,6 +1,7 @@
 import { plantAddEvent } from './CustomEvents.mjs';
 import PLANT_MAP from '../mapDriver.js';
 import initTouchScreen from '../global-scripts/touchHover.mjs';
+import { getFlagEmoji, reverseGeocode } from './geoUtils.mjs';
 
 const plantGrid = document.getElementById('plant-grid');
 
@@ -50,6 +51,10 @@ export default function updateEditedPlant(plant) {
   card.querySelector('[data-spotted]').innerText = buildDateString(plant);
   card.querySelector('[data-description]').innerText = plant.description;
 
+  reverseGeocode(plant.latitude, plant.longitude).then((geocode) => {
+    card.querySelector('[data-place-name]').innerText = `${geocode.displayName} ${getFlagEmoji(geocode.countryCode)}`;
+  });
+
   // Update indicator SVGs
   const leafIndicator = card.querySelector('[data-leaves]');
 
@@ -77,7 +82,9 @@ export default function updateEditedPlant(plant) {
 
   card.querySelector('[data-colour]').style.backgroundColor = plant.colour;
 
-  PLANT_MAP.updatePlantCoordinates(plant);
+  if (PLANT_MAP !== null) {
+    PLANT_MAP.updatePlantCoordinates(plant);
+  }
 }
 
 /**

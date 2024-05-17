@@ -95,7 +95,7 @@ if (valButton !== null) {
   });
 }
 
-const submitValButton = document.getElementById('validateButton');
+const submitValButton = document.getElementById('submitValidationButton');
 if (submitValButton !== null) {
   submitValButton.addEventListener('click', () => {
     submitIdentification(document.getElementById('identificationForm'));

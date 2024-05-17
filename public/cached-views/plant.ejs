@@ -1,10 +1,10 @@
-<% var editModalName = plant._id + "-edit-plant-modal"%>
 <!--  Image Div  -->
 <div
   class="left-0 top-12 h-[33vh] w-screen cursor-pointer bg-cover bg-center lg:fixed lg:top-0 lg:h-screen lg:w-[40vw]"
   style="background-image: url('<%= plant.image %>')"
   data-toggle="modal"
   data-target="image-full-modal"
+  data-plant-image
 ></div>
 
 <div
@@ -42,6 +42,7 @@
     </div>
     <div class="modal-body">
       <img
+        id="full-image"
         src="<%=plant.image%>"
         alt="An image of a plant"
         class="modal-body max-w-[80vw]"
@@ -71,7 +72,9 @@
         <div class="mb-3 flex flex-col items-start justify-evenly gap-1">
           <div class="flex items-center gap-1">
             <span class="material-symbols-outlined">pin_drop</span>
-            <span class="mb-0.5"><%= plant.placeName %> <%= plant.flag %></span>
+            <span class="mb-0.5" data-place-name>
+              <%= plant.placeName %> <%= plant.flag %>
+            </span>
           </div>
 
           <div
@@ -141,18 +144,10 @@
           class="mb-3 flex flex-row items-end justify-start gap-1 xs:flex-col xs:justify-evenly"
         >
           <button
-            class="hover-button rounded-lg px-4 py-1 text-center text-sm font-bold"
-            data-toggle="modal"
-            data-target="plant-map-modal"
-          >
-            View on Map
-          </button>
-
-          <button
             id="edit-button"
             class="hover-button-secondary text-center21 hidden w-max rounded-lg px-4 py-1 text-sm font-bold"
             data-toggle="modal"
-            data-target="<%= editModalName %>"
+            data-target="edit-plant-modal"
             data-user="<%= plant.author %>"
           >
             Edit Plant
@@ -235,7 +230,7 @@
 
 <div
   class="modal invisible"
-  id="<%= editModalName %>"
+  id="edit-plant-modal"
   tabindex="-1"
   role="dialog"
   data-modal
@@ -243,7 +238,7 @@
   <div
     class="modal-overlay"
     data-close="modal"
-    data-target="<%= editModalName %>"
+    data-target="edit-plant-modal"
   ></div>
   <div class="modal-container">
     <div class="mb-4 flex items-center justify-between">
@@ -253,14 +248,14 @@
         aria-label="Close modal"
         title="Close modal"
         data-close="modal"
-        data-target="<%= editModalName %>"
+        data-target="edit-plant-modal"
       >
         <span class="material-symbols-outlined">close</span>
       </button>
     </div>
     <div class="modal-body">
       <form
-        id="editPlantForm-<%= plant._id %>"
+        id="editPlantForm"
         target="fakesubmit"
         data-form="plant"
         data-plant="<%= plant._id %>"
@@ -269,7 +264,6 @@
         autocomplete="off"
         class="w-[32rem] max-w-[70vw]"
       >
-        <input id="_id" name="_id" type="hidden" value="<%= plant._id %>" />
         <input id="_id" name="_id" type="hidden" value="<%= plant._id %>" />
         <div class="form-group mb-4">
           <label for="name" class="block text-text">Name</label>
@@ -424,16 +418,16 @@
         </div>
 
         <!-- checkbox for using a file or a url for image -->
-        <label for="imageSettings<%=plant._id%>" class="block text-text"
+        <label for="imageSettingsEdit" class="block text-text"
           >Image Settings</label
         >
         <div
-          id="imageSettings<%=plant._id%>"
+          id="imageSettingsEdit"
           class="form-group mb-4 flex flex-col justify-between sm:flex-row"
         >
           <div class="mb-2 flex items-center">
             <input
-              id="imageInputCheckbox<%=plant._id%>"
+              id="imageInputCheckboxEdit"
               name="imageInput"
               type="checkbox"
               value="url"
@@ -448,7 +442,7 @@
           </div>
           <div class="mb-2 flex items-center">
             <input
-              id="imageValidated<%=plant._id%>"
+              id="imageValidatedEdit"
               name="imageValidated"
               type="checkbox"
               value="true"
@@ -459,19 +453,19 @@
               oninvalid="this.setCustomValidity('Upload or enter a valid URL and preview to continue')"
             />
             <label
-              for="imageValidated<%=plant._id%>"
+              for="imageValidatedEdit"
               class="ms-2 text-sm font-medium text-text"
               >Image validated?</label
             >
           </div>
         </div>
-        <div class="form-group mb-4" id="imageDiv<%=plant._id%>">
-          <label class="block text-text" for="image<%=plant._id%>"
+        <div class="form-group mb-4" id="imageDivEdit">
+          <label class="block text-text" for="imageEdit"
             >Upload Image</label
           >
           <input
             class="file:form-input file:hover-button w-full cursor-pointer file:rounded file:px-4 file:py-2 file:font-bold"
-            id="image<%=plant._id%>"
+            id="imageEdit"
             name="image"
             type="file"
             aria-describedby="file_input_help"
@@ -482,13 +476,13 @@
         </div>
         <div
           class="form-group mb-4 flex hidden space-x-2"
-          id="urlDiv<%=plant._id%>"
+          id="urlDivEdit"
         >
           <div class="w-3/4">
-            <label for="url<%=plant._id%>">Enter URL:</label>
+            <label for="urlEdit">Enter URL:</label>
             <input
               type="text"
-              id="url<%=plant._id%>"
+              id="urlEdit"
               name="url"
               class="form-input mt-1 block w-full grow-0 rounded border border-gray-300 bg-background-light pl-2 text-text"
             />
@@ -501,7 +495,7 @@
             Preview
           </button>
         </div>
-        <div id="imagePreviewContainer<%=plant._id%>">
+        <div id="imagePreviewContainerEdit">
           <label class="block text-text" for="preview">Image Preview</label>
           <object
             type="image/svg+xml"
@@ -509,7 +503,7 @@
             class="hidden aspect-square w-1/2 rounded"
           ></object>
           <img
-            id="preview<%=plant._id%>"
+            id="previewEdit"
             src="<%= plant.image %>"
             alt="your image"
             class="w-1/2"
@@ -517,13 +511,13 @@
           />
         </div>
         <p
-          id="previewError<%=plant._id%>"
+          id="previewErrorEdit"
           class="my-2 hidden px-2 font-bold text-error"
         ></p>
         <div class="form-group mb-4 flex space-x-2">
           <input
             type="text"
-            id="latitude<%=plant._id%>"
+            id="latitudeEdit"
             name="latitude"
             class="form-input mt-1 block hidden w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
             value="<%= plant.latitude %>"
@@ -532,7 +526,7 @@
           />
           <input
             type="text"
-            id="longitude<%=plant._id%>"
+            id="longitudeEdit"
             name="longitude"
             class="form-input mt-1 block hidden w-full rounded border border-gray-300 bg-background-light pl-2 text-text"
             value="<%= plant.longitude %>"
@@ -542,7 +536,7 @@
             <label for="coordinates">Coordinates:</label>
             <input
               type="text"
-              id="coordinates<%=plant._id%>"
+              id="coordinatesEdit"
               name="coordinates"
               class="form-input mt-1 block w-full grow-0 rounded border border-gray-300 bg-background-light pl-2 text-text"
               value="(<%= plant.latitude %>,<%= plant.longitude %>)"
