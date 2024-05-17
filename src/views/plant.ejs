@@ -1,6 +1,6 @@
-<% var editModalName = plant._id + "-edit-plant-modal"%>
+<% var editModalName = "edit-plant-modal"%>
 <main
-  id="plant-grid"
+  id="plant"
   data-plant-card
   data-plant="<%=plant._id%>"
   class="flex-fill-remaining-space h-1 overflow-y-scroll"
@@ -11,6 +11,7 @@
     style="background-image: url('<%= plant.image %>')"
     data-toggle="modal"
     data-target="image-full-modal"
+    data-plant-image
   ></div>
 
   <div
@@ -44,7 +45,7 @@
         </div>
         <div class="mb-1 flex items-center gap-1">
           <span class="material-symbols-outlined">schedule</span>
-          <span class="mb-0.5"><%= plant.displayDate %></span>
+          <span class="mb-0.5" data-spotted><%= plant.displayDate %></span>
         </div>
 
         <div class="mb-3 flex flex-col justify-between gap-1 xs:flex-row">
@@ -125,10 +126,10 @@
             class="mb-3 flex flex-row items-end justify-start gap-1 xs:flex-col xs:justify-evenly"
           >
             <button
-                    id = 'identify-button'
-                    class="hover-button rounded-lg px-4 py-1 text-center text-sm font-bold hidden"
-                    data-toggle="modal"
-                    data-target="identification-modal"
+              id="identify-button"
+              class="hover-button hidden rounded-lg px-4 py-1 text-center text-sm font-bold"
+              data-toggle="modal"
+              data-target="identification-modal"
             >
               Identify
             </button>
@@ -159,7 +160,7 @@
 
             <button
               id="edit-button"
-              class="hover-button-secondary text-center21 w-max rounded-lg px-4 py-1 text-sm font-bold hidden"
+              class="hover-button-secondary text-center21 hidden w-max rounded-lg px-4 py-1 text-sm font-bold"
               data-toggle="modal"
               data-target="<%= editModalName %>"
               data-user="<%= plant.author %>"

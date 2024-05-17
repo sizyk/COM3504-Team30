@@ -3,7 +3,8 @@ module.exports = {
   content: [
     './src/**/*.ejs',
     './public/**/*.js',
-    './public/**/*.mjs'
+    './public/**/*.mjs',
+    './public/**/*.ejs',
   ],
   darkMode: 'selector',
   theme: {

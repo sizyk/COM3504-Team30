@@ -2,3 +2,7 @@
   id="<%= typeof mapID === 'undefined' ? 'map' : mapID %>"
   class="aspect-video h-[66vh] max-w-[80vw]"
 ></div>
+
+<% if (typeof plantID !== 'undefined' && typeof latitude !== 'undefined' && typeof longitude !== 'undefined') { %>
+    <div id="location-vars" data-plant="<%= plantID %>" data-lat="<%= latitude %>" data-lng="<%= longitude %>"></div>
+<% } %>

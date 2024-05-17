@@ -2,4 +2,4 @@
 import PlantMap from './utils/PlantMap.mjs';
 
 // eslint-disable-next-line no-unused-vars
-const LOC_MAP = new PlantMap('pick-location-map', '', 'pickLocation');
+const LOC_MAP = new PlantMap('pick-location-map', 'location-vars', 'pickLocation');

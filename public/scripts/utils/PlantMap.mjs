@@ -119,6 +119,16 @@ export default class PlantMap {
     if (type === 'pickLocation') {
       this._chosenLocation = null;
 
+      if (JSVarDiv.dataset.lat && JSVarDiv.dataset.lng) {
+        const latlng = new L.LatLng(
+          parseFloat(JSVarDiv.dataset.lat),
+          parseFloat(JSVarDiv.dataset.lng),
+        );
+        this._backupCentre = latlng;
+        this._chosenLocation = new L.Marker(latlng, { icon: getNewPlantIcon() });
+        this._chosenLocation.addTo(this._map);
+      }
+
       // Place submit button onto map
       this._mapDiv.insertAdjacentHTML(
         'afterbegin',
@@ -138,10 +148,10 @@ export default class PlantMap {
         let event;
         // Create new custom event to pass coordinates of chosen location out of this map
         if (this._chosenLocation === null) {
-          event = new CustomEvent('pick-location', { detail: { lat: 0, lng: 0 } });
+          event = new CustomEvent('pick-location', { detail: { lat: 0, lng: 0, plantID: JSVarDiv.dataset.plant } });
         } else {
           const latlng = this._chosenLocation.getLatLng().wrap();
-          event = new CustomEvent('pick-location', { detail: { lat: latlng.lat, lng: latlng.lng } });
+          event = new CustomEvent('pick-location', { detail: { lat: latlng.lat, lng: latlng.lng, plantID: JSVarDiv.dataset.plant } });
         }
 
         document.dispatchEvent(event);
@@ -150,7 +160,7 @@ export default class PlantMap {
       this._mapDiv.style.cursor = 'pointer';
       this._map.on('click', (e) => {
         if (this._chosenLocation === null) {
-          this._chosenLocation = new L.Marker(e.latlng, { icon: getNewPlantIcon(e.latlng) });
+          this._chosenLocation = new L.Marker(e.latlng, { icon: getNewPlantIcon() });
           this._chosenLocation.addTo(this._map);
         } else {
           this._chosenLocation.setLatLng(e.latlng);
