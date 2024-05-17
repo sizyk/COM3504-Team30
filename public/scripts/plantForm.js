@@ -5,6 +5,7 @@ import getUsername from './utils/localStore.mjs';
 import PLANT_MAP from './mapDriver.js';
 import { getFlagEmoji, reverseGeocode } from './utils/geoUtils.mjs';
 import { plantAddEvent } from './utils/CustomEvents.mjs';
+import initTouchScreen from './global-scripts/touchHover.mjs';
 
 /**
  * Shows coordinates on the form
@@ -245,6 +246,10 @@ function submitPlantToDB(plant) {
                   },
                 ]);
               }
+
+              // Enable touch hover on the new cards
+              initTouchScreen();
+
               resolve();
             })
             .catch((e) => {
