@@ -19,16 +19,19 @@ To install this project, follow these steps:
 ```bash
 cd project
 ```
-
 3. Install dependencies:
 ```bash
 npm install
+```
+4. Optional -  Build CSS if required:
+```bash
+npm run build -css
 ```
 
 ## Usage
 To run the project, use the following command:
 ```bash
-npm start
+npm run start
 ```
 This will start the server, and you should see a message indicating the server is running on a specific port (usually port 3000 by default).
 Visit localhost:3000 to see the app.
