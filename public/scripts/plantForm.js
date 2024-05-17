@@ -268,6 +268,7 @@ function submitPlantToDB(plant) {
  * @param formElem {HTMLFormElement} the form element that has been submitted
  */
 async function submitPlantForm(formElem) {
+  setDatetimeMax(); // reset the max date to the current date and time
   const params = new FormData(formElem);
   const shouldShowUrl = formElem.querySelector('[data-change="toggle-input"]');
 
@@ -381,6 +382,7 @@ export default function addEventListeners(card) {
   });
 
   card.querySelectorAll('[data-form="plant"]').forEach((formElem) => {
+
     formElem.addEventListener('submit', () => submitPlantForm(formElem));
   });
 
@@ -461,8 +463,9 @@ if (plantEditForm) {
 document.querySelectorAll('[data-plant-card]').forEach(addEventListeners);
 
 // Set the max date for the date input to the current date and time adjusted for timezone
-document.addEventListener('DOMContentLoaded', function() {
+function setDatetimeMax() {
   const dateInput = document.getElementById('dateTimeSeen');
+  console.log(dateInput);
   const now = new Date();
   const year = now.getFullYear();
   const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -472,7 +475,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   const localDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
   dateInput.max = localDateTime;
-});
+}
+
+setDatetimeMax();
 
 // Handle new location being passed from location picker
 document.addEventListener('pick-location', (e) => {
