@@ -121,3 +121,6 @@ This process is made much easier through client-side rendering, using the browse
 ## Stories Completed
 
 <img src="readme-img/StoriesCompleted.png" width="100%">
+
+## Repository Link
+The repository can be found [here](https://github.com/sizyk/COM3504-Team30.git)
