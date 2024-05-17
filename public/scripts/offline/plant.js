@@ -3,7 +3,7 @@ import DBController from '../utils/DBController.mjs';
 import { buildDateString, singlePlantTemplate } from '../utils/plantUtils.mjs';
 import { initialiseModal } from '../global-scripts/modals.mjs';
 import addEventListeners from '../plantForm.js';
-import initChat from '../chat.js';
+import initChat, { addUserMessage } from '../chat.js';
 
 showMessage('Connection to server lost! Showing locally stored info & chats.', 'info', 'wifi_off');
 
@@ -27,14 +27,20 @@ DBController.get('plants', { _id: plantID }, (plants) => {
   // eslint-disable-next-line no-undef
   mainElem.insertAdjacentHTML('afterbegin', ejs.render(singlePlantTemplate, { plant }));
 
-  mainElem.id = `card-${plantID}`;
+  mainElem.id = 'plant';
   mainElem.dataset.plant = plantID;
+  mainElem.dataset.identified = String(plant.identificationStatus === 'completed');
 
   initialiseModal(document.getElementById(`${plant._id}-edit-plant-modal`));
   initialiseModal(document.getElementById('image-full-modal'));
 
   // eslint-disable-next-line no-use-before-define
-  addEventListeners(document.getElementById(`card-${plant._id}`));
+  addEventListeners(document.getElementById('plant'));
 
   initChat();
+
+  // Get all chats for the requested plant
+  DBController.get('chats', { plant: plantID }, (chats) => {
+    chats.forEach((chat) => addUserMessage(chat.message, chat.user));
+  }, () => { /* fail silently */ });
 });
