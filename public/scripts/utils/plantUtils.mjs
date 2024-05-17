@@ -77,7 +77,9 @@ export default function updateEditedPlant(plant) {
 
   card.querySelector('[data-colour]').style.backgroundColor = plant.colour;
 
-  PLANT_MAP.updatePlantCoordinates(plant);
+  if (PLANT_MAP !== null) {
+    PLANT_MAP.updatePlantCoordinates(plant);
+  }
 }
 
 /**

@@ -2,8 +2,9 @@ import { showMessage } from '../utils/flash-messages.mjs';
 import DBController from '../utils/DBController.mjs';
 import { buildDateString, singlePlantTemplate } from '../utils/plantUtils.mjs';
 import { initialiseModal } from '../global-scripts/modals.mjs';
-import addEventListeners from '../plantForm.js';
+import { initForm } from '../plantForm.js';
 import initChat, { addUserMessage } from '../chat.js';
+import getUsername from '../utils/localStore.mjs';
 
 showMessage('Connection to server lost! Showing locally stored info & chats.', 'info', 'wifi_off');
 
@@ -31,11 +32,23 @@ DBController.get('plants', { _id: plantID }, (plants) => {
   mainElem.dataset.plant = plantID;
   mainElem.dataset.identified = String(plant.identificationStatus === 'completed');
 
-  initialiseModal(document.getElementById(`${plant._id}-edit-plant-modal`));
+  initialiseModal(document.getElementById('edit-plant-modal'));
   initialiseModal(document.getElementById('image-full-modal'));
 
-  // eslint-disable-next-line no-use-before-define
-  addEventListeners(document.getElementById('plant'));
+  if (getUsername() === plant.author && plant.identificationStatus !== 'completed') {
+    // plant can be edited and identified only if user==author & plant is not identified
+    const idButton = document.getElementById('identify-button');
+    if (idButton !== null) {
+      idButton.classList.remove('hidden');
+    }
+
+    const editButton = document.getElementById('edit-button');
+    if (editButton !== null) {
+      editButton.classList.remove('hidden');
+    }
+  }
+
+  initForm();
 
   initChat();
 

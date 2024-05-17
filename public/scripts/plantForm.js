@@ -476,31 +476,40 @@ function submitBackgroundTaskEdit() {
   showMessage('Plant edited successfully!', 'success', 'done');
 }
 
-const plantAddForm = document.getElementById('createPlantForm');
-if (plantAddForm) {
-  plantAddForm.addEventListener('submit', () => submitBackgroundTaskAdd(plantAddForm));
-  addEventListeners(plantAddForm);
+/**
+ * Initialises all forms on the screen
+ */
+export function initForm() {
+  const plantAddForm = document.getElementById('createPlantForm');
+  if (plantAddForm) {
+    plantAddForm.addEventListener('submit', () => submitBackgroundTaskAdd(plantAddForm));
+    addEventListeners(plantAddForm);
+  }
+
+  const plantEditForm = document.getElementById('editPlantForm');
+  if (plantEditForm) {
+    plantEditForm.addEventListener('submit', () => submitBackgroundTaskEdit(plantEditForm));
+    addEventListeners(plantEditForm);
+  }
+
+  document.querySelectorAll('[data-plant-card]').forEach(addEventListeners);
+
+  setDatetimeMax();
+
+  // Handle new location being passed from location picker
+  document.addEventListener('pick-location', (e) => {
+    // Convert location to format expected by showPosition
+    const location = {
+      coords: {
+        latitude: e.detail.lat,
+        longitude: e.detail.lng,
+      },
+    };
+
+    showPosition(location, e.detail.plantID);
+  });
 }
 
-const plantEditForm = document.getElementById('editPlantForm');
-if (plantEditForm) {
-  plantEditForm.addEventListener('submit', () => submitBackgroundTaskEdit(plantEditForm));
-  addEventListeners(plantEditForm);
-}
-
-document.querySelectorAll('[data-plant-card]').forEach(addEventListeners);
-
-setDatetimeMax();
-
-// Handle new location being passed from location picker
-document.addEventListener('pick-location', (e) => {
-  // Convert location to format expected by showPosition
-  const location = {
-    coords: {
-      latitude: e.detail.lat,
-      longitude: e.detail.lng,
-    },
-  };
-
-  showPosition(location, e.detail.plantID);
-});
+try {
+  initForm();
+} catch (e) { /* fail silently */ }
